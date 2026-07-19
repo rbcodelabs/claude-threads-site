@@ -16,3 +16,4 @@ npm run preview  # preview the production build locally
 
 All copy is sourced from the plugin's own README. See
 [`.claude/pr-guidelines.md`](.claude/pr-guidelines.md) for the pre-PR checklist.
+
