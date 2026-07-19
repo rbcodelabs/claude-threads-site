@@ -1,0 +1,22 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Hero from '../components/Hero.astro';
+import ScreenshotShowcase from '../components/ScreenshotShowcase.astro';
+import FeatureGrid from '../components/FeatureGrid.astro';
+import Prerequisites from '../components/Prerequisites.astro';
+import InstallSteps from '../components/InstallSteps.astro';
+import RoadmapCTA from '../components/RoadmapCTA.astro';
+
+const title = 'Claude Threads for Obsidian — Run Claude Code in your sidebar';
+const description =
+  'Claude Threads embeds Claude Code directly in your Obsidian sidebar. Run multiple sessions in parallel with streaming responses, an Agent Dashboard, kanban board, slash commands, and inline permission dialogs.';
+---
+
+<Layout title={title} description={description}>
+  <Hero />
+  <ScreenshotShowcase />
+  <FeatureGrid />
+  <Prerequisites />
+  <InstallSteps />
+  <RoadmapCTA />
+</Layout>

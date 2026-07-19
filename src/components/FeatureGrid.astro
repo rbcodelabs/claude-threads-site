@@ -1,0 +1,67 @@
+---
+import FeatureCard from './FeatureCard.astro';
+
+// Curated from the plugin README's "Key features" list — strongest, most
+// visual features for a landing page grid. Sentences trimmed from the README.
+const features = [
+  {
+    title: 'Multi-tab sessions',
+    description: 'Open as many Claude threads as you need, switch between them instantly.',
+  },
+  {
+    title: 'Streaming responses',
+    description: 'Tokens stream in with live markdown rendering — code blocks, tables, lists, and more.',
+  },
+  {
+    title: 'Agent Dashboard + Kanban',
+    description:
+      'Monitor and dispatch to multiple threads from one view, or toggle a kanban board to visualize agent state by column — idle, running, waiting, done — with folder swimlanes per project.',
+  },
+  {
+    title: 'Slash commands & skills',
+    description: 'Built-in context commands plus your full ~/.claude/skills/ library, browseable with /.',
+  },
+  {
+    title: 'Model switching',
+    description: 'Set a persistent model per thread with /model fable|opus|sonnet|haiku, or a global default.',
+  },
+  {
+    title: 'Goals and loops',
+    description: 'Pin a persistent goal on a thread with /goal, or re-run a prompt on an interval with /loop 10m.',
+  },
+  {
+    title: 'Permission dialogs & Plan Mode',
+    description:
+      'Claude asks before writing files or running commands. In Plan Mode, Claude proposes a written plan you can Approve, Edit, or Reject before it touches anything.',
+  },
+  {
+    title: 'Remote mobile access',
+    description: 'Stay connected to your running threads and respond to permission requests from your phone.',
+  },
+  {
+    title: '@ file mentions',
+    description:
+      'Type @ in the input to search vault files by name; selecting one injects its full content as context.',
+  },
+  {
+    title: 'MCP Elicitation',
+    description:
+      'When an MCP server needs OAuth or a form filled mid-session, a card appears inline so you can respond without leaving Obsidian.',
+  },
+];
+---
+
+<section id="features" class="border-y border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface-alt))]/40">
+  <div class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+    <div class="mx-auto max-w-2xl text-center">
+      <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Everything you need to run agents in parallel</h2>
+      <p class="mt-4 text-[rgb(var(--color-text-muted))]">
+        A curated look at the features that make Claude Threads more than a chat sidebar.
+      </p>
+    </div>
+
+    <div class="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+      {features.map((feature) => <FeatureCard title={feature.title} description={feature.description} />)}
+    </div>
+  </div>
+</section>

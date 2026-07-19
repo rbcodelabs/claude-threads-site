@@ -1,0 +1,50 @@
+---
+const items = [
+  {
+    title: 'Obsidian v1.0.0+',
+    description: 'Desktop only — Claude Threads runs as a native sidebar plugin.',
+  },
+  {
+    title: 'Claude Code CLI installed and authenticated',
+    description:
+      'The plugin auto-detects claude at /opt/homebrew/bin/claude, /usr/local/bin/claude, or ~/.local/bin/claude.',
+  },
+  {
+    title: 'AWS Bedrock / SSO users',
+    description: 'Set AWS_PROFILE and AWS_REGION in the plugin’s Extra Environment Variables setting.',
+  },
+];
+---
+
+<section class="mx-auto max-w-6xl px-4 py-16 sm:px-6 sm:py-24">
+  <div class="grid grid-cols-1 gap-10 lg:grid-cols-3">
+    <div>
+      <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Prerequisites</h2>
+      <p class="mt-4 text-[rgb(var(--color-text-muted))]">
+        Before you install, make sure your setup meets these requirements.
+      </p>
+    </div>
+
+    <div class="lg:col-span-2">
+      <ul class="space-y-4">
+        {
+          items.map((item) => (
+            <li class="card flex gap-4 p-5">
+              <span
+                class="mt-1 flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold text-white"
+                style="background: linear-gradient(135deg, #7C3AED, #6366F1);"
+                aria-hidden="true"
+              >
+                &#10003;
+              </span>
+              <div>
+                <p class="font-semibold">{item.title}</p>
+                <p class="mt-1 text-sm text-[rgb(var(--color-text-muted))]">{item.description}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>

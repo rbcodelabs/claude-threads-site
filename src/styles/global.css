@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  /* Claude Threads — dark-mode-first brand palette */
+  --color-bg: 11 11 16;              /* #0B0B10 */
+  --color-surface: 23 23 31;         /* #17171F */
+  --color-surface-alt: 28 27 36;     /* #1C1B24 */
+  --color-border: 42 42 53;          /* #2A2A35 */
+  --color-text: 244 243 248;         /* #F4F3F8 */
+  --color-text-muted: 155 153 168;   /* #9B99A8 */
+  --color-primary: 124 58 237;       /* #7C3AED violet */
+  --color-secondary: 99 102 241;     /* #6366F1 indigo */
+
+  --font-sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: rgb(var(--color-text));
+  background-color: rgb(var(--color-bg));
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sans);
+  font-weight: 800;
+  color: rgb(var(--color-text));
+}
+
+::selection {
+  background-color: rgba(var(--color-primary), 0.35);
+  color: rgb(var(--color-text));
+}
+
+/* Subtle dot-grid texture for hero background */
+.bg-dot-grid {
+  background-image: radial-gradient(rgba(155, 153, 168, 0.18) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.text-gradient {
+  background-image: linear-gradient(90deg, rgb(var(--color-primary)), rgb(var(--color-secondary)));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Component classes must live in @layer components so that Tailwind
+   utilities (e.g. `hidden`, `sm:inline-flex`) still win the cascade —
+   unlayered CSS beats @layer CSS regardless of source order. */
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg px-5 py-3 text-sm font-semibold transition-colors duration-200;
+  }
+
+  .btn-primary {
+    background-color: rgb(var(--color-primary));
+    color: rgb(var(--color-text));
+  }
+
+  .btn-primary:hover {
+    background-color: rgb(var(--color-secondary));
+  }
+
+  .btn-secondary {
+    background-color: transparent;
+    color: rgb(var(--color-text));
+    border: 1px solid rgb(var(--color-border));
+  }
+
+  .btn-secondary:hover {
+    border-color: rgb(var(--color-primary));
+    background-color: rgba(var(--color-primary), 0.08);
+  }
+
+  .card {
+    background-color: rgb(var(--color-surface));
+    border: 1px solid rgb(var(--color-border));
+    border-radius: 0.75rem;
+  }
+}
