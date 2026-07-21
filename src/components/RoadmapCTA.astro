@@ -1,0 +1,27 @@
+---
+const ROADMAP_URL = 'https://compass.rbcodelabs.com/portal/rbcodelabs/claude-threads/roadmap';
+const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
+---
+
+<section id="roadmap" class="relative overflow-hidden">
+  <div
+    class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-full bg-[radial-gradient(ellipse_at_center,_rgba(99,102,241,0.18),_transparent_65%)]"
+  >
+  </div>
+
+  <div class="mx-auto max-w-4xl px-4 py-16 text-center sm:px-6 sm:py-24">
+    <h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Help shape what ships next</h2>
+    <p class="mx-auto mt-4 max-w-xl text-[rgb(var(--color-text-muted))]">
+      Vote on upcoming features and see what's in progress on the public roadmap, or star the repo on GitHub to
+      follow along.
+    </p>
+    <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+      <a href={ROADMAP_URL} target="_blank" rel="noopener noreferrer" class="btn btn-primary w-full sm:w-auto">
+        Vote on the roadmap
+      </a>
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full sm:w-auto">
+        Star on GitHub
+      </a>
+    </div>
+  </div>
+</section>

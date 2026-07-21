@@ -1,0 +1,55 @@
+---
+import { Image } from 'astro:assets';
+import screenshotMobileConnected from '../assets/screenshots/screenshot-mobile-connected.png';
+
+const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
+const VERSION = '0.19.12';
+---
+
+<section class="relative overflow-hidden bg-dot-grid">
+  <div
+    class="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[600px] bg-[radial-gradient(ellipse_at_top,_rgba(124,58,237,0.25),_transparent_60%)]"
+  >
+  </div>
+
+  <div class="mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
+    <div class="mx-auto max-w-3xl text-center">
+      <div class="mb-6 flex flex-wrap items-center justify-center gap-2">
+        <span class="rounded-full border border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface))] px-3 py-1 text-xs font-semibold text-[rgb(var(--color-text-muted))]">
+          Obsidian Plugin
+        </span>
+        <span class="rounded-full border border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface))] px-3 py-1 text-xs font-semibold text-[rgb(var(--color-text-muted))]">
+          v{VERSION}
+        </span>
+      </div>
+
+      <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl">
+        Run multiple <span class="text-gradient">Claude Code</span> sessions, right inside Obsidian
+      </h1>
+
+      <p class="mx-auto mt-6 max-w-2xl text-lg text-[rgb(var(--color-text-muted))] sm:text-xl">
+        A native Obsidian sidebar plugin for running multiple Claude Code sessions in parallel — with streaming
+        markdown responses, tab management, and deep vault integration.
+      </p>
+
+      <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
+        <a href="#install" class="btn btn-primary w-full sm:w-auto">Install via BRAT</a>
+        <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full sm:w-auto">
+          View on GitHub
+        </a>
+      </div>
+    </div>
+
+    <div class="mx-auto mt-14 max-w-4xl">
+      <div class="card overflow-hidden shadow-2xl shadow-black/40">
+        <Image
+          src={screenshotMobileConnected}
+          alt="Claude Threads connected and running from a mobile device"
+          width={1600}
+          class="w-full"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </div>
+</section>
