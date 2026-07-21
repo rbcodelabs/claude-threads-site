@@ -1,0 +1,68 @@
+---
+title: Models, Goals, and Loops
+description: Switching models mid-thread, model escalation, pinning goals, and running loops on an interval.
+category: core-workflow
+order: 2
+---
+
+## Model switching
+
+`/model` sets the model for all subsequent turns in a thread:
+
+```
+/model fable    → uses Claude Fable 5 for every turn in this thread
+/model opus     → uses Claude Opus for every turn in this thread
+/model sonnet   → switches to Sonnet
+/model haiku    → switches to Haiku
+/model default  → resets to the plugin's Default model setting (or the CLI default)
+```
+
+A **Default model** dropdown in Settings → Claude picks the model for threads that have no `/model` override. Family aliases (Fable / Opus / Sonnet / Haiku "latest") are always listed first; pinned model IDs are sourced from the SDK's `capabilities_discovered` event, which fires the first time a thread starts in the current Obsidian session. Before any thread has run, the dropdown falls back to a hardcoded list of current models — start a thread and reopen Settings to see the full CLI-sourced list, so no plugin update is needed when Anthropic adds a new model.
+
+You can also switch models without typing: a **model switcher button** (CPU icon) sits in the conversation footer, left of the menu button. Hover it to see the active model; click it to pick Default / Opus / Sonnet / Haiku / Fable from a dropdown. The icon turns accent-colored whenever a per-thread override is active, and it stays in sync with the `/model` command.
+
+The active model is shown as a badge in the thread info bar.
+
+## Model escalation
+
+`/escalate` (the keyword is configurable) is a one-turn override — it routes just that message to the Escalation model chosen in Settings → Claude (Fable 5, Opus, Sonnet, or Haiku), then the thread model resumes for the next turn. Both the keyword and the target model are configurable in [Settings Reference → Claude](/docs/reference/settings/#claude).
+
+While an escalated turn is running, the model switcher button glows in the accent color and its tooltip names the escalated model, so you always have visible confirmation that the escalation took effect. A brief tooltip also pops up from the model button when the turn starts, fading in, holding for a moment, then fading out automatically — no interaction needed and zero layout shift. The glow clears automatically when the turn finishes.
+
+![Model escalation — the model switcher button glows and names the escalated model for the duration of the turn](../../../assets/screenshots/screenshot-model-escalation.png)
+
+## Goals
+
+`/goal <text>` pins a persistent goal on a thread. Setting a goal does two things:
+
+1. Claude immediately starts working toward it — no separate prompt needed.
+2. The goal is injected into the system prompt on **every subsequent turn**, so it survives context compaction, topic drift, and multi-day threads. Claude is instructed to keep working toward it until it's met or blocked on your input.
+
+`/goal` alone shows the current goal; `/goal clear` (or `off`/`done`) removes it.
+
+## Loops
+
+`/loop <interval> <prompt>` re-sends a prompt to the thread on a schedule:
+
+```
+/loop 30s poll the deploy status     → every 30 seconds
+/loop 5m check the build             → every 5 minutes
+/loop 1h summarize new emails        → every hour
+/loop 10 check CI                    → bare numbers mean minutes
+```
+
+Like `/goal`, starting a loop sends the prompt immediately — you don't wait for the first interval to elapse. Intervals below 30 seconds are clamped to 30s. Loops run on the plugin's built-in scheduler, so they **persist across plugin reloads and Obsidian restarts**. If a loop tick arrives before the thread's previous turn has finished, it's retried shortly after rather than piling up as a queued duplicate. A thread can only have one active loop at a time — starting a new `/loop` replaces whichever loop was already running there.
+
+`/loop` alone lists the thread's loop with its next run time; `/loop stop` (or `off`/`cancel`/`clear`) stops it. While a loop is active, a banner above the input shows its status ("Loop running…" or the next run time) with a **Stop** button, and a matching pill appears in the thread's status footer.
+
+For recurring tasks that should run independently of any single thread's lifecycle — surviving even if you close that thread — see [Scheduled tasks](/docs/automation/scheduled-tasks/) instead.
+
+## Dispatching with commands
+
+`/model`, `/goal`, and `/loop` also work as prefixes in the Agent Dashboard and Kanban dispatch boxes, applying to the newly created thread:
+
+- `/model opus fix the login bug` — creates the new thread with Opus set as its model and dispatches just the prompt
+- `/goal ship the v1 login flow` — creates the thread with that persistent goal and immediately starts working toward it (same kickoff as `/goal` inside a thread)
+- `/loop 10m check CI status` — creates the thread, sends the prompt now, and re-runs it every 10 minutes (stop it later with `/loop stop` inside the thread)
+
+A command with bad or missing arguments shows a notice and keeps your draft instead of creating a thread. The thread-management variants (`/goal clear`, `/loop stop`) only work inside an existing thread.

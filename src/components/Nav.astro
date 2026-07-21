@@ -1,5 +1,6 @@
 ---
 const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
+const isDocsRoute = Astro.url.pathname.startsWith('/docs');
 ---
 
 <header class="sticky top-0 z-50 border-b border-[rgb(var(--color-border))] bg-[rgb(var(--color-bg))]/85 backdrop-blur">
@@ -15,10 +16,22 @@ const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
     </a>
 
     <div class="hidden items-center gap-6 text-sm font-medium text-[rgb(var(--color-text-muted))] md:flex">
-      <a href="#features" class="transition-colors hover:text-[rgb(var(--color-text))]">Features</a>
-      <a href="#screenshots" class="transition-colors hover:text-[rgb(var(--color-text))]">Screenshots</a>
-      <a href="#install" class="transition-colors hover:text-[rgb(var(--color-text))]">Install</a>
-      <a href="#roadmap" class="transition-colors hover:text-[rgb(var(--color-text))]">Roadmap</a>
+      {
+        isDocsRoute ? (
+          <>
+            <a href="/" class="transition-colors hover:text-[rgb(var(--color-text))]">Home</a>
+            <a href="/docs/" class="transition-colors hover:text-[rgb(var(--color-text))]">Docs</a>
+          </>
+        ) : (
+          <>
+            <a href="#features" class="transition-colors hover:text-[rgb(var(--color-text))]">Features</a>
+            <a href="#screenshots" class="transition-colors hover:text-[rgb(var(--color-text))]">Screenshots</a>
+            <a href="#install" class="transition-colors hover:text-[rgb(var(--color-text))]">Install</a>
+            <a href="#roadmap" class="transition-colors hover:text-[rgb(var(--color-text))]">Roadmap</a>
+            <a href="/docs/" class="transition-colors hover:text-[rgb(var(--color-text))]">Docs</a>
+          </>
+        )
+      }
     </div>
 
     <div class="flex items-center gap-3">
