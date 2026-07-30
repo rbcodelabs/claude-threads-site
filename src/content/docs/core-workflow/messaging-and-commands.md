@@ -25,10 +25,19 @@ If you send a message while Claude is already processing, it goes into a queue �
 While Claude is processing, a typed status card appears above the input area showing what's happening:
 
 - **Active work** — a pulsing spinner with a short label (e.g. "Compacting context…" during automatic compaction, "Retrying API call…" on transient errors). The card disappears as soon as the operation completes.
-- **Rate limit** — if the API returns a rate limit response, a card shows in warning or error style depending on whether the request was allowed to proceed or rejected outright.
+- **Rate limit** — if the API returns a rate limit response *before* rejecting the turn outright, a card shows in warning or error style depending on whether the request was allowed to proceed anyway.
 - **Model escalation tip** — when a turn is routed to the escalation model, a brief tooltip pops up from the model button rather than reshuffling the layout. See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation) for the full behavior.
 
 ![Status rail — active-work card with a spinner above the composer](../../../assets/screenshots/screenshot-status-rail.png)
+
+## Errors and auto-retry
+
+Two failure modes are recovered automatically, shown as a transient amber "reconnecting" notice in the conversation rather than a hard error:
+
+- **Transport hiccup** — the underlying `claude` CLI transport is spuriously force-closed mid-tool-call. The plugin auto-fires one follow-up turn so Claude can verify whether the interrupted action actually succeeded before treating it as a failure.
+- **Rate-limited turn** — the API rejects a turn outright with a rate-limit or overload error before processing it at all. The plugin silently retries the *exact same* turn after a backoff delay (up to 5 attempts, growing from ~3s to ~90s) — no duplicate message is added to the conversation, since Claude never saw the original prompt.
+
+If a rate-limited turn exhausts all of its retries, or any other error occurs, it surfaces as a normal error card — but instead of a wall of raw stack-trace text, you get a short one-line summary with a **Show technical details** disclosure you can expand for the full trace.
 
 ## Slash commands
 
