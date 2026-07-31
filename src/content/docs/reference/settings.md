@@ -1,11 +1,11 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Remote, and Skills.
+description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Remote, Skills, and MCP.
 category: reference
 order: 1
 ---
 
-Settings are organized into seven tabs. On desktop, all seven are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
+Settings are organized into eight tabs. On desktop, all eight are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
 
 ## General
 
@@ -117,9 +117,26 @@ See [Remote access (mobile)](/docs/integrations/remote-and-voice/#remote-access-
 
 Register local skill collections — GitHub repos or local folders — to browse and install from within the [Skills Manager](/docs/automation/skills-manager/). Each source shows its type, path, and (for GitHub sources) an update badge when the clone is behind its remote, with **Update** and **Remove** actions per source, and an **Add Source** button to register a new one.
 
+## MCP
+
+Manage the external MCP servers referenced in [MCP Elicitation](/docs/permissions/permission-modes-and-plan-mode/#mcp-elicitation) and the [scheduled-sessions note](/docs/permissions/permission-modes-and-plan-mode/#permissions) — add, edit, or remove entries without hand-editing JSON.
+
+**This tab edits your global `~/.claude/settings.json`** (or the per-machine file it symlinks to), not a per-vault config. That file is shared by every vault running Claude Threads on the machine and by the `claude` CLI itself — a server added here is visible everywhere, and vice versa. Changes apply to new threads only; sessions already running keep whatever MCP servers they started with.
+
+Each row shows the server's name, a type badge (`stdio`, `http`, `sse`, or `sdk`), and a one-line summary — the command for `stdio`, the URL for `http`/`sse`. **Edit** and **Remove** act on that entry; **Add MCP server** opens a form with a type toggle:
+
+| Type | Fields |
+|---|---|
+| Command (stdio) | Command, Arguments (one per line), Environment variables (`KEY=VALUE` per line) |
+| HTTP or SSE | URL, transport (`http`/`sse`), Headers (`KEY=VALUE` per line) |
+
+Environment and header values support `${VAR_NAME}` placeholders, resolved the same way as [Extra environment variables](#environment) — from environment variables merged with keychain-stored secrets.
+
+`sdk`-type entries (registered by an in-process integration rather than a spawned command or remote URL) render read-only — edit `~/.claude/settings.json` directly to change one. If that file has invalid JSON, the tab shows the parse error and hides the add/edit controls rather than risking a write that clobbers whatever's actually on disk.
+
 ## Mobile settings
 
-Obsidian Mobile shows a reduced settings screen instead of the seven tabs above:
+Obsidian Mobile shows a reduced settings screen instead of the eight tabs above:
 
 | Setting | Description |
 |---|---|
