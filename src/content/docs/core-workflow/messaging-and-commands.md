@@ -81,6 +81,18 @@ Type `@this` (no search needed) to instantly reference the currently active file
 
 When the context window fills up, Claude compacts the conversation automatically. You can also trigger it manually with `/compact`. Either way, a divider appears in the conversation showing when compaction happened and how many tokens were in context beforehand. Compaction markers are persisted and survive plugin reloads.
 
+## Tool call visibility
+
+As Claude works, you see exactly what it's doing: each tool call renders as a pill showing which file it's reading or writing, with elapsed time once complete. REPL calls get a dedicated icon and summary, git operations render as structured pills, and a file Claude edited that you subsequently modified shows a **"Modified by user"** badge.
+
+**Live grouping.** Consecutive calls of the same kind — a run of file reads, a string of edits — collapse into a single expandable group (e.g. "Exploring (12)") instead of a long scroll of individual pills. This happens **live as the turn runs**, not just after it settles, so a long agentic run never grows an unbounded wall of pills while Claude is still working:
+
+- The in-progress group shows a **"still running" pulse** while a call in it is active.
+- A group you **expand mid-turn stays expanded** as more same-kind calls arrive, so you can keep watching the detail without it collapsing under you.
+- A group containing a **failed call auto-expands and stays flagged**, so errors are never hidden inside a collapsed pill.
+
+Grouping works on both desktop and [mobile](/docs/integrations/remote-and-voice/#what-you-can-do-on-mobile).
+
 ## Compressed conversation view
 
 Long agentic threads — especially ones with many tool calls spread across dozens of turns — can be hard to scan. Toggle **Compress view** from the `⋯` menu (top-right of the conversation panel) to collapse the history into a scannable list of one-line summaries.
