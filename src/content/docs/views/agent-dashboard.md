@@ -27,6 +27,12 @@ After each completed response, the summarizer runs in a lightweight background p
 
 This combination means you can dispatch several threads in parallel, switch to other work, then return to the dashboard to understand the state of every agent without reading through each conversation. Summarization behavior — auto vs. manual, and which model does the summarizing — is configurable in [Settings Reference → Features](/docs/reference/settings/#features).
 
+## Scheduled Jobs
+
+An hourly (or more frequent) [scheduled task](/docs/automation/scheduled-tasks/) can produce dozens of quiet threads a day, burying the manually-created ones you actually need to triage. When a run created by the scheduler is unreviewed, reviewed, or empty — never one that's running, awaiting a permission/question, or errored — it's pulled out of its normal group into a **Scheduled Jobs** section at the bottom of the dashboard, one collapsed row per job showing its name, run count, and the latest run's time. Click a row to expand it into the individual runs.
+
+Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads**, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
+
 ## Jump to latest unreviewed
 
 Run **Jump to latest unreviewed completed agent** from the command palette to open the Agent Dashboard (if it isn't already open) and jump straight to the most recently completed thread you haven't looked at yet. This is the fastest way to work through a backlog of finished agents after dispatching several tasks in parallel.
