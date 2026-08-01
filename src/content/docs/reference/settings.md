@@ -1,11 +1,11 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Remote, and Skills.
+description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Remote, Skills, and MCP.
 category: reference
 order: 1
 ---
 
-Settings are organized into seven tabs. On desktop, all seven are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
+Settings are organized into eight tabs. On desktop, all eight are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
 
 ## General
 
@@ -118,9 +118,13 @@ See [Remote access (mobile)](/docs/integrations/remote-and-voice/#remote-access-
 
 Register local skill collections — GitHub repos or local folders — to browse and install from within the [Skills Manager](/docs/automation/skills-manager/). Each source shows its type, path, and (for GitHub sources) an update badge when the clone is behind its remote, with **Update** and **Remove** actions per source, and an **Add Source** button to register a new one.
 
+## MCP
+
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread — no hand-editing JSON required for the common case. This tab edits your **global** `~/.claude/settings.json`, shared by every vault and by the `claude` CLI itself. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, read-only `sdk` entries, and how the tab guards a malformed config.
+
 ## Mobile settings
 
-Obsidian Mobile shows a reduced settings screen instead of the seven tabs above:
+Obsidian Mobile shows a reduced settings screen instead of the eight tabs above:
 
 | Setting | Description |
 |---|---|
