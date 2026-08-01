@@ -31,6 +31,12 @@ Use the group-by toggle in the board header (the columns/folder icon, next to se
 
 ![Kanban board grouped by folder — one horizontal swimlane per app/project, each with its own nested status columns](../../../assets/screenshots/screenshot-kanban-folder.png)
 
+## Stacked scheduled-job threads
+
+Repeat runs of the same [scheduled task](/docs/automation/scheduled-tasks/) pile up fast — an hourly triage job produces ~24 cards a day, crowding out the threads you started yourself. In the quiet columns only (**New**, **Done**, **Ready** — a run that's Working, Awaiting, Waiting, or Failed always stays its own card), runs that share a scheduled job collapse into a single dashed-border rollup card: job name, a "×N" run count, and the latest run's time. Click the card to expand it into the individual run cards, indented beneath. This applies in both status-column and folder-swimlane mode.
+
+Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads** if you'd rather see every run as its own card, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
+
 ## Auto-collapse side panels
 
 Set **Settings → Features → Kanban board → Auto-collapse side panel** to `Left sidebar`, `Right sidebar`, or `Both sidebars` to automatically collapse Obsidian's sidebar panel(s) when the Kanban tab opens, giving the board more horizontal room. Only the panel(s) the Kanban view collapsed are restored when you close the tab, so it won't fight a panel you collapsed or expanded manually. Defaults to `None` (opt-in) — see [Settings Reference → Features](/docs/reference/settings/#features).
