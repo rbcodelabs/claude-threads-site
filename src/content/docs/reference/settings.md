@@ -119,20 +119,7 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Manage the external MCP servers referenced in [MCP Elicitation](/docs/permissions/permission-modes-and-plan-mode/#mcp-elicitation) and the [scheduled-sessions note](/docs/permissions/permission-modes-and-plan-mode/#permissions) — add, edit, or remove entries without hand-editing JSON.
-
-**This tab edits your global `~/.claude/settings.json`** (or the per-machine file it symlinks to), not a per-vault config. That file is shared by every vault running Claude Threads on the machine and by the `claude` CLI itself — a server added here is visible everywhere, and vice versa. Changes apply to new threads only; sessions already running keep whatever MCP servers they started with.
-
-Each row shows the server's name, a type badge (`stdio`, `http`, `sse`, or `sdk`), and a one-line summary — the command for `stdio`, the URL for `http`/`sse`. **Edit** and **Remove** act on that entry; **Add MCP server** opens a form with a type toggle:
-
-| Type | Fields |
-|---|---|
-| Command (stdio) | Command, Arguments (one per line), Environment variables (`KEY=VALUE` per line) |
-| HTTP or SSE | URL, transport (`http`/`sse`), Headers (`KEY=VALUE` per line) |
-
-Environment and header values support `${VAR_NAME}` placeholders, resolved the same way as [Extra environment variables](#environment) — from environment variables merged with keychain-stored secrets.
-
-`sdk`-type entries (registered by an in-process integration rather than a spawned command or remote URL) render read-only — edit `~/.claude/settings.json` directly to change one. If that file has invalid JSON, the tab shows the parse error and hides the add/edit controls rather than risking a write that clobbers whatever's actually on disk.
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread — no hand-editing JSON required for the common case. This tab edits your **global** `~/.claude/settings.json`, shared by every vault and by the `claude` CLI itself. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, read-only `sdk` entries, and how the tab guards a malformed config.
 
 ## Mobile settings
 
