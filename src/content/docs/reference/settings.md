@@ -99,6 +99,10 @@ See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk
 | Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Kanban board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
 | Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and the [Agent Dashboard](/docs/views/agent-dashboard/#scheduled-jobs)'s Scheduled Jobs section |
 
+### Orchestrator
+
+Shows the status of the [thread-orchestrator](/docs/views/thread-orchestrator/) thread: setup guidance if none has been created yet, an **Open** button once it resolves to a live thread, or a warning if the stored thread was deleted or archived outside the plugin.
+
 ### Scheduled tasks
 
 Lists every [scheduled task](/docs/automation/scheduled-tasks/), showing its schedule description, last run time, and next run time. Toggle a task on/off or delete it inline. New scheduled tasks are created by asking Claude in natural language, not from this settings panel.
