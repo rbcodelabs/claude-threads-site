@@ -60,8 +60,9 @@ Type `/` in the input box to see built-in context commands and your installed Cl
 | `/context` | Show a per-category token usage breakdown for the active session (tools, system prompt, skills, MCP tools, conversation, etc.) |
 | `/create-pr` | Ask Claude to push the branch and open a PR (`gh pr create`) — same action as the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar)'s Create PR button |
 | `/create-pr --draft` | Same, but opens a draft PR — same as the git diff bar's Create draft PR button |
+| `/escalate <prompt>` | Route just this turn to the [escalation model](/docs/core-workflow/models-goals-loops/#model-escalation) (default keyword `/escalate`; keyword and target model are configurable in Settings, and the row only appears here when escalation is enabled) |
 
-`/model`, `/goal`, and `/loop` details are covered in full on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/).
+`/model`, `/goal`, `/loop`, and `/escalate` details are covered in full on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/).
 
 **Command pills** — when you complete a built-in command (type `/goal ` or pick one from the dropdown), it turns into a pill chip at the left of the input box. Type the arguments after it; a single Backspace at the start of the input (or clicking the pill's `×`) deletes the whole command. After a command, argument autocomplete kicks in — `/model ` offers `fable|opus|sonnet|haiku|default`.
 
