@@ -17,6 +17,19 @@ This is distinct from [`/loop`](/docs/core-workflow/models-goals-loops/#loops), 
 
 Existing scheduled tasks are listed under **Settings → Features → Scheduled tasks**, each showing its schedule description, last run time, and next run time (when enabled). You can toggle a task on/off or delete it from the same list — see [Settings Reference → Features](/docs/reference/settings/#features).
 
+## Active-hours windows
+
+A scheduled task can be restricted to a local time-of-day window, so it only fires during — say — business hours. Ask Claude to scope it (*"…but only between 7am and 10pm"*), or set it directly through the Cron tools with `activeHoursStart` / `activeHoursEnd` (24-hour `HH:MM`).
+
+When a cycle comes due **outside** the window, the scheduler skips it entirely — no thread is opened, no prompt is sent — and jumps straight to the next window-open time. An every-6-hour job scoped to `07:00`–`22:00` therefore never wastes an overnight run; it simply resumes at 07:00. Overnight windows work too: set the start after the end (e.g. `22:00`–`06:00`) and the window wraps past midnight.
+
+The **Settings → Features → Scheduled tasks** list shows the window inline in each task's schedule description, e.g. *"Every 6 hour(s) (07:00-22:00 only)"*.
+
+This replaces the older pattern of baking a business-hours check into the prompt itself (e.g. *"if the current hour is before 7 or after 22, stop immediately"*), which burned a whole thread and turn every time the task fired outside hours just to check the clock and bail. With an active-hours window the out-of-hours run never happens at all.
+
+- **`CronCreate`** accepts `activeHoursStart` and `activeHoursEnd` — provide both together, or neither.
+- **`CronUpdate`** accepts `activeHoursStart` / `activeHoursEnd` to set or change the window (a partial change is merged with the existing one), and `clearActiveHours: true` to remove the restriction entirely.
+
 ## Cron MCP tools
 
 Under the hood, the scheduler is exposed to any thread as a set of MCP tools, so an agent can create, inspect, and manage scheduled tasks on its own without you going through Settings:
