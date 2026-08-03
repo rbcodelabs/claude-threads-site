@@ -95,6 +95,10 @@ Long agentic threads — especially ones with many tool calls spread across doze
 
 Summaries are cached in memory for the session. They regenerate on the next reload — which keeps storage simple while keeping the background work cheap (the in-process model is fast and inexpensive).
 
+## Background tasks
+
+Claude can kick off a long-running task in the background (for example, a `Bash` command run with `run_in_background: true`) and keep working while it finishes. When that task completes — even after its turn has already ended, or the thread has gone idle — the result is saved directly into the conversation as a compact pill, the same style used for live sub-agent progress rows. The pill shows a short summary and a success or failure indicator, and it's there whenever you next open the thread — no separate popup notification to catch.
+
 ## Thread summaries
 
 A summary bar above the messages shows what the thread is about. It updates automatically after each response if **Auto-summarize** is enabled, or you can trigger it manually with the brain icon. The summarizer updates the tab name — auto-summarize only does this when the name is still the default "Thread N"; manual summarize always applies the new title regardless of what the tab is currently named. (Tabs also rename themselves automatically after the first exchange — see [Dispatching your first task](/docs/getting-started/first-thread/).)
