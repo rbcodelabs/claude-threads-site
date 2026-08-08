@@ -1,6 +1,6 @@
 ---
 title: Kanban Board
-description: Status columns, folder swimlanes, task lists on cards, and auto-collapsing side panels.
+description: Status columns, folder swimlanes, project columns, task lists on cards, and auto-collapsing side panels.
 category: views
 order: 2
 ---
@@ -25,15 +25,23 @@ Columns are sorted most-recently-active first. The board has its own floating di
 
 When a thread has an active `TodoWrite` / `TaskCreate` checklist, its kanban card shows a compact task list: up to 5 items with status icons (✔ completed, ■ in-progress, ○ pending), a "X / Y done" progress line, and "+N more" when there are additional tasks. The list updates live as the agent ticks items off — useful for seeing exactly how far along a long-running task is without opening the conversation.
 
-## Group by folder
+## Group by folder or project
 
-Use the group-by toggle in the board header (the columns/folder icon, next to search) to switch from status columns to **folder swimlanes** — one horizontal lane per app/project, so you can see every conversation for a given codebase together. Each lane is keyed by the thread's assigned [Project](/docs/integrations/git-and-vault/#projects), falling back to a working-directory label (git repo name) when no project is set, and an **Unassigned** lane catches threads with no folder. Inside each lane the cards are still grouped into the same status columns (empty columns are hidden to keep lanes compact). Lanes are ordered by most-recent activity, with Unassigned pinned last. The choice persists across reloads.
+The group-by toggle in the board header (the icon next to search) cycles through three layouts: **status columns** (the default), **folder swimlanes**, and **project columns**. Each click advances to the next; the choice persists across reloads.
+
+### Folder swimlanes
+
+One horizontal lane per app/project, so you can see every conversation for a given codebase together. Each lane is keyed by the thread's assigned [Project](/docs/integrations/git-and-vault/#projects), falling back to a working-directory label (git repo name) when no project is set, and an **Unassigned** lane catches threads with no folder. Inside each lane the cards are still grouped into the same status columns (empty columns are hidden to keep lanes compact). Lanes are ordered alphabetically (case-insensitive), with Unassigned pinned last.
 
 ![Kanban board grouped by folder — one horizontal swimlane per app/project, each with its own nested status columns](../../../assets/screenshots/screenshot-kanban-folder.png)
 
+### Project columns
+
+One vertical column per app/project (same project resolution as folder swimlanes — alphabetical, Unassigned last), with each column's cards grouped under status **section headers**: Working, Waiting, New, Reviewed, Failed, Ready. This mirrors the Agent Dashboard sidebar's grouping — awaiting-permission threads fold into **Working**, and empty sections are omitted. Each column reads top-to-bottom like a compact per-project dashboard, which keeps a busy single-project board scannable without horizontal scrolling.
+
 ## Stacked scheduled-job threads
 
-Repeat runs of the same [scheduled task](/docs/automation/scheduled-tasks/) pile up fast — an hourly triage job produces ~24 cards a day, crowding out the threads you started yourself. In the quiet columns only (**New**, **Done**, **Ready** — a run that's Working, Awaiting, Waiting, or Failed always stays its own card), runs that share a scheduled job collapse into a single dashed-border rollup card: job name, a "×N" run count, and the latest run's time. Click the card to expand it into the individual run cards, indented beneath. This applies in both status-column and folder-swimlane mode.
+Repeat runs of the same [scheduled task](/docs/automation/scheduled-tasks/) pile up fast — an hourly triage job produces ~24 cards a day, crowding out the threads you started yourself. In the quiet columns only (**New**, **Done**/**Reviewed**, **Ready** — a run that's Working, Awaiting, Waiting, or Failed always stays its own card), runs that share a scheduled job collapse into a single dashed-border rollup card: job name, a "×N" run count, and the latest run's time. Click the card to expand it into the individual run cards, indented beneath. This applies in status-column, folder-swimlane, and project-column mode.
 
 Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads** if you'd rather see every run as its own card, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
 
