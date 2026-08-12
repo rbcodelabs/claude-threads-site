@@ -67,6 +67,29 @@ pulls every GitHub Release from the plugin repo
 one Markdown file per release, verbatim. It requires the `gh` CLI to be
 authenticated (`gh auth status`). Like the screenshots, this is NOT run
 automatically as part of the build - the site is `output: 'static'` and
-must not depend on live GitHub API calls at build time. Re-run it manually
-whenever a new plugin version ships (to pick up the new release) or to pull
-in edits to existing release notes on GitHub.
+must not depend on live GitHub API calls at build time.
+
+### Auto-refresh (you normally do NOT need to touch this)
+
+The changelog is kept current by a scheduled job, so a new plugin release
+flows to the live site without anyone remembering to regenerate. When
+opening an unrelated PR you can ignore the changelog entirely - do not
+hand-run the generator or add "refresh changelog" to your PR scope.
+
+- **Schedule:** a daily CronCreate item, "Changelog auto-refresh - Claude
+  Threads site" (see `CronList`). A deterministic gate runs
+  `changelog:generate` first and only spawns an agent on days where a
+  new/changed release is actually detected, so idle days cost nothing.
+- **Isolation:** all automated work happens in a DEDICATED clone at
+  `~/projects/claude-threads-site-autobot`, never the primary checkout.
+  The gate does a `git reset --hard`, which is why it must never point at a
+  working checkout that might hold uncommitted changes.
+- **Flow when a release is detected:** regenerate -> `astro check` ->
+  branch -> PR -> wait for preview -> smoke-test `/changelog/` via
+  `vercel curl` -> squash-merge -> verify production at
+  `https://threads.rbcodelabs.com/changelog/`. It only pings the user on
+  failure.
+
+**Manual regeneration** is still fine anytime (e.g. to pull in edited
+release notes immediately): run `npm run changelog:generate`, then commit
+the diff under `src/content/changelog/`.
