@@ -152,6 +152,7 @@ h1, h2, h3, h4, h5, h6 {
     color: rgb(var(--color-secondary));
     text-decoration: underline;
     text-underline-offset: 2px;
+    overflow-wrap: anywhere;
   }
 
   .docs-content a:hover {
@@ -170,6 +171,7 @@ h1, h2, h3, h4, h5, h6 {
     border: 1px solid rgb(var(--color-border));
     border-radius: 0.25rem;
     padding: 0.1rem 0.35rem;
+    overflow-wrap: anywhere;
   }
 
   .docs-content pre {
