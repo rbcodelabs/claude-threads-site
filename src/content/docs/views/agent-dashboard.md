@@ -21,6 +21,15 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ![Inline workflow progress — live agent rows with running/done dots and a phase label](../../../assets/screenshots/screenshot-workflow-progress.png)
 
+## Background task completions
+
+A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the dashboard (and the Kanban board) keeps it under **Working** until the background task or workflow reports back.
+
+What happens when it does report back depends on whether the thread is still active:
+
+- **Thread still streaming:** the result shows up inline via the running turn's live task pill.
+- **Thread has gone idle:** a ✓/✗ summary is appended directly into that thread's conversation as a subtle centered notice row, so it's there whenever you next open the thread or scroll back — instead of a toast you had to be looking at the moment it fired.
+
 ## Auto-generated summaries (idle threads)
 
 After each completed response, the summarizer runs in a lightweight background process (a separate Claude Code instance using a small model) and writes a multi-sentence recap of what that thread worked on. This summary is shown in the dashboard row so you can re-orient yourself to any thread at a glance — what it accomplished, what files it touched, what's left to do.
