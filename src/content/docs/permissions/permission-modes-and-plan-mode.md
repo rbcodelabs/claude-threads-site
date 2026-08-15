@@ -24,6 +24,8 @@ The default behavior can be changed globally in **Settings → Tools → Permiss
 
 > **Note for scheduled sessions.** Threads created by the built-in scheduler automatically use `dontAsk` so [cron jobs](/docs/automation/scheduled-tasks/) never stall waiting for a permission dialog that nobody is watching. They also inherit any external MCP servers defined in `~/.claude/settings.json` (Compass, Helio, or any other user-configured HTTP/SSE/stdio server) alongside the plugin's built-in tools, so scheduled agents have the same tool surface as an interactive CLI session — `${VAR_NAME}` placeholders in that config are resolved from environment variables and keychain-stored secrets.
 
+> **Auto-denied tool calls.** In `auto` and `dontAsk` mode — or when a deny rule blocks a tool — a tool call can be denied without an interactive prompt. When that happens the conversation shows a distinct **"Auto-denied &lt;tool&gt;"** annotation, with the deciding reason (e.g. `rule` or `mode`), so the denial stays visible instead of only surfacing as a failed tool result.
+
 ## Plan Mode
 
 Set **Permission Mode → `plan`** globally in Settings, or use the **shield button** in the thread footer to set it for a single thread, to enable Plan Mode. In this mode Claude reads, researches, and thinks — but doesn't write files or run commands — until it has produced a written plan and you've approved it.
