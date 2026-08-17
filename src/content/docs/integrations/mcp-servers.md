@@ -5,9 +5,11 @@ category: integrations
 order: 3
 ---
 
-Every Claude Threads session ships with a built-in `obsidian` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Beyond that, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and every new thread picks them up automatically.
+Every Claude Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
 
-Those external servers live in your **global Claude Code config** (`~/.claude/settings.json`). The **Settings → MCP** tab lets you list, add, edit, and remove them from inside Obsidian, so the common cases never require hand-editing JSON.
+Beyond that built-in surface, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and every new thread picks them up automatically.
+
+Those external servers live in your **global Claude Code config** (`~/.claude/settings.json`). The **Settings → MCP** tab lets you list, add, edit, and remove them from inside the host app, so the common cases never require hand-editing JSON.
 
 ![Settings MCP tab: a list of configured MCP servers, each with a type badge (stdio, http, sdk), a one-line summary, and Edit and Remove buttons, plus an Add MCP server button](../../../assets/screenshots/screenshot-mcp-servers.png)
 
@@ -19,7 +21,7 @@ Open **Settings → Claude Threads** and select the **MCP** tab. On mobile, the 
 
 **The MCP tab edits your global `~/.claude/settings.json`** (or the per-machine file it symlinks to) — not a per-vault or per-plugin config. That file is shared by:
 
-- Every Obsidian vault running Claude Threads on this machine, and
+- Every vault running Claude Threads on this machine, and
 - The `claude` CLI itself.
 
 So a server you add here shows up everywhere, and a server you (or a teammate's setup script) added via the CLI shows up here too. The tab always displays the resolved path to the file it is editing, so you can confirm exactly what's on disk.
