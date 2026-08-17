@@ -2,7 +2,7 @@
 title: Thread Orchestrator
 description: The bundled thread-orchestrator skill — a supervisory agent that tracks peer threads and proposes replies for human approval.
 category: views
-order: 3
+order: 4
 ---
 
 The **thread-orchestrator** is a bundled Claude Code skill (`resources/skills/thread-orchestrator`) that turns one thread into a supervisor over several peers. Open it with **Open Thread Orchestrator** from the command palette, or the `open-thread-orchestrator` command ID.

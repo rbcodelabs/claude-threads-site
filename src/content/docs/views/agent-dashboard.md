@@ -21,6 +21,10 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ![Inline workflow progress — live agent rows with running/done dots and a phase label](../../../assets/screenshots/screenshot-workflow-progress.png)
 
+## Native agent teams
+
+When a Claude or Codex thread launches native child agents, the dashboard shows them beneath their owning thread as a nested team. Follow the hierarchy to see descendants, select an agent to inspect its lifecycle and activity, or search by agent role, task, or current activity. The same durable Agent Team view is available inside the parent conversation. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
+
 ## Auto-generated summaries (idle threads)
 
 After each completed response, the summarizer runs in a lightweight background process (a separate Claude Code instance using a small model) and writes a multi-sentence recap of what that thread worked on. This summary is shown in the dashboard row so you can re-orient yourself to any thread at a glance — what it accomplished, what files it touched, what's left to do.

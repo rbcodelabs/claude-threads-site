@@ -2,7 +2,7 @@
 title: Kanban Board
 description: Status columns, folder swimlanes, project columns, task lists on cards, and auto-collapsing side panels.
 category: views
-order: 2
+order: 3
 ---
 
 Toggle the **Kanban** button in the Agent Dashboard toolbar (or run **Open Kanban Board** from the command palette) to switch from the default list view to a board layout. Each thread is a card, bucketed into a column for its agent state:
@@ -18,6 +18,8 @@ Toggle the **Kanban** button in the Agent Dashboard toolbar (or run **Open Kanba
 | **Ready** | Empty — no active work |
 
 Columns are sorted most-recently-active first. The board has its own floating dispatch panel at the bottom — type a task and press Enter to launch a new thread without leaving the board. List view is the default; the preference persists across reloads.
+
+When a thread owns Claude or Codex child agents, its card also shows a compact native-agent count. Open the thread or [Agent Dashboard](/docs/views/agent-dashboard/) to inspect the nested team; see [Native Agent Workspace](/docs/views/native-agent-workspace/) for details.
 
 ![Kanban board grouped by status — Working, Awaiting, Waiting, New, Done, Failed, and Ready columns, each holding thread cards](../../../assets/screenshots/screenshot-kanban-status.png)
 
