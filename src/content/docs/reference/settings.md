@@ -54,12 +54,12 @@ See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation)
 | Setting | Description |
 |---|---|
 | Permission mode | How Claude handles tool-use permission prompts — see the full [permission mode table](/docs/permissions/permission-modes-and-plan-mode/#permissions) |
-| Web Viewer tool | Lets Claude open URLs directly in the Obsidian Web Viewer panel (`obsidian_open_url`). Requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
+| Web Viewer tool | Lets Claude open URLs directly in the host Web Viewer panel (`host_open_url`). In Obsidian, this requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
 | Hidden built-in tools | Comma-separated Claude Code built-in tools to hide from sessions. `Cron*` tools are hidden by default — the plugin has its own [scheduler](/docs/automation/scheduled-tasks/). |
 
 ### Always-allowed tools
 
-A list of tools granted automatically without prompting. Tools land here when you choose "Always Allow" in a [permission prompt](/docs/permissions/permission-modes-and-plan-mode/#permissions), or you can add one by name directly (e.g. `Bash`, `Read`, `mcp__obsidian__…`). Each entry can be removed individually.
+A list of tools granted automatically without prompting. Tools land here when you choose "Always Allow" in a [permission prompt](/docs/permissions/permission-modes-and-plan-mode/#permissions), or you can add one by name directly (e.g. `Bash`, `Read`, `mcp__claude_threads__…`). Each entry can be removed individually. Existing `mcp__obsidian__…` entries continue to work as deprecated compatibility aliases until the next major release.
 
 ## Vault
 

@@ -25,8 +25,8 @@ If you have the [Vault Bridges](https://github.com/rbcodelabs/obsidian-vault-bri
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `obsidian_list_vault_bridges` | — | Returns all currently configured bridges. Agents should call this first to check what already exists before adding a new one. |
-| `obsidian_add_vault_bridge` | `name`, `repoPath`, `vaultPath`, `sourcePath?`, `branch?`, `autoSync?`, `syncNow?` | Adds a new bridge live via the Vault Bridges API. The bridge is registered immediately — the status bar updates, per-bridge push/pull commands are wired up, and settings are saved. If a bridge with the same `repoPath` + `vaultPath` already exists, the existing record is returned without creating a duplicate. |
+| `vault_list_bridges` | — | Returns all currently configured bridges. Agents should call this first to check what already exists before adding a new one. |
+| `vault_add_bridge` | `name`, `repoPath`, `vaultPath`, `sourcePath?`, `branch?`, `autoSync?`, `syncNow?` | Adds a new bridge live via the Vault Bridges API. The bridge is registered immediately — the status bar updates, per-bridge push/pull commands are wired up, and settings are saved. If a bridge with the same `repoPath` + `vaultPath` already exists, the existing record is returned without creating a duplicate. |
 
 Both tools return a clear error if the Vault Bridges plugin is not installed or not enabled.
 
@@ -49,18 +49,18 @@ Projects group threads by vault sub-folder and inject shared context into every 
 
 **Managing projects:** Edit the name, folder, or context prompt at any time in Settings → Vault → Projects. Deleting a project keeps all its threads — they just lose the project association.
 
-Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder) group threads, and how `obsidian_list_projects` / `obsidian_create_project` / `obsidian_set_thread_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
+Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
 
 ## Vault tools
 
-Every Claude thread runs with a built-in MCP server that exposes read and search access to your Obsidian vault — no configuration required:
+Every Claude thread runs with the built-in `claude_threads` MCP server, which exposes read and search access to your vault — no configuration required:
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `obsidian_search_vault` | `query`, `limit?` | Full-text search across all Markdown files. Tokenizes multi-word queries so each term is matched independently. Returns results ranked by relevance (filename hits weighted 10×) with a ~300-char excerpt from the densest matching region. Default limit: 20. |
-| `obsidian_get_note_metadata` | `path` | Returns the full metadata cache entry for a note: frontmatter, tags, wikilinks, and headings. |
-| `obsidian_get_backlinks` | `path` | Returns all notes that link to the specified file, with source path and original link text. |
-| `obsidian_get_outgoing_links` | `path` | Returns all wikilinks and Markdown links a note makes to other files, with display text and resolved vault paths. |
+| `vault_search` | `query`, `limit?` | Full-text search across all Markdown files. Tokenizes multi-word queries so each term is matched independently. Returns results ranked by relevance (filename hits weighted 10×) with a ~300-char excerpt from the densest matching region. Default limit: 20. |
+| `vault_get_note_metadata` | `path` | Returns the full metadata cache entry for a note: frontmatter, tags, wikilinks, and headings. |
+| `vault_get_backlinks` | `path` | Returns all notes that link to the specified file, with source path and original link text. |
+| `vault_get_outgoing_links` | `path` | Returns all wikilinks and Markdown links a note makes to other files, with display text and resolved vault paths. |
 
 Combined with native `[[wikilink]]` rendering in the conversation — links Claude writes or references resolve the same way they would in any Obsidian note — this means an agent can navigate and reason about your vault's link graph the same way you do.
 

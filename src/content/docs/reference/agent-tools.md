@@ -5,31 +5,34 @@ category: reference
 order: 3
 ---
 
-Every Claude thread runs with a built-in MCP server that exposes tools for vault access, session control, and — for multi-agent workflows — live coordination with other threads. These tools are available automatically; no configuration is required.
+Every thread runs with built-in tools for vault access, session control, and — for multi-agent workflows — live coordination with other threads. Claude receives them through the host-neutral `claude_threads` MCP server; Codex receives the same canonical definitions through its dynamic-tool protocol. No configuration is required.
+
+The former `obsidian` server and `obsidian_*` names remain callable as deprecated compatibility aliases until the next major release. New prompts, permission rules, and automation should use the canonical names below.
 
 ## Vault tools
 
-Read and search your Obsidian vault from within any thread.
+Read and search your vault from within any thread.
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `obsidian_search_vault` | `query`, `limit?` | Full-text search across all Markdown files. Tokenizes multi-word queries so each term is matched independently. Returns results ranked by relevance (filename hits weighted 10×) with a ~300-char excerpt from the densest matching region. Default limit: 20. |
-| `obsidian_get_note_metadata` | `path` | Returns the full metadata cache entry for a note: frontmatter, tags, wikilinks, and headings. |
-| `obsidian_get_backlinks` | `path` | Returns all notes that link to the specified file, with source path and original link text. |
-| `obsidian_get_outgoing_links` | `path` | Returns all wikilinks and Markdown links a note makes to other files, with display text and resolved vault paths. |
+| `vault_search` | `query`, `limit?` | Full-text search across all Markdown files. Tokenizes multi-word queries so each term is matched independently. Returns results ranked by relevance (filename hits weighted 10×) with a ~300-char excerpt from the densest matching region. Default limit: 20. |
+| `vault_get_note_metadata` | `path` | Returns the full metadata cache entry for a note: frontmatter, tags, wikilinks, and headings. |
+| `vault_get_backlinks` | `path` | Returns all notes that link to the specified file, with source path and original link text. |
+| `vault_get_outgoing_links` | `path` | Returns all wikilinks and Markdown links a note makes to other files, with display text and resolved vault paths. |
 
-## UI tools
+## Workspace and host tools
 
-Interact with the active Obsidian workspace.
+Interact with the active Obsidian or Geode workspace.
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `obsidian_get_active_file` | — | Returns metadata (path, basename, extension, size, mtime, ctime) for the file currently open in the editor, or `null` if nothing is open. |
-| `obsidian_get_open_tabs` | — | Returns all open tabs with path, title, view type, and which one is active. |
-| `obsidian_navigate_to_file` | `path`, `newLeaf?` | Opens a vault file in the editor. Pass `newLeaf: true` to open in a new tab. |
-| `obsidian_insert_at_cursor` | `text` | Inserts text at the cursor in the active editor, replacing any current selection. |
-| `obsidian_list_commands` | `query?` | Returns all registered Obsidian commands (id + name), sorted alphabetically. Pass a `query` string to filter. Use this to discover command IDs before calling `obsidian_execute_command`. |
-| `obsidian_execute_command` | `commandId` | Runs any Obsidian command by its ID (e.g. `obsidian-git:push`, `editor:toggle-bold`). Returns success or failure. |
+| `workspace_get_active_file` | — | Returns metadata (path, basename, extension, size, mtime, ctime) for the file currently open in the editor, or `null` if nothing is open. |
+| `workspace_get_open_tabs` | — | Returns all open tabs with path, title, view type, and which one is active. |
+| `workspace_navigate_to_file` | `path`, `newLeaf?` | Opens a vault file in the editor. Pass `newLeaf: true` to open in a new tab. |
+| `workspace_insert_at_cursor` | `text` | Inserts text at the cursor in the active editor, replacing any current selection. |
+| `host_list_commands` | `query?` | Returns all registered host commands (id + name), sorted alphabetically. Pass a `query` string to filter. Use this to discover command IDs before calling `host_execute_command`. |
+| `host_execute_command` | `commandId` | Runs any host command by its ID (e.g. `obsidian-git:push`, `editor:toggle-bold`). Third-party command IDs are unchanged. |
+| `host_open_url` | `url`, `newTab?` | Opens a URL in the host Web Viewer panel. Reuses an existing tab by default; set `newTab: true` to force a fresh tab. |
 
 ## Session tools
 
@@ -50,19 +53,19 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `obsidian_get_current_thread` | — | Returns this thread's own metadata: `id`, `title`, `status`, `isRunning`, `projectId`, `cwd`, `updatedAt`, `messageCount`. Useful for knowing your own context before coordinating with peers. |
-| `obsidian_list_threads` | — | Returns all threads with the same metadata fields as `obsidian_get_current_thread`, including a live `isRunning` flag. |
-| `obsidian_list_projects` | — | Returns all configured projects: `id`, `name`, `description`, `vaultFolder`. Useful for deciding which project context a new thread should use. |
-| `obsidian_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates a new project and persists it. Returns the created project snapshot including its `id` — capture this for use with `CronCreate`, `obsidian_set_thread_project`, and other project-aware APIs. |
-| `obsidian_set_thread_project` | `threadId`, `projectId` | Assigns a thread to a project. Pass `projectId: null` to detach the thread from its current project. Call `obsidian_list_projects` first to get a valid `projectId`. |
-| `obsidian_get_thread_messages` | `threadId`, `limit?` | Returns the live message history for any thread. Messages are filtered to `user` and `assistant` roles (internal compaction markers are excluded). Default: last 20 messages. |
-| `obsidian_wait_for_thread` | `threadId`, `timeoutSeconds?` | Blocks until the target thread finishes its current request (`isRunning` → `false`). Polls every second. Returns `{ done: true, elapsedSeconds }` on success, or `{ timedOut: true }` if the timeout is reached (default 120s, max 600s). Returns immediately if the thread is already idle. |
-| `obsidian_send_message_to_thread` | `threadId`, `message` | Queues a user message on another thread and triggers Claude to process it. Returns immediately once the message is enqueued — use `obsidian_wait_for_thread` to block until the response is ready. Cannot send to the current thread. |
-| `obsidian_archive_thread` | `threadId` | Saves the thread as a vault note (if vault save is enabled) then removes it from the active thread list. Use at the end of a release or multi-step session to close out completed threads automatically. A thread cannot archive itself. |
-| `obsidian_open_url` | `url`, `newTab?` | Opens a URL in the Obsidian Web Viewer panel. Reuses an existing Web Viewer tab by default; set `newTab: true` to force a fresh tab. Useful for opening local dev servers (`http://localhost:…`), HTML prototypes, or any web page directly from an agent without manual URL entry. |
-| `obsidian_set_thread_notes` | `threadId`, `notes` | Sets (overwrites) a thread's orchestrator tracking notes — free-form text for an inferred goal, status, and a last-reviewed cursor. Shown in a collapsible "Manager Notes" panel in ThreadsView, but never injected into any session's context. Pass an empty string to clear. |
-| `obsidian_set_thread_proposed_reply` | `threadId`, `text` | Sets an AI-proposed next message for a thread, awaiting human approval. Rendered as a banner above the compose box with **Approve & Send** / **Edit** / **Discard** actions — nothing is ever sent automatically. Distinct from the thread's own unsent compose-box draft. Cannot target the current thread. |
-| `obsidian_clear_thread_proposed_reply` | `threadId` | Clears a thread's pending proposed reply, if any, without sending it. Use when a prior proposal is stale or no longer relevant. |
+| `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
+| `threads_list` | — | Returns the same metadata for every thread, including live `isRunning` state. |
+| `threads_list_projects` | — | Returns configured projects and their vault folders. |
+| `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
+| `threads_set_project` | `threadId`, `projectId` | Assigns a thread to a project, or detaches it with `null`. |
+| `threads_get_messages` | `threadId`, `limit?` | Returns recent user and assistant messages. |
+| `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
+| `threads_wait` | `threadId`, `timeoutSeconds?` | Waits until a target thread becomes idle. |
+| `threads_send_message` | `threadId`, `message` | Queues a message on another thread and triggers it. |
+| `threads_archive` | `threadId` | Saves and removes a completed thread. A thread cannot archive itself. |
+| `threads_set_notes` | `threadId`, `notes` | Sets orchestrator tracking notes. |
+| `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval. |
+| `threads_clear_proposed_reply` | `threadId` | Clears a stale proposed reply. |
 
 These three tools back the bundled **thread-orchestrator** skill (`resources/skills/thread-orchestrator`), which lets one thread supervise several peers: it tracks per-thread notes across polling passes and proposes replies for a human to review rather than sending on a peer's behalf.
 
@@ -72,10 +75,10 @@ These three tools back the bundled **thread-orchestrator** skill (`resources/ski
 
 A typical delegation loop:
 
-1. Call `obsidian_list_threads` to find a peer, or `fork_conversation` to create a dedicated one
-2. Call `obsidian_send_message_to_thread` to assign a task
-3. Call `obsidian_wait_for_thread` to block until the peer finishes
-4. Call `obsidian_get_thread_messages` to read the result
+1. Call `threads_list` to find a peer, or `fork_conversation` to create a dedicated one
+2. Call `threads_send_message` to assign a task
+3. Call `threads_wait` to block until the peer finishes
+4. Call `threads_get_messages` to read the result
 
 This pattern works across any combination of threads — you can fan out to multiple peers simultaneously by sending messages to several threads before waiting on any of them.
 
@@ -85,8 +88,8 @@ If you have the [Vault Bridges](https://github.com/rbcodelabs/obsidian-vault-bri
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `obsidian_list_vault_bridges` | — | Returns all currently configured bridges. Agents should call this first to check what already exists before adding a new one. |
-| `obsidian_add_vault_bridge` | `name`, `repoPath`, `vaultPath`, `sourcePath?`, `branch?`, `autoSync?`, `syncNow?` | Adds a new bridge live via the Vault Bridges API. The bridge is registered immediately — the status bar updates, per-bridge push/pull commands are wired up, and settings are saved. If a bridge with the same `repoPath` + `vaultPath` already exists, the existing record is returned without creating a duplicate. |
+| `vault_list_bridges` | — | Returns all currently configured bridges. Agents should call this first to check what already exists before adding a new one. |
+| `vault_add_bridge` | `name`, `repoPath`, `vaultPath`, `sourcePath?`, `branch?`, `autoSync?`, `syncNow?` | Adds a new bridge live via the Vault Bridges API. The bridge is registered immediately — the status bar updates, per-bridge push/pull commands are wired up, and settings are saved. If a bridge with the same `repoPath` + `vaultPath` already exists, the existing record is returned without creating a duplicate. |
 
 Both tools return a clear error if the vault-bridges plugin is not installed or not enabled.
 
