@@ -32,7 +32,7 @@ See the full [Commands Reference](/docs/reference/commands/) for every keyboard-
 
 ## Forking a thread
 
-Forking splits the current conversation into a new, independent thread. Run **Fork current Claude thread** from the command palette, or use the `fork_conversation` MCP tool from within a thread. A lightweight Claude call distills the existing history into a focused starting prompt for the new thread — so the fork doesn't just copy the whole transcript, it starts the new thread with the relevant context already summarized. The original thread continues completely unaffected.
+Forking splits the current conversation into a new, independent thread. Run **Fork current Claude thread** from the command palette or enter `/fork` in the chat input. A lightweight Claude call distills the existing history into a focused starting prompt for the new thread — so the fork doesn't just copy the whole transcript, it starts the new thread with the relevant context already summarized. The original thread continues completely unaffected.
 
 Forking is useful when a conversation has drifted onto a tangent you want to pursue separately, or when you want to hand off a sub-problem to its own thread without losing the parent thread's momentum.
 

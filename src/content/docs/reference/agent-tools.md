@@ -44,7 +44,6 @@ Control the current thread's session state.
 | `ScheduleWakeup` | `delaySeconds`, `prompt`, `reason` | Schedules a message to be injected into this thread after a delay. Useful for polling CI, waiting for a deploy, or self-pacing a loop. While the wake-up is pending the thread shows a waiting indicator — a "Waiting" group with a live countdown (`Resumes in 4m — <reason>`) in the Agent Dashboard and the [Kanban board](/docs/views/kanban-board/), and a banner above the chat input — each with a one-click Cancel. Wakeups are persisted to disk (the same durable store backing [Scheduled Tasks](/docs/automation/scheduled-tasks/)), so a pending wakeup survives an Obsidian restart, plugin reload, or the machine sleeping — it fires on schedule, or immediately on next load if the fire time already passed. |
 | `EnterWorktree` | `branch?`, `baseBranch?`, `repoPath?` | Creates a git worktree for the current repo and switches the session cwd to it. Automatically routed to the plugin's MCP implementation, which tracks the in-session cwd correctly after `set_working_directory`. |
 | `ExitWorktree` | `worktreePath?`, `force?` | Removes the worktree and restores the session cwd to the original repo root. Defaults to the current effective cwd. Pass `force: true` to remove even if there are uncommitted changes. |
-| `fork_conversation` | `focus_area?` | Forks the current conversation into a new independent thread. A lightweight Claude call distills the history into a focused starting prompt. The current thread continues unaffected. |
 | `request_secret` | `secretName`, `reason`, `force?` | Prompts the user (via a modal) to provide a secret value such as an API key. The value is stored in the OS keychain under the plugin's namespace and injected into future sessions as an environment variable — it never appears in the conversation. Returns `{success: true, secretName, alreadyExisted: boolean}` if the user saves, or `{success: false, reason}` if cancelled. If a secret with the same name already exists, returns `alreadyExisted: true` immediately without prompting. Pass `force: true` to always re-prompt (e.g. when rotating a stale token) — the modal will indicate that the existing value will be replaced. |
 
 ## Thread coordination tools
@@ -55,6 +54,7 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 |---|---|---|
 | `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
 | `threads_list` | — | Returns the same metadata for every thread, including live `isRunning` state. |
+| `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. |
 | `threads_list_projects` | — | Returns configured projects and their vault folders. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
 | `threads_set_project` | `threadId`, `projectId` | Assigns a thread to a project, or detaches it with `null`. |
@@ -75,8 +75,8 @@ These three tools back the bundled **thread-orchestrator** skill (`resources/ski
 
 A typical delegation loop:
 
-1. Call `threads_list` to find a peer, or `fork_conversation` to create a dedicated one
-2. Call `threads_send_message` to assign a task
+1. Call `threads_create` with a prompt to create and immediately assign a dedicated thread, or call `threads_list` to find an existing peer
+2. For an existing peer, call `threads_send_message` to assign the task
 3. Call `threads_wait` to block until the peer finishes
 4. Call `threads_get_messages` to read the result
 
