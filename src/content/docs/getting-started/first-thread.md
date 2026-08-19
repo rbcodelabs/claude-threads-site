@@ -11,8 +11,10 @@ The first time you install Claude Threads on a fresh vault, the plugin opens a t
 
 1. Click the **Agent Dashboard** ribbon icon, or run **Open Agent Dashboard** from the command palette (`Cmd+P`)
 2. Type a task into the **dispatch box** at the top — for example, `Summarize the README in my project folder`
-3. Press **Enter** — Claude spins up a new thread and starts working
+3. Check the Claude or Codex harness shown on the kickoff button, then press **Enter** (or click the button) — the selected harness spins up a new thread and starts working
 4. Watch progress in the dashboard; click any thread row to open the full conversation in Chat
+
+To choose the other harness before sending, open the button's selector; the choice affects new threads in that dashboard, not existing threads or your global default. See [Agent Dashboard → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for mouse, touch, and keyboard gestures.
 
 That's the whole loop. From here, most of what you'll do is send follow-up messages, review results, and dispatch new tasks — see [Sending messages and slash commands](/docs/core-workflow/messaging-and-commands/) for the details of composing and sending.
 
