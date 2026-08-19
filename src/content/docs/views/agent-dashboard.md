@@ -11,6 +11,10 @@ Open the **Agent Dashboard** from the ribbon or command palette to see all threa
 
 A dispatch box sits at the top of the dashboard. Type a task and press Enter to spin up a new thread and start it working immediately — this is the fastest way to launch a task without first opening Chat. The dispatch box also accepts the `/model`, `/goal`, and `/loop` prefixes described in [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/#dispatching-with-commands), and supports attaching images or files via the paperclip button or drag-and-drop.
 
+The kickoff button displays the harness that will own the new thread: **Claude** or **Codex**. Press Enter or click the button to dispatch with the harness shown. To change it without dispatching, right-click or press and hold the button; from the keyboard, focus it and use `Shift+F10`, the Context Menu key, or `Alt+Down`. Choosing Claude or Codex updates the button, and that choice stays local to the mounted dashboard while you launch more threads.
+
+**Settings → Claude → Agent harness** provides the initial default only. A dashboard choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Kanban dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
+
 You can resolve pending permission requests directly from dashboard rows without switching threads — see [Permissions](/docs/permissions/permission-modes-and-plan-mode/) for what those requests look like.
 
 ## Live activity (running threads)

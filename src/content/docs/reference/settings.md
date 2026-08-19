@@ -20,6 +20,7 @@ Settings are organized into eight tabs. On desktop, all eight are shown; on mobi
 
 | Setting | Description |
 |---|---|
+| Agent harness | Initial Claude or Codex default for new [Dashboard and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
 | Default model | Model for new turns unless a thread overrides it with [`/model`](/docs/core-workflow/models-goals-loops/). "CLI default" defers to the Claude Code CLI configuration. Family aliases always track the latest version; pinned IDs lock to a specific release. Start a thread to populate the full model list from the CLI. |
