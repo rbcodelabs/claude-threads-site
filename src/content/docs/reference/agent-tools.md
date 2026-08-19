@@ -62,7 +62,7 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 | `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
 | `threads_wait` | `threadId`, `timeoutSeconds?` | Waits until a target thread becomes idle. |
 | `threads_send_message` | `threadId`, `message` | Queues a message on another thread and triggers it. |
-| `threads_archive` | `threadId` | Saves and removes a completed thread. A thread cannot archive itself. |
+| `threads_archive` | `threadId`, `confirm?` | Saves and removes a completed thread. A scheduled thread may target itself; the tool acknowledges with `deferred: true` and archives it only after the current run settles. Interactive threads cannot archive themselves. Archiving the Thread Orchestrator requires `confirm: true`. |
 | `threads_set_notes` | `threadId`, `notes` | Sets orchestrator tracking notes. |
 | `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval. |
 | `threads_clear_proposed_reply` | `threadId` | Clears a stale proposed reply. |
