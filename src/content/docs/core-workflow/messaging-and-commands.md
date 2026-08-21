@@ -61,7 +61,14 @@ Type `/` in the input box to see built-in context commands and your installed Cl
 | `/usage` | Show cross-provider token totals, quota windows and resets, and account activity where available |
 | `/create-pr` | Ask Claude to push the branch and open a PR (`gh pr create`) — same action as the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar)'s Create PR button |
 | `/create-pr --draft` | Same, but opens a draft PR — same as the git diff bar's Create draft PR button |
+| `/design <brief>` | Create or revise a secure, responsive static UI artifact for this thread and open it in Geode's ArtifactView |
 | `/escalate <prompt>` | Route just this turn to the [escalation model](/docs/core-workflow/models-goals-loops/#model-escalation) (default keyword `/escalate`; keyword and target model are configurable in Settings, and the row only appears here when escalation is enabled) |
+
+### Design artifacts in Geode
+
+Use `/design <brief>` in an existing thread to create a zero-install static UI artifact under `.geode/artifacts/` in your vault. Claude edits ordinary `index.html`, `styles.css`, `app.js`, and local asset files. The persisted artifact card keeps **Open preview**, **Capture**, and **Reveal source** available after the turn and after reopening the thread. Run `/design` without a brief to reopen the existing preview, or provide a new brief to revise the same artifact.
+
+Geode's ArtifactView provides live reload, desktop/tablet/mobile viewport controls, runtime diagnostics, and PNG capture. The preview runs in an isolated, ephemeral, Node-less guest with network, clipboard, downloads, popups, and external navigation denied. Outside Geode, Threads reveals the source instead of launching it without that sandbox.
 
 `/model`, `/goal`, `/loop`, and `/escalate` details are covered in full on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/).
 
