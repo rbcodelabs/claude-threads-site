@@ -27,7 +27,7 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ## Native agent teams
 
-When a Claude or Codex thread launches native child agents, the dashboard shows them beneath their owning thread as a nested team. Follow the hierarchy to see descendants, select an agent to inspect its lifecycle and activity, or search by agent role, task, or current activity. The same durable Agent Team view is available inside the parent conversation. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
+When a Claude or Codex thread launches native child agents, the dashboard shows them beneath their owning thread as a nested team. Follow the hierarchy to see descendants, select an agent to inspect its lifecycle and activity, or search by agent role, task, or current activity. Clicking an agent here opens the parent conversation with that agent's activity view already showing, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
 
 ## Auto-generated summaries (idle threads)
 

@@ -1,13 +1,29 @@
 ---
 title: Native Agent Workspace
-description: Follow Claude and Codex child agents as a durable, nested team inside their parent thread.
+description: Follow Claude and Codex child agents from a compact composer pill, without an agent tree crowding out your conversation.
 category: views
 order: 2
 ---
 
-When Claude or Codex starts child agents, Claude Threads keeps them attached to the conversation that launched them. The parent conversation gains an **Agent Team** tree where you can follow the full hierarchy without turning every child into a separate thread.
+When Claude or Codex starts child agents, Claude Threads keeps them attached to the conversation that launched them, without turning every child into a separate thread and without letting agent status take over the screen. Your conversation stays the conversation.
 
-Select an agent in the tree to inspect the information its native harness reports, including its role and task, current activity, lifecycle status, result, and errors. Breadcrumbs show where the selected agent sits in the hierarchy, and nested children remain attached to their parent even when events arrive out of order.
+## The agent pill
+
+While a thread has child agents, a compact pill appears in the composer footer. It reports how many agents are working, how many failed, or a plain count once everything has finished. The pill stays visible at rest for as long as agents exist, so you never have to hover to check on them. When a thread has no agent runs at all, the pill disappears and the footer returns to its normal hover-only behavior.
+
+## The agent tree
+
+Click the pill to open a popover above the composer listing every agent in the thread, indented under its parent. Each row shows the agent's role, its current activity, and its status. Arrow keys move between rows, `Escape` closes the popover, and clicking anywhere outside dismisses it.
+
+Nested children remain attached to their parent even when events arrive out of order.
+
+## Following one agent
+
+Select an agent to replace the message pane with that agent's activity: the information its native harness reports, including its role and task, current activity, lifecycle status, result, and errors.
+
+A sticky breadcrumb at the top reads `Main conversation › parent › child`. Every crumb before the last is clickable, so you can step up to a parent agent or straight back to the conversation. A close button in the same header returns to the conversation directly. Your scroll position in the main conversation is restored when you come back, and live agent events update the timeline in place without yanking you away from something you scrolled up to read.
+
+The composer stays live the whole time. Its placeholder notes that a message goes to the main conversation, and sending one visibly returns you there rather than quietly redirecting it out of sight.
 
 ## Dashboard and Kanban visibility
 
@@ -27,5 +43,5 @@ Background shell jobs and local workflow phases remain ordinary tasks rather tha
 
 The workspace exposes only controls that the active harness can support through a verified host-side API. Currently, Claude and Codex provide stable child identities and lifecycle/activity events, but neither exposes a verified host-callable path for messaging one child or interrupting only that child.
 
-For that reason, direct child-agent messaging and single-agent interruption remain unavailable. Claude Threads explains the limitation in the detail view and never silently redirects an attempted child action to the parent thread.
+For that reason, direct child-agent messaging and single-agent interruption remain unavailable. Claude Threads explains the limitation in the agent activity view and never silently redirects an attempted child action to the parent thread.
 
