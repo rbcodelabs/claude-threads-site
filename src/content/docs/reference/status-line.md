@@ -42,6 +42,10 @@ PR detection is fully script-driven: a `kind:"pr"` tag with a `url` (e.g. from `
 
 This replaced an earlier approach that scanned assistant message prose for a GitHub PR URL, which missed the common case of a PR opened via `gh pr create` inside a Bash tool call (the URL lands in tool *output*, not assistant prose, so the scanner never saw it). Sourcing the PR tag from the script instead means it can read the actual result of a `gh pr view` call for the branch, rather than guessing from text.
 
+**Always emit the `pr` tag, even though it's usually hidden.** While the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar) is on screen it already shows the branch and a PR button, so the footer hides its own `pr` and `branch` pills to avoid printing the same values twice in adjacent rows. The tag is still doing the work: it is the only source of a thread's PR association, feeding the diff bar's **PR #N** button, the Kanban PR chip, MCP tools, and archive-on-merge. Dropping it to save a `gh` call silently disables all of them.
+
+**Sticky means thread-scoped, not branch-scoped.** Because `prUrl` is never cleared, it outlives the branch it came from — and outlives the *repository* too, if a thread is later pointed at a different project with `set_working_directory`. Branch-scoped UI therefore doesn't read it: the diff bar's button uses the live `pr` tag from the current poll, which vanishes as soon as the branch has no PR, and the footer's own sticky pill is suppressed when its PR provably belongs to a different repo than the thread's current one. A PR whose repo can't be determined (a non-GitHub remote, say) is always shown rather than hidden, so only a provable mismatch is filtered.
+
 **Opening links:** clicking a pill with a `url` opens it in Obsidian's in-app **Web Viewer** when that core plugin is enabled (reusing an existing tab); otherwise it opens in your system browser. **Cmd-click** (Ctrl-click on Windows/Linux) always opens in the system browser, even when the Web Viewer is enabled.
 
 ## Reference script

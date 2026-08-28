@@ -17,7 +17,23 @@ A **Create PR** split button sits on the right:
 
 The bar is hidden when the cwd isn't a git repo, when the branch can't be resolved (e.g. detached HEAD), or when you're already sitting on the base/default branch (nothing to open a PR against).
 
-Once a PR exists for the thread (tracked via the same sticky `prUrl` used by the [status-line PR pill](/docs/reference/status-line/#pr-detection)), the primary button switches to **View PR**, opening it the same way pill links do, and a **View PR** item is prepended to the dropdown — the other three actions stay available in case you want to open another PR later.
+Once the **current branch** has a PR, the primary button switches to that PR's number — **PR #121** — opening it the same way pill links do, with the full URL as a tooltip, and a **View PR** item is prepended to the dropdown; the other three actions stay available in case you want to open another PR later.
+
+### One row, not two
+
+Because the bar already names the branch and the PR, it's treated as the single surface for that information. While the bar is visible, the [status-line footer](/docs/reference/status-line/) hides its own `pr` and `branch` pills, so the same branch name and PR number aren't printed twice in adjacent rows. This applies both to pills your status-line script emits and to the footer's own built-in PR pill.
+
+The suppression is conditional, not a blanket removal. As soon as the bar hides — the PR merged and the thread is back on the base branch, or the working directory isn't a git repo — the footer PR pill reappears as the only remaining surface for that PR.
+
+### Which PR the bar shows
+
+The PR named here comes from the live `pr` tag emitted by your [context footer command](/docs/reference/status-line/) — typically a branch-scoped `gh pr view "$branch"` — and **not** from the thread's stored `prUrl`.
+
+That distinction matters for long-lived threads. `prUrl` is thread-scoped *history*: it is deliberately never cleared, so it survives a branch switch and even a `set_working_directory` that moves the thread into a different repository. That stickiness is what lets the release archive-on-merge workflow still match a thread to its PR after the branch is deleted. But it means a thread reused for a second task can still be carrying the first task's PR — potentially from another repo entirely. Driving this button from it would leave the bar confidently advertising a stale, unrelated PR right next to the new branch's name, so the bar asks the branch instead.
+
+If no context footer command is configured, the button simply stays on **Create PR**.
+
+> **If you use a custom context footer command:** keep emitting the `pr` tag even though it's usually hidden behind the bar. It isn't only a pill — it's the sole source of a thread's PR association, and it feeds the diff bar's **PR #N** button, the Kanban PR chip, and archive-on-merge. Dropping it to save a `gh` call turns all three off.
 
 ## Vault Bridges integration
 
