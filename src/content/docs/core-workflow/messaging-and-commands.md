@@ -84,7 +84,7 @@ Provider capabilities are not identical. Claude account activity is not availabl
 
 **Command pills** — when you complete a built-in command (type `/goal ` or pick one from the dropdown), it turns into a pill chip at the left of the input box. Type the arguments after it; a single Backspace at the start of the input (or clicking the pill's `×`) deletes the whole command. After a command, argument autocomplete kicks in — `/model ` offers `fable|opus|sonnet|haiku|default`.
 
-**Skills** — any `.md` file (or directory) in `~/.claude/skills/` appears below the built-in commands in the same `/` dropdown. Selecting one inserts the skill name into your message, which Claude handles via your `CLAUDE.md` configuration. This is the same slash-command surface the [Skills Manager](/docs/automation/skills-manager/) installs into — anything you add there shows up here automatically, with no separate registration step.
+**Skills** — every skill available to the session appears below the built-in commands in the same `/` dropdown: your `~/.claude/skills/` library (invoked bare, e.g. `/my-skill`), skills the plugin installed into the vault (namespaced under the `vault` plugin, e.g. `/vault:my-skill`), and skills from any configured plugin source (namespaced after themselves, e.g. `/my-skill:my-skill`). The autocomplete shows the name you actually invoke, so what you pick is what resolves. Selecting one inserts the skill name into your message, which Claude handles via your `CLAUDE.md` configuration. This is the same slash-command surface the [Skills Manager](/docs/automation/skills-manager/) installs into — anything you add there shows up here automatically, with no separate registration step.
 
 ## @ file mentions
 

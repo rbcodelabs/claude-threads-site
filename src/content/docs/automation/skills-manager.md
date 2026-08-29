@@ -25,11 +25,16 @@ The top-right corner of the tab bar has two icon buttons (Installed tab only):
 - **Reinstall** — delete and re-clone for broken installs
 - **Remove Source**
 
-A **Local** node at the bottom groups your standalone skills and agents — click any item to view and edit it. For skills: **Save**, **Reload**, **Reveal in Finder**, **Uninstall**. For agents: **Save**, **Reload**, **Reveal in Finder**, **Delete**.
+Two more nodes sit at the bottom:
+
+- **Vault** — the skills this plugin installed into your vault. Click one to view and edit it, with **Save**, **Reload**, **Reveal in Finder**, and **Uninstall**.
+- **Claude Code** — everything in `~/.claude/` (skills *and* agent profiles), marked `read-only`. The plugin shows them because the Claude CLI genuinely loads them into every session, but it never writes to that directory, so those panes offer only **Reload** and **Reveal in Finder**. Edit or remove them with the `claude` CLI, or by hand.
+
+> **Where installs go.** Everything the Skills Manager installs or imports lands in `<vault>/.obsidian/plugins/claude-threads/skills/`, beside the plugin's `skill-sources/` clones — never in `~/.claude/`. That folder shares the plugin folder's fate: community-plugin *updates* leave unknown subdirectories alone, but manually uninstalling and reinstalling the plugin will delete your installed skills along with it.
 
 ## Browse tab
 
-Search the [skills.sh](https://skills.sh) registry. Results show the skill name, GitHub source, and install count. Click a result to see details and an **Install** button that clones the skill from GitHub into `~/.claude/skills/`.
+Search the [skills.sh](https://skills.sh) registry. Results show the skill name, GitHub source, and install count. Click a result to see details and an **Install** button that clones the skill from GitHub into `<vault>/.obsidian/plugins/claude-threads/skills/`. Installed skills are invoked as `/vault:<name>`.
 
 ## Skill Sources settings
 
@@ -40,4 +45,4 @@ Search the [skills.sh](https://skills.sh) registry. Results show the skill name,
 
 Add or remove sources from Settings → Skills, or via the **Add Source** button, which opens the same add-source flow reachable from the Skills Manager itself.
 
-Once a skill or agent from `~/.claude/skills/` is installed, it's automatically available in the [`/` slash command dropdown](/docs/core-workflow/messaging-and-commands/#slash-commands) in every thread — there's no separate step to wire a newly installed skill into the chat input.
+Once a skill is installed, it's automatically available in the [`/` slash command dropdown](/docs/core-workflow/messaging-and-commands/#slash-commands) in every thread — there's no separate step to wire a newly installed skill into the chat input. Vault-installed skills appear as `/vault:<name>`; skills from your read-only `~/.claude/skills/` library are invoked bare as `/<name>`.
