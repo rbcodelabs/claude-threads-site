@@ -50,3 +50,7 @@ Enabled by default — disable via **Settings → Features → Kanban board → 
 Run **Jump to latest unreviewed completed agent** from the command palette to open the Agent Dashboard (if it isn't already open) and jump straight to the most recently completed thread you haven't looked at yet. This is the fastest way to work through a backlog of finished agents after dispatching several tasks in parallel.
 
 You can also send messages to any thread directly from the dashboard without switching tabs.
+
+## Background tasks stay "Working"
+
+A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the dashboard (and the [Kanban board](/docs/views/kanban-board/)) keeps it under **Working** until the background task or workflow reports back, so you don't have to stumble onto a stray notification to realize something is still running.
