@@ -1,11 +1,11 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Remote, Skills, and MCP.
+description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
 category: reference
 order: 1
 ---
 
-Settings are organized into eight tabs. On desktop, all eight are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
+Settings are organized into nine tabs. On desktop, all nine are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
 
 ## General
 
@@ -106,9 +106,22 @@ See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk
 
 Shows the status of the [thread-orchestrator](/docs/views/thread-orchestrator/) thread: setup guidance if none has been created yet, an **Open** button once it resolves to a live thread, or a warning if the stored thread was deleted or archived outside the plugin.
 
-### Scheduled tasks
+## Scheduled
 
-Lists every [scheduled task](/docs/automation/scheduled-tasks/), showing its schedule description, last run time, and next run time. Toggle a task on/off or delete it inline. New scheduled tasks are created by asking Claude in natural language, not from this settings panel.
+The Scheduled tab is the dashboard for [scheduled work](/docs/automation/scheduled-tasks/):
+
+| Section or control | Description |
+|---|---|
+| Next up | Enabled jobs sorted by their persisted `nextRun`, with the exact local time and a relative countdown. Past-due work is marked as overdue and catching up. |
+| Next run / Next check | Ordinary jobs show **Next run**. Gated jobs show **Next check**, since a gate may skip that occurrence. |
+| Scheduled work groups | Recurring standalone jobs are separated from thread-specific loops and one-shot wakeups. The internal orchestrator heartbeat is omitted from the primary list. |
+| Job details | Shows active hours, project, working directory, gate, and recent outcomes/history, including runs, skipped checks, and errors. |
+| Pause / Resume | Disables or enables future occurrences without deleting the job. |
+| Open last run | Opens the most recent thread created by the job, when one is available. |
+| Delete | Permanently removes the scheduled item. |
+| Create with Claude | Opens a thread with a scheduling prompt so you can describe the work and cadence in natural language. |
+
+Manual create/edit forms and a **Run now** control are not available in this release. Ask Claude to create or update a schedule instead.
 
 ## Remote
 
