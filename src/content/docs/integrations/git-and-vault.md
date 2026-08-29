@@ -51,6 +51,45 @@ Projects group threads by vault sub-folder and inject shared context into every 
 
 Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
 
+## Where threads are stored
+
+Each thread is its own file inside the plugin folder:
+
+```
+<plugin folder>/
+  data.json                    settings, projects, and scheduled items only
+  threads/
+    <thread-id>.json           one live thread — canonical
+    archived/
+      <thread-id>.json         archived, not loaded into the live list
+```
+
+One file per thread means a save only rewrites the threads that actually
+changed, and a corrupt or half-written file costs exactly that one thread
+instead of all of them.
+
+With **Save threads to vault** enabled, every conversation additionally gets a
+readable `.md` note plus a versioned `.recovery.json` snapshot in your vault
+folder. That pair is an independent *second* copy: the Markdown body is
+presentation-only and is never parsed back into a live conversation, so editing
+a thread note can never corrupt the thread.
+
+Anything archived, and anything that survives only as a `.recovery.json`
+snapshot, can be brought back from
+[Settings → Vault → Data recovery](/docs/reference/settings/#data-recovery).
+
+### Upgrading from an earlier version
+
+The first launch after upgrading migrates the old single-file `data.json` into
+the `threads/` folder automatically, and restores any thread that still had a
+recovery snapshot but had dropped out of the live list. It is non-destructive:
+nothing is removed from `data.json` until every thread file has been written and
+read back successfully, and if anything fails it simply retries on the next
+launch.
+
+Once the migration has run, **do not downgrade** — an older build would read the
+now-empty `threads` array in `data.json` and show no threads.
+
 ## Vault tools
 
 Every Claude thread runs with the built-in `claude_threads` MCP server, which exposes read and search access to your vault — no configuration required:

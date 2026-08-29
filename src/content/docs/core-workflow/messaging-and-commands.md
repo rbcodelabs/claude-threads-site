@@ -112,6 +112,32 @@ As Claude works, you see exactly what it's doing: each tool call renders as a pi
 
 Grouping works on both desktop and [mobile](/docs/integrations/remote-and-voice/#what-you-can-do-on-mobile).
 
+## Inline visualizations
+
+Codex's bundled `visualize` skill answers a "show me the numbers" question by writing a small HTML chart to disk and marking where it belongs in its reply with a content reference on its own line:
+
+```text
+visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
+```
+
+That marker is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises it while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text.
+
+The file on disk is an HTML *fragment*, not a page: no doctype, no `<html>`, no `<body>`. The plugin wraps it into a complete document before showing it, and that wrapper does three things worth knowing about:
+
+- **It matches your theme.** The design tokens the skill's charts are built against (`--background`, `--foreground`, `--primary`, `--viz-series-1`…`6`, and the rest) are mapped onto your theme's own colours and passed in as resolved values, so a chart looks native in both light and dark — and follows the *app's* theme, not your operating system's.
+- **It is sandboxed.** The visualization runs with scripts only: no same-origin access, so it can never reach your vault, your notes, or the plugin's credentials; no pop-ups, no modals, no forms. Its network access is limited to the CDN allowlist the skill documents (jsDelivr, unpkg, esm.sh, cdnjs, Google/Bunny fonts) — everything else is blocked. If a visualization tries to push a follow-up prompt into your composer, the plugin shows a notice and drops it rather than typing model-authored text into your input box.
+- **It sizes itself.** The card grows and shrinks to fit its contents as charts finish drawing. Very tall visualizations are capped at a readable height with a soft fade at the cut, rather than nesting a second scrollbar inside the conversation.
+
+Each card has a **pop-out** button in its header that opens the same visualization full size in the Web Viewer. Hover the card's title to see the resolved file path it came from.
+
+Visualizations only mount while they are on or near screen, so a long thread full of charts stays responsive and does not re-fetch every chart library each time you switch threads. While a reply is still streaming, a complete marker shows as a quiet placeholder card and only becomes live once the message settles.
+
+**Editing in place.** The skill re-emits the marker every turn while it iterates on the same file. Because the card reads the file at render time, an older message scrolled back to will show the *current* contents of that file, not the version from when the message was written. Codex behaves the same way.
+
+**Mobile.** Visualizations are desktop-only. On [mobile](/docs/integrations/remote-and-voice/#what-you-can-do-on-mobile) the marker renders as a card naming the visualization, with an **Open visualization** button when the file happens to live in your synced vault — the fragment normally sits on your desktop machine's disk, which a phone cannot reach.
+
+Turn the whole feature off under **Settings → Tools → Inline visualizations**; markers then stay as plain text.
+
 ## Compressed conversation view
 
 Long agentic threads — especially ones with many tool calls spread across dozens of turns — can be hard to scan. Toggle **Compress view** from the `⋯` menu (top-right of the conversation panel) to collapse the history into a scannable list of one-line summaries.

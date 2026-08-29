@@ -56,6 +56,7 @@ See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation)
 |---|---|
 | Permission mode | How Claude handles tool-use permission prompts — see the full [permission mode table](/docs/permissions/permission-modes-and-plan-mode/#permissions) |
 | Web Viewer tool | Lets Claude open URLs directly in the host Web Viewer panel (`host_open_url`). In Obsidian, this requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
+| Inline visualizations | Renders a `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
 | Hidden built-in tools | Comma-separated Claude Code built-in tools to hide from sessions. `Cron*` tools are hidden by default — the plugin has its own [scheduler](/docs/automation/scheduled-tasks/). |
 
 ### Always-allowed tools
@@ -66,10 +67,25 @@ A list of tools granted automatically without prompting. Tools land here when yo
 
 | Setting | Description |
 |---|---|
-| Save threads to vault | Auto-save conversations as Obsidian notes after each response |
+| Save threads to vault | Auto-save conversations as Obsidian notes after each response. These notes and their `.recovery.json` snapshots are a *second* copy — the canonical store is one file per thread in the plugin folder — so turning this off does not put threads at risk. |
 | Save raw JSONL logs | Append each thread's raw event stream (tool calls, results, usage) to `<vault folder>/logs/<thread id>.jsonl`, linked from the note's `raw_log` frontmatter. Lets agents retrieve and analyze the full transcript. |
-| Auto-archive idle threads after (days) | Automatically archive a waiting thread once it has been idle (no activity) for this many days. Archiving writes the thread to its markdown note, with any images embedded, and removes it from the live thread list, so finished threads stop accumulating and `data.json` does not grow without bound. Only waiting threads qualify; active threads, the orchestrator thread, and threads awaiting a plan or question are never touched. Default: `14`. Set to `0` to disable auto-archiving entirely. |
+| Auto-archive idle threads after (days) | Automatically archive a waiting thread once it has been idle (no activity) for this many days. Archiving writes the thread to its markdown note, with any images embedded, moves its thread file into `threads/archived/`, and removes it from the live thread list, so finished threads stop accumulating. Only waiting threads qualify; active threads, the orchestrator thread, and threads awaiting a plan or question are never touched. Anything archived this way can be brought back from **Data recovery** below. Default: `14`. Set to `0` to disable auto-archiving entirely. |
 | Vault folder | Where thread notes are saved, relative to the vault root (default: `Claude`) |
+
+### Data recovery
+
+**Restore threads** opens a picker listing everything that can be put back into
+the live thread list, in two groups:
+
+- **Archived** — threads you archived, or that the idle sweep archived for you.
+- **Recovery snapshots only** — threads that still have a vault
+  `.recovery.json` snapshot but no thread file. Restoring rebuilds the thread
+  file from the snapshot.
+
+Each row shows the thread title, its message count, and when it was last
+updated. Tick the ones you want and choose **Restore selected**. Restored
+threads come back as `waiting` (their agent session is long gone) with their
+full message history intact.
 
 ### Projects
 
