@@ -127,7 +127,7 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread — no hand-editing JSON required for the common case. This tab edits your **global** `~/.claude/settings.json`, shared by every vault and by the `claude` CLI itself. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, read-only `sdk` entries, and how the tab guards a malformed config.
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
 
 ## Mobile settings
 
