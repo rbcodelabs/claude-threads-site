@@ -15,7 +15,17 @@ This is distinct from [`/loop`](/docs/core-workflow/models-goals-loops/#loops), 
 
 ## Managing scheduled tasks
 
-Existing scheduled tasks are listed under **Settings → Features → Scheduled tasks**, each showing its schedule description, last run time, and next run time (when enabled). You can toggle a task on/off or delete it from the same list — see [Settings Reference → Features](/docs/reference/settings/#features).
+Open **Settings → Scheduled** for a dashboard of scheduled work. **Next up** sorts enabled jobs by their persisted next run time, so the order survives plugin reloads and Obsidian restarts. Each entry shows the exact local time and a relative countdown. An overdue item is labeled as catching up instead of appearing to be a future run.
+
+For an ordinary job, the dashboard labels the upcoming time **Next run**. For a job with a gate, it uses **Next check**, because the gate may decide that no thread needs to run.
+
+The dashboard separates recurring standalone jobs from thread-specific loops and one-shot wakeups. The plugin's internal orchestrator heartbeat is omitted from the primary list so it does not distract from work you created.
+
+Each item shows its active hours, project, working directory, and gate. From the dashboard you can pause or resume a job, delete it, and use **Open last run** when the job has a previous thread. You can expand its recent run history to review runs, skipped checks, and errors.
+
+Use **Create with Claude** to open a thread with a scheduling prompt, then describe the work and cadence in natural language. This release does not include a manual schedule form, direct editing in Settings, or a **Run now** control. To change an existing job, ask Claude to update it with the Cron tools described below.
+
+See [Settings Reference → Scheduled](/docs/reference/settings/#scheduled) for a compact reference to the dashboard.
 
 ## Cron MCP tools
 
