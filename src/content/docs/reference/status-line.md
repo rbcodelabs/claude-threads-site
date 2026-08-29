@@ -9,6 +9,16 @@ A row of pills below the input area shows live context for each thread — git b
 
 ![Status-line footer pills — dev URL, git branch, a clickable PR pill, and an AWS status pill below the message input](../../../assets/screenshots/screenshot-status-line.png)
 
+## Scheduled activity
+
+The composer footer also shows a built-in scheduled-activity pill whenever the active thread has a pending one-time wakeup or recurring interval loop. Unlike the custom context tags described below, this pill needs no command or configuration.
+
+For one item, the pill summarizes its timing: `Resumes in 12m` for a wakeup or `Every 5m` for a loop. With multiple scheduled items, it shows whichever runs next plus the number of additional items, such as `Resumes in 12m · +1`. The timing updates in place.
+
+Click the pill to open a popover anchored above the composer. It lists every enabled wakeup and interval loop for the thread in next-run order, with the type, timing, and human-readable reason or prompt for each item. **Cancel** removes only its wakeup; **Stop** removes only its loop. The popover stays open while other items remain and closes when the last item is removed.
+
+The pill is keyboard-accessible: `Enter` or `Space` opens it, `Escape` closes it, and clicking outside dismisses it. It remains available while the thread is running so scheduled activity can still be inspected or stopped. When the thread has no scheduled activity, the pill is hidden.
+
 ## Output format
 
 The command can return either:

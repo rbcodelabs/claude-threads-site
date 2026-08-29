@@ -17,6 +17,10 @@ The kickoff button displays the harness that will own the new thread: **Claude**
 
 You can resolve pending permission requests directly from dashboard rows without switching threads — see [Permissions](/docs/permissions/permission-modes-and-plan-mode/) for what those requests look like.
 
+## Waiting threads
+
+When a thread has a pending `ScheduleWakeup`, the dashboard keeps it in the **Waiting** group and shows a live `Resumes in…` countdown with the wakeup reason. This dashboard classification remains visible across threads even though the conversation itself uses a compact [scheduled-activity pill and popover](/docs/reference/status-line/#scheduled-activity) for inspection and item-specific controls.
+
 ## Live activity (running threads)
 
 While a thread is actively processing, the dashboard shows a live one-line summary of the current tool call or step — so you can see "Reading src/components/Header.tsx" or "Running npm test" without switching to that tab.

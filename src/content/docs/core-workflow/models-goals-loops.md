@@ -53,7 +53,9 @@ While an escalated turn is running, the model switcher button glows in the accen
 
 Like `/goal`, starting a loop sends the prompt immediately — you don't wait for the first interval to elapse. Intervals below 30 seconds are clamped to 30s. Loops run on the plugin's built-in scheduler, so they **persist across plugin reloads and Obsidian restarts**. If a loop tick arrives before the thread's previous turn has finished, it's retried shortly after rather than piling up as a queued duplicate. A thread can only have one active loop at a time — starting a new `/loop` replaces whichever loop was already running there.
 
-`/loop` alone lists the thread's loop with its next run time; `/loop stop` (or `off`/`cancel`/`clear`) stops it. While a loop is active, a banner above the input shows its status ("Loop running…" or the next run time) with a **Stop** button, and a matching pill appears in the thread's status footer.
+`/loop` alone lists the thread's loop with its next run time; `/loop stop` (or `off`/`cancel`/`clear`) stops it. While a loop is active, a compact scheduled-activity pill appears in the composer footer instead of a permanent banner. The pill shows the interval for a single loop (for example, `Every 5m`); if the thread also has a pending one-time wakeup, it summarizes whichever item runs next and adds `+1`.
+
+Click the pill to open an anchored popover above the composer. Each recurring loop and one-time wakeup has its own row with timing and prompt/reason details. **Stop** removes only the selected loop, while **Cancel** removes only the selected wakeup. The pill disappears when no scheduled activity remains. See [Status Line (Context Footer)](/docs/reference/status-line/#scheduled-activity) for the complete interaction.
 
 For recurring tasks that should run independently of any single thread's lifecycle — surviving even if you close that thread — see [Scheduled tasks](/docs/automation/scheduled-tasks/) instead.
 
