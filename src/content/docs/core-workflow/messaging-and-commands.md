@@ -20,6 +20,10 @@ If you send a message while Claude is already processing, it goes into a queue �
 
 ![Message queue — stacked removable rows above the composer showing queued messages](../../../assets/screenshots/screenshot-queue-rows.png)
 
+## Task checklist
+
+Claude's `TodoWrite` / `TaskCreate` tools and Codex's `update_plan` tool render the same live task checklist above the composer. It updates as the agent moves items between pending, in-progress, and completed states, so you can follow a multi-step task without interrupting the thread.
+
 ## Activity indicator
 
 While Claude is processing, a typed status card appears above the input area showing what's happening:
@@ -29,6 +33,17 @@ While Claude is processing, a typed status card appears above the input area sho
 - **Model escalation tip** — when a turn is routed to the escalation model, a brief tooltip pops up from the model button rather than reshuffling the layout. See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation) for the full behavior.
 
 ![Status rail — active-work card with a spinner above the composer](../../../assets/screenshots/screenshot-status-rail.png)
+
+## Tool call grouping
+
+Consecutive tool calls of the same kind — a run of file reads, or a string of edits — collapse into a single expandable group instead of a long scroll of individual pills. This happens live as the turn runs, not just after it settles, so a long agentic run never grows an unbounded wall of pills while Claude is still working. The in-progress group shows a "still running" pulse, a group you expand mid-turn stays expanded as more calls arrive, and a group containing a failed call auto-expands and stays flagged so errors are never hidden.
+
+Two refinements keep even a busy, fast-changing turn (reads, edits, and planning calls interleaved) from reading as a wall of short, choppy groups:
+
+- **Smoothing** — a short interruption of a different kind (for example, a single `TaskUpdate` between two runs of file reads) is folded back into the group on either side instead of breaking it into three separate short entries.
+- **A second collapsible tier** — if the list is still long after smoothing, it collapses one level further into a single "N tool calls, M steps" wrapper. While the turn is in progress, that wrapper's header live-updates to show the icon and name of whichever tool is currently running, so a long collapsed run doesn't read as frozen. It auto-expands through both levels if any call anywhere inside it fails, the same way a single group does.
+
+Both refinements are available on desktop; mobile gets the smoothing pass only.
 
 ## Errors and auto-retry
 
@@ -58,15 +73,35 @@ Type `/` in the input box to see built-in context commands and your installed Cl
 | `/clear` | Clear conversation history and start a fresh session |
 | `/cost` | Show token usage and cost for the current session |
 | `/context` | Show a per-category token usage breakdown for the active session (tools, system prompt, skills, MCP tools, conversation, etc.) |
+| `/usage` | Show cross-provider token totals, quota windows and resets, and account activity where available |
 | `/create-pr` | Ask Claude to push the branch and open a PR (`gh pr create`) — same action as the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar)'s Create PR button |
 | `/create-pr --draft` | Same, but opens a draft PR — same as the git diff bar's Create draft PR button |
+| `/design <brief>` | Start a new design thread from Dashboard/Kanban, or create or revise a secure static UI artifact in Chat, and open it in Geode's ArtifactView |
 | `/escalate <prompt>` | Route just this turn to the [escalation model](/docs/core-workflow/models-goals-loops/#model-escalation) (default keyword `/escalate`; keyword and target model are configurable in Settings, and the row only appears here when escalation is enabled) |
 
-`/model`, `/goal`, `/loop`, and `/escalate` details are covered in full on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/).
+### Design artifacts in Geode
+
+Use `/design <brief>` from the Agent Dashboard or Kanban dispatch box to create a new native design-artifact thread, or use it in Chat to create or revise the current thread's artifact. Threads creates a zero-install static UI artifact under `.geode/artifacts/` in your vault, and the agent edits ordinary `index.html`, `styles.css`, `app.js`, and local asset files. The persisted artifact card keeps **Open preview**, **Capture**, and **Reveal source** available after the turn and after reopening the thread.
+
+Inside Chat, `/design` without a brief reopens the existing preview. In Dashboard or Kanban, a brief is required: bare `/design` shows a usage notice, preserves the draft, and creates no thread. New-thread design dispatch does not accept image or text attachments; remove them and send again. Other dispatch commands can still use attachments normally.
+
+Geode's ArtifactView provides live reload, desktop/tablet/mobile viewport controls, runtime diagnostics, and PNG capture. The preview runs in an isolated, ephemeral, Node-less guest with network, clipboard, downloads, popups, and external navigation denied. Outside Geode, Threads reveals the source instead of launching it without that sandbox.
+
+Dashboard and Kanban dispatch behavior for `/model`, `/goal`, `/loop`, `/design`, and `/escalate` is summarized on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/#dispatching-with-commands).
+
+### Context, cost, and usage
+
+These commands answer three different questions:
+
+- **`/context`** shows what currently occupies the active model context window, broken down into categories such as the system prompt, tools, skills, MCP tools, and conversation.
+- **`/cost`** remains the existing harness-native session command for token usage and cost.
+- **`/usage`** opens Claude Threads' cross-provider usage view. It shows thread or session token totals, last-turn tokens when the provider reports them, Claude cost explicitly labelled as estimated, and each available quota window with percentage used and reset time. With supported Codex-service authentication, it also shows cumulative account metrics and recent daily token activity.
+
+Provider capabilities are not identical. Claude account activity is not available through the SDK. Claude quota windows (5-hour and 7-day) show live utilization for subscription sessions: `/usage` pulls the current percentages proactively from the SDK's structured usage data, so you see them at any point in the window rather than only after a rate-limit event. API-key, Bedrock, and Vertex sessions have no plan limits, so those windows show a dash instead of a percentage. Codex can read current multi-window limits and Codex account daily/cumulative activity, but API-key-only or Bedrock authentication may not expose account activity. The view reports unavailable fields directly rather than estimating or manufacturing parity between providers.
 
 **Command pills** — when you complete a built-in command (type `/goal ` or pick one from the dropdown), it turns into a pill chip at the left of the input box. Type the arguments after it; a single Backspace at the start of the input (or clicking the pill's `×`) deletes the whole command. After a command, argument autocomplete kicks in — `/model ` offers `fable|opus|sonnet|haiku|default`.
 
-**Skills** — any `.md` file (or directory) in `~/.claude/skills/` appears below the built-in commands in the same `/` dropdown. Selecting one inserts the skill name into your message, which Claude handles via your `CLAUDE.md` configuration. This is the same slash-command surface the [Skills Manager](/docs/automation/skills-manager/) installs into — anything you add there shows up here automatically, with no separate registration step.
+**Skills** — every skill available to the session appears below the built-in commands in the same `/` dropdown: your `~/.claude/skills/` library (invoked bare, e.g. `/my-skill`), skills the plugin installed into the vault (namespaced under the `vault` plugin, e.g. `/vault:my-skill`), and skills from any configured plugin source (namespaced after themselves, e.g. `/my-skill:my-skill`). The autocomplete shows the name you actually invoke, so what you pick is what resolves. Selecting one inserts the skill name into your message, which Claude handles via your `CLAUDE.md` configuration. This is the same slash-command surface the [Skills Manager](/docs/automation/skills-manager/) installs into — anything you add there shows up here automatically, with no separate registration step.
 
 ## @ file mentions
 
@@ -94,6 +129,32 @@ As Claude works, you see exactly what it's doing: each tool call renders as a pi
 
 Grouping works on both desktop and [mobile](/docs/integrations/remote-and-voice/#what-you-can-do-on-mobile).
 
+## Inline visualizations
+
+Codex's bundled `visualize` skill answers a "show me the numbers" question by writing a small HTML chart to disk and marking where it belongs in its reply with a content reference on its own line:
+
+```text
+visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
+```
+
+That canonical wrapped reference is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises the `visualize{…}` wrapper while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text. Legacy bare `visualize{…}` references remain supported so visualizations in existing conversations continue to render.
+
+The file on disk is an HTML *fragment*, not a page: no doctype, no `<html>`, no `<body>`. The plugin wraps it into a complete document before showing it, and that wrapper does three things worth knowing about:
+
+- **It matches your theme.** The design tokens the skill's charts are built against (`--background`, `--foreground`, `--primary`, `--viz-series-1`…`6`, and the rest) are mapped onto your theme's own colours and passed in as resolved values, so a chart looks native in both light and dark — and follows the *app's* theme, not your operating system's.
+- **It is sandboxed.** The visualization runs with scripts only: no same-origin access, so it can never reach your vault, your notes, or the plugin's credentials; no pop-ups, no modals, no forms. Its network access is limited to the CDN allowlist the skill documents (jsDelivr, unpkg, esm.sh, cdnjs, Google/Bunny fonts) — everything else is blocked. If a visualization tries to push a follow-up prompt into your composer, the plugin shows a notice and drops it rather than typing model-authored text into your input box.
+- **It sizes itself.** The card grows and shrinks to fit its contents as charts finish drawing. Very tall visualizations are capped at a readable height with a soft fade at the cut, rather than nesting a second scrollbar inside the conversation.
+
+Each card has a **pop-out** button in its header that opens the same visualization full size in the Web Viewer. Hover the card's title to see the resolved file path it came from.
+
+Visualizations only mount while they are on or near screen, so a long thread full of charts stays responsive and does not re-fetch every chart library each time you switch threads. While a reply is still streaming, a complete marker shows as a quiet placeholder card and only becomes live once the message settles.
+
+**Editing in place.** The skill re-emits the marker every turn while it iterates on the same file. Because the card reads the file at render time, an older message scrolled back to will show the *current* contents of that file, not the version from when the message was written. Codex behaves the same way.
+
+**Mobile.** Visualizations are desktop-only. On [mobile](/docs/integrations/remote-and-voice/#what-you-can-do-on-mobile) the marker renders as a card naming the visualization, with an **Open visualization** button when the file happens to live in your synced vault — the fragment normally sits on your desktop machine's disk, which a phone cannot reach.
+
+Turn the whole feature off under **Settings → Tools → Inline visualizations**; markers then stay as plain text.
+
 ## Compressed conversation view
 
 Long agentic threads — especially ones with many tool calls spread across dozens of turns — can be hard to scan. Toggle **Compress view** from the `⋯` menu (top-right of the conversation panel) to collapse the history into a scannable list of one-line summaries.
@@ -107,6 +168,10 @@ Long agentic threads — especially ones with many tool calls spread across doze
 - Toggle the menu item again (now labelled **Expand view**) to return to the normal conversation view.
 
 Summaries are cached in memory for the session. They regenerate on the next reload — which keeps storage simple while keeping the background work cheap (the in-process model is fast and inexpensive).
+
+## Background tasks
+
+Claude can kick off a long-running task in the background (for example, a `Bash` command run with `run_in_background: true`) and keep working while it finishes. If the thread is still streaming when the task reports back, the result appears in its live task pill. If the thread has gone idle, a compact success or failure notice row is saved directly into the conversation, so the result is there whenever you next open the thread instead of disappearing as a transient popup.
 
 ## Thread summaries
 

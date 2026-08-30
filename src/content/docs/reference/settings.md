@@ -1,25 +1,28 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Remote, Skills, and MCP.
+description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
 category: reference
 order: 1
 ---
 
-Settings are organized into eight tabs. On desktop, all eight are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
+Settings are organized into nine tabs. On desktop, all nine are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
 
 ## General
 
 | Setting | Description |
 |---|---|
+| Conversation placement | `Classic sidebar` (default), or the opt-in `Conversation first` prototype. On desktop, Conversation first keeps one Chat view in the main area and reuses an adjacent native companion for contextual content without detaching unrelated leaves. Mobile is unchanged. |
 | Layout density | `Compact`, `Comfortable` (default), or `Spacious` — controls message spacing and padding in the conversation view |
 | Context footer command | Shell command that produces the [status-line pills](/docs/reference/status-line/) (JSON tags or plaintext). Runs per-thread, in the background, against that thread's working directory. Desktop only. |
 | Keep computer awake | Prevent the Mac from sleeping while Claude is responding; shows a ☕ indicator in the status bar |
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
+| Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
 ## Claude
 
 | Setting | Description |
 |---|---|
+| Agent harness | Initial Claude or Codex default for new [Dashboard and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
 | Default model | Model for new turns unless a thread overrides it with [`/model`](/docs/core-workflow/models-goals-loops/). "CLI default" defers to the Claude Code CLI configuration. Family aliases always track the latest version; pinned IDs lock to a specific release. Start a thread to populate the full model list from the CLI. |
@@ -53,13 +56,14 @@ See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation)
 
 | Setting | Description |
 |---|---|
-| Permission mode | How Claude handles tool-use permission prompts — see the full [permission mode table](/docs/permissions/permission-modes-and-plan-mode/#permissions) |
-| Web Viewer tool | Lets Claude open URLs directly in the Obsidian Web Viewer panel (`obsidian_open_url`). Requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
+| Permission mode | How the active Claude or Codex harness handles tool-use permission prompts — see the full [permission mode table](/docs/permissions/permission-modes-and-plan-mode/#permissions) |
+| Web Viewer tool | Lets Claude open URLs directly in the host Web Viewer panel (`host_open_url`). In Obsidian, this requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
+| Inline visualizations | Renders a wrapped `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
 | Hidden built-in tools | Comma-separated Claude Code built-in tools to hide from sessions. `Cron*` tools are hidden by default — the plugin has its own [scheduler](/docs/automation/scheduled-tasks/). |
 
 ### Always-allowed tools
 
-A list of tools granted automatically without prompting. Tools land here when you choose "Always Allow" in a [permission prompt](/docs/permissions/permission-modes-and-plan-mode/#permissions), or you can add one by name directly (e.g. `Bash`, `Read`, `mcp__obsidian__…`). Each entry can be removed individually.
+A list of tools granted automatically without prompting. Tools land here when you choose "Always Allow" in a [permission prompt](/docs/permissions/permission-modes-and-plan-mode/#permissions), or you can add one by name directly (e.g. `Bash`, `Read`, `mcp__claude_threads__…`). Each entry can be removed individually. Existing `mcp__obsidian__…` entries continue to work as deprecated compatibility aliases until the next major release.
 
 ## Vault
 
@@ -67,6 +71,7 @@ A list of tools granted automatically without prompting. Tools land here when yo
 |---|---|
 | Save threads to vault | Auto-save conversations as Obsidian notes after each response |
 | Save raw JSONL logs | Append each thread's raw event stream (tool calls, results, usage) to `<vault folder>/logs/<thread id>.jsonl`, linked from the note's `raw_log` frontmatter. Lets agents retrieve and analyze the full transcript. |
+| Auto-archive idle threads after (days) | Automatically archive a waiting thread once it has been idle (no activity) for this many days. Archiving writes the thread to its markdown note, with any images embedded, and removes it from the live thread list, so finished threads stop accumulating and `data.json` does not grow without bound. Only waiting threads qualify; active threads, the orchestrator thread, and threads awaiting a plan or question are never touched. Default: `14`. Set to `0` to disable auto-archiving entirely. |
 | Vault folder | Where thread notes are saved, relative to the vault root (default: `Claude`) |
 
 ### Projects
@@ -103,9 +108,22 @@ See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk
 
 Shows the status of the [thread-orchestrator](/docs/views/thread-orchestrator/) thread: setup guidance if none has been created yet, an **Open** button once it resolves to a live thread, or a warning if the stored thread was deleted or archived outside the plugin.
 
-### Scheduled tasks
+## Scheduled
 
-Lists every [scheduled task](/docs/automation/scheduled-tasks/), showing its schedule description, last run time, and next run time. Toggle a task on/off or delete it inline. New scheduled tasks are created by asking Claude in natural language, not from this settings panel.
+The Scheduled tab is the dashboard for [scheduled work](/docs/automation/scheduled-tasks/):
+
+| Section or control | Description |
+|---|---|
+| Next up | Enabled jobs sorted by their persisted `nextRun`, with the exact local time and a relative countdown. Past-due work is marked as overdue and catching up. |
+| Next run / Next check | Ordinary jobs show **Next run**. Gated jobs show **Next check**, since a gate may skip that occurrence. |
+| Scheduled work groups | Recurring standalone jobs are separated from thread-specific loops and one-shot wakeups. The internal orchestrator heartbeat is omitted from the primary list. |
+| Job details | Shows active hours, project, working directory, gate, and recent outcomes/history, including runs, skipped checks, and errors. |
+| Pause / Resume | Disables or enables future occurrences without deleting the job. |
+| Open last run | Opens the most recent thread created by the job, when one is available. |
+| Delete | Permanently removes the scheduled item. |
+| Create with Claude | Opens a thread with a scheduling prompt so you can describe the work and cadence in natural language. |
+
+Manual create/edit forms and a **Run now** control are not available in this release. Ask Claude to create or update a schedule instead.
 
 ## Remote
 
@@ -124,7 +142,7 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread — no hand-editing JSON required for the common case. This tab edits your **global** `~/.claude/settings.json`, shared by every vault and by the `claude` CLI itself. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, read-only `sdk` entries, and how the tab guards a malformed config.
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
 
 ## Mobile settings
 

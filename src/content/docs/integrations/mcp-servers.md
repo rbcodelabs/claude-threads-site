@@ -5,35 +5,37 @@ category: integrations
 order: 3
 ---
 
-Every Claude Threads session ships with a built-in `obsidian` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Beyond that, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and every new thread picks them up automatically.
+Every Claude Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
 
-Those external servers live in your **global Claude Code config** (`~/.claude/settings.json`). The **Settings → MCP** tab lets you list, add, edit, and remove them from inside Obsidian, so the common cases never require hand-editing JSON.
+Beyond that built-in surface, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and every new thread picks them up automatically, on both the Claude and Codex harnesses.
 
-![Settings MCP tab: a list of configured MCP servers, each with a type badge (stdio, http, sdk), a one-line summary, and Edit and Remove buttons, plus an Add MCP server button](../../../assets/screenshots/screenshot-mcp-servers.png)
+Those external servers are stored in **this plugin's own `data.json`**, not in any Claude Code config file. The **Settings → MCP** tab lets you list, add, edit, and remove them from inside the host app, so the common cases never require hand-editing JSON.
+
+![Settings MCP tab: a list of configured MCP servers, each with a type badge (stdio, http, or sse), a one-line summary, and Edit and Remove buttons, plus an Add MCP server button](../../../assets/screenshots/screenshot-mcp-servers.png)
 
 ## Opening the tab
 
 Open **Settings → Claude Threads** and select the **MCP** tab. On mobile, the settings screen is reduced to pairing and reload controls — MCP servers are managed from desktop only.
 
-## This edits your global config
+## This is per-vault plugin data, not a Claude Code config file
 
-**The MCP tab edits your global `~/.claude/settings.json`** (or the per-machine file it symlinks to) — not a per-vault or per-plugin config. That file is shared by:
+**The MCP tab edits this plugin's own `data.json`** for the current vault — not `~/.claude/settings.json`, and not any other Claude Code config. That means:
 
-- Every Obsidian vault running Claude Threads on this machine, and
-- The `claude` CLI itself.
+- Servers you add here are **scoped to this vault**; they don't show up in other vaults running Claude Threads, and they aren't shared with the `claude` CLI run outside the plugin.
+- The `claude` CLI's own `~/.claude/settings.json` is never read or written by this tab — a server added there doesn't appear here, and vice versa.
+- Each configured server is injected into a session's tool set **at runtime**, when a thread starts, on whichever harness (Claude or Codex) that thread uses.
 
-So a server you add here shows up everywhere, and a server you (or a teammate's setup script) added via the CLI shows up here too. The tab always displays the resolved path to the file it is editing, so you can confirm exactly what's on disk.
-
-Changes take effect for **new threads only** — sessions already running keep whatever MCP servers they started with. There's no plugin reload required; the per-thread merge logic re-reads the file each time a thread starts.
+Changes take effect for **new threads only** — sessions already running keep whatever MCP servers they started with.
 
 ## The server list
 
 Each configured server is shown as a row with:
 
-- Its **name** (the key under `mcpServers` in the config).
-- A **type badge** — `stdio`, `http`, `sse`, or `sdk`.
+- Its **name** (the key under `mcpServers` in the stored config).
+- A **type badge** — `stdio`, `http`, or `sse`.
 - A **one-line summary** — the command line for `stdio` servers, the URL for `http`/`sse` servers.
 - **Edit** and **Remove** actions.
+- A **warning line**, if the server references an environment variable or secret that isn't currently resolvable — see [Placeholders and secrets](#placeholders-and-secrets) below.
 
 If no servers are configured yet, the list shows an empty state instead of rows.
 
@@ -52,15 +54,14 @@ Names may contain only letters, numbers, hyphens, and underscores, and must be u
 
 ### Placeholders and secrets
 
-Environment-variable values and HTTP header values support `${VAR_NAME}` placeholders. These are stored **verbatim** — the tab never resolves or reveals a secret — and are expanded only when a live thread starts, using the same resolution as [Extra environment variables](/docs/reference/settings/#environment): process environment variables merged with keychain-stored secrets. This keeps real tokens out of `settings.json` while still letting each thread authenticate.
+Environment-variable values and HTTP header values support `${VAR_NAME}` placeholders. These are stored **verbatim** in `data.json` — the tab never resolves or reveals a secret — and are expanded only when a live thread starts, using the same resolution as [Extra environment variables](/docs/reference/settings/#environment): process environment variables merged with keychain-stored secrets. This keeps real tokens out of `data.json` while still letting each thread authenticate.
 
-## Read-only `sdk` servers
+**If a placeholder can't be resolved — the variable is unset and no matching secret is registered — the server is skipped entirely for that session, rather than starting with a blank credential.** You'll see this in two places:
 
-Servers with `type: "sdk"` are registered by an in-process integration rather than a spawned command or a remote URL. They can't be reconstructed from JSON alone, so the tab shows them **read-only** — you can see them in the list, but editing one means opening `~/.claude/settings.json` by hand.
+- A row in the **Settings → MCP** list shows *"Will be skipped: `${VAR_NAME}` is not registered under Settings → Secrets."*
+- The first time a thread hits this during a session, a one-time notice banner reports it (deduplicated per warning message, so it won't repeat every turn).
 
-## Safety with a malformed config
-
-If `~/.claude/settings.json` contains invalid JSON, the tab shows the parse error and **hides the add/edit controls** rather than risk a write that clobbers whatever is actually on disk. Fix the JSON by hand, reopen the tab, and the controls return. Saves also re-read the file at write time, so a change you made in another editor won't be silently overwritten by a stale in-memory copy.
+Earlier versions of the plugin expanded an unresolved placeholder to an empty string and injected it anyway — which meant a server could silently authenticate with a blank token and fail in confusing ways. Register the missing variable or secret under **Settings → Claude → Extra environment variables / Secret environment variables** to clear the warning and have the server load normally.
 
 ## Related
 

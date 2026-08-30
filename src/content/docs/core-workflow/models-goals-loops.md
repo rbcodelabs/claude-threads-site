@@ -33,12 +33,16 @@ While an escalated turn is running, the model switcher button glows in the accen
 
 ## Goals
 
-`/goal <text>` pins a persistent goal on a thread. Setting a goal does two things:
+`/goal <text>` pins a persistent goal on a thread. If you already sent the request without `/goal`, right-click your latest sent, non-empty message in the main conversation and choose **Set as goal**. Older messages and messages without text do not offer this action.
 
-1. Claude immediately starts working toward it — no separate prompt needed.
-2. The goal is injected into the system prompt on **every subsequent turn**, so it survives context compaction, topic drift, and multi-day threads. Claude is instructed to keep working toward it until it's met or blocked on your input.
+Setting a goal does two things:
 
-`/goal` alone shows the current goal; `/goal clear` (or `off`/`done`) removes it.
+1. Once the goal is saved, the agent receives a kickoff and starts working toward it — no separate prompt needed. If the thread is busy, the kickoff waits for the active turn and any permission, tool, or background-work callbacks to settle safely.
+2. The goal is injected into the authoritative session context on **every subsequent turn**, so it survives context compaction, topic drift, and multi-day threads. The agent is instructed to keep working toward it until it's met or blocked on your input.
+
+Setting or replacing a goal safely refreshes the active Claude or Codex session after persistence. The refresh preserves the session's conversation continuity while ensuring the next turn uses only the latest goal; rapid replacements do not accumulate stale goal instructions.
+
+`/goal` alone shows the current goal; `/goal clear` (or `off`/`done`) removes it. Clearing also performs the same safe session refresh, without sending a kickoff, so the removed goal cannot linger in later turns.
 
 ## Loops
 
@@ -53,18 +57,23 @@ While an escalated turn is running, the model switcher button glows in the accen
 
 Like `/goal`, starting a loop sends the prompt immediately — you don't wait for the first interval to elapse. Intervals below 30 seconds are clamped to 30s. Loops run on the plugin's built-in scheduler, so they **persist across plugin reloads and Obsidian restarts**. If a loop tick arrives before the thread's previous turn has finished, it's retried shortly after rather than piling up as a queued duplicate. A thread can only have one active loop at a time — starting a new `/loop` replaces whichever loop was already running there.
 
-`/loop` alone lists the thread's loop with its next run time; `/loop stop` (or `off`/`cancel`/`clear`) stops it. While a loop is active, a banner above the input shows its status ("Loop running…" or the next run time) with a **Stop** button, and a matching pill appears in the thread's status footer.
+`/loop` alone lists the thread's loop with its next run time; `/loop stop` (or `off`/`cancel`/`clear`) stops it. While a loop is active, a compact scheduled-activity pill appears in the composer footer instead of a permanent banner. The pill shows the interval for a single loop (for example, `Every 5m`); if the thread also has a pending one-time wakeup, it summarizes whichever item runs next and adds `+1`.
+
+Click the pill to open an anchored popover above the composer. Each recurring loop and one-time wakeup has its own row with timing and prompt/reason details. **Stop** removes only the selected loop, while **Cancel** removes only the selected wakeup. The pill disappears when no scheduled activity remains. See [Status Line (Context Footer)](/docs/reference/status-line/#scheduled-activity) for the complete interaction.
 
 For recurring tasks that should run independently of any single thread's lifecycle — surviving even if you close that thread — see [Scheduled tasks](/docs/automation/scheduled-tasks/) instead.
 
 ## Dispatching with commands
 
-`/model`, `/goal`, and `/loop` also work as prefixes in the Agent Dashboard and Kanban dispatch boxes, applying to the newly created thread:
+`/model`, `/goal`, `/loop`, and `/design` also work as prefixes in the Agent Dashboard and Kanban dispatch boxes, applying to the newly created thread:
 
 - `/model opus fix the login bug` — creates the new thread with Opus set as its model and dispatches just the prompt
 - `/goal ship the v1 login flow` — creates the thread with that persistent goal and immediately starts working toward it (same kickoff as `/goal` inside a thread)
 - `/loop 10m check CI status` — creates the thread, sends the prompt now, and re-runs it every 10 minutes (stop it later with `/loop stop` inside the thread)
+- `/design a responsive settings page` — creates a native design-artifact thread, opens it in Chat, and launches Geode's ArtifactView preview
 
 A command with bad or missing arguments shows a notice and keeps your draft instead of creating a thread. The thread-management variants (`/goal clear`, `/loop stop`) only work inside an existing thread.
+
+Design dispatch requires a brief. Bare `/design` creates no thread, and design dispatch does not accept image or text attachments; the draft is preserved so you can remove them and retry. Inside Chat, `/design` without a brief instead reopens that thread's existing artifact. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode).
 
 `/escalate <prompt>` (when escalation is enabled) also appears in the dispatch box autocomplete — it creates the new thread and routes its first turn to the escalation model, same as using it mid-thread. A bare `/escalate` with no prompt shows a usage notice instead of dispatching.

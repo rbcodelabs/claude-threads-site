@@ -9,9 +9,19 @@ Open the **Agent Dashboard** from the ribbon or command palette to see all threa
 
 ## Dispatch box
 
-A dispatch box sits at the top of the dashboard. Type a task and press Enter to spin up a new thread and start it working immediately — this is the fastest way to launch a task without first opening Chat. The dispatch box also accepts the `/model`, `/goal`, and `/loop` prefixes described in [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/#dispatching-with-commands), and supports attaching images or files via the paperclip button or drag-and-drop.
+A dispatch box sits at the top of the dashboard. Type a task and press Enter to spin up a new thread and start it working immediately — this is the fastest way to launch a task without first opening Chat. The dispatch box also accepts the `/model`, `/goal`, `/loop`, and `/design` prefixes described in [Dispatching with commands](/docs/core-workflow/models-goals-loops/#dispatching-with-commands), and supports attaching images or files via the paperclip button or drag-and-drop.
+
+Use `/design <brief>` here to create a new native design-artifact thread, open it in Chat, and launch Geode's ArtifactView preview. Bare `/design` shows a usage notice and creates no thread. Design dispatch does not accept image or text attachments; if any are present, Threads keeps the draft and asks you to remove them. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode) for the artifact workflow and in-Chat revision behavior.
+
+The kickoff button displays the harness that will own the new thread: **Claude** or **Codex**. Press Enter or click the button to dispatch with the harness shown. To change it without dispatching, right-click or press and hold the button; from the keyboard, focus it and use `Shift+F10`, the Context Menu key, or `Alt+Down`. Choosing Claude or Codex updates the button, and that choice stays local to the mounted dashboard while you launch more threads.
+
+**Settings → Claude → Agent harness** provides the initial default only. A dashboard choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Kanban dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
 
 You can resolve pending permission requests directly from dashboard rows without switching threads — see [Permissions](/docs/permissions/permission-modes-and-plan-mode/) for what those requests look like.
+
+## Waiting threads
+
+When a thread has a pending `ScheduleWakeup`, the dashboard keeps it in the **Waiting** group and shows a live `Resumes in…` countdown with the wakeup reason. This dashboard classification remains visible across threads even though the conversation itself uses a compact [scheduled-activity pill and popover](/docs/reference/status-line/#scheduled-activity) for inspection and item-specific controls.
 
 ## Live activity (running threads)
 
@@ -21,14 +31,9 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ![Inline workflow progress — live agent rows with running/done dots and a phase label](../../../assets/screenshots/screenshot-workflow-progress.png)
 
-## Background task completions
+## Native agent teams
 
-A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the dashboard (and the Kanban board) keeps it under **Working** until the background task or workflow reports back.
-
-What happens when it does report back depends on whether the thread is still active:
-
-- **Thread still streaming:** the result shows up inline via the running turn's live task pill.
-- **Thread has gone idle:** a ✓/✗ summary is appended directly into that thread's conversation as a subtle centered notice row, so it's there whenever you next open the thread or scroll back — instead of a toast you had to be looking at the moment it fired.
+When a Claude or Codex thread launches native child agents, the dashboard shows them beneath their owning thread as a nested team. Follow the hierarchy to see descendants, select an agent to inspect its lifecycle and activity, or search by agent role, task, or current activity. Clicking an agent here opens the parent conversation with that agent's activity view already showing, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
 
 ## Auto-generated summaries (idle threads)
 
@@ -47,3 +52,12 @@ Enabled by default — disable via **Settings → Features → Kanban board → 
 Run **Jump to latest unreviewed completed agent** from the command palette to open the Agent Dashboard (if it isn't already open) and jump straight to the most recently completed thread you haven't looked at yet. This is the fastest way to work through a backlog of finished agents after dispatching several tasks in parallel.
 
 You can also send messages to any thread directly from the dashboard without switching tabs.
+
+## Background tasks stay "Working"
+
+A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the dashboard (and the [Kanban board](/docs/views/kanban-board/)) keeps it under **Working** until the background task or workflow reports back, so you don't have to stumble onto a stray notification to realize something is still running.
+
+What happens when it reports back depends on whether the thread is still active:
+
+- **Thread still streaming:** the result appears inline through the running turn's live task pill.
+- **Thread has gone idle:** a ✓/✗ summary is appended to the conversation as a subtle centered notice row, so it remains available when you reopen the thread or scroll back instead of disappearing as a transient toast.
