@@ -27,6 +27,36 @@ Use **Create with Claude** to open a thread with a scheduling prompt, then descr
 
 See [Settings Reference → Scheduled](/docs/reference/settings/#scheduled) for a compact reference to the dashboard.
 
+## Active-hours windows
+
+A scheduled task can be restricted to a local time-of-day window, so it only fires during — say — business hours. Ask Claude to scope it (*"…but only between 7am and 10pm"*), or set it directly through the Cron tools with `activeHoursStart` / `activeHoursEnd` (24-hour `HH:MM`).
+
+When a cycle comes due **outside** the window, the scheduler skips it entirely — no thread is opened, no prompt is sent — and jumps straight to the next window-open time. An every-6-hour job scoped to `07:00`–`22:00` therefore never wastes an overnight run; it simply resumes at 07:00. Overnight windows work too: set the start after the end (e.g. `22:00`–`06:00`) and the window wraps past midnight.
+
+The **Settings → Features → Scheduled tasks** list shows the window inline in each task's schedule description, e.g. *"Every 6 hour(s) (07:00-22:00 only)"*.
+
+This replaces the older pattern of baking a business-hours check into the prompt itself (e.g. *"if the current hour is before 7 or after 22, stop immediately"*), which burned a whole thread and turn every time the task fired outside hours just to check the clock and bail. With an active-hours window the out-of-hours run never happens at all.
+
+- **`CronCreate`** accepts `activeHoursStart` and `activeHoursEnd` — provide both together, or neither.
+- **`CronUpdate`** accepts `activeHoursStart` / `activeHoursEnd` to set or change the window (a partial change is merged with the existing one), and `clearActiveHours: true` to remove the restriction entirely.
+
+## Gate commands
+
+A scheduled task can carry a deterministic **gate** — a shell command that runs *before* each cycle spawns a thread, so cycles with nothing to do are skipped without burning an agent turn. Ask Claude to add one (*"…but only run it if `~/inbox/pending.txt` is non-empty"*), or set it directly through the Cron tools with `gateCommand` (plus the optional `gateTimeoutSeconds`, default 30 and capped at 120, and `gateFailOpen`, default `true`).
+
+The contract mirrors a shell test like `test -s file` or `grep -q`: **exit `0` fires the agent; any clean non-zero exit skips the cycle entirely** — no thread, no prompt, no LLM call — while the schedule still advances normally to the next run.
+
+On a fire, the gate's stdout is fed into the prompt: it replaces a `{{gateOutput}}` placeholder if the prompt has one, otherwise it's appended as a `Gate output:` block (truncated to ~8 KB) — so the agent doesn't have to re-derive what the check already found. The gate runs in the task's working directory with an environment that includes `CRON_LAST_RUN_MS` (epoch ms of the previous run, a natural "since last check" cursor), `CRON_ITEM_ID`, and `CRON_ITEM_NAME`.
+
+If the gate can't be *evaluated* — it times out or fails to spawn (e.g. command not found) — the task **fails open and fires anyway** by default, so a broken check never silently blackholes a real cron job. Set `gateFailOpen: false` to fail closed and skip instead. A clean non-zero exit is always treated as a deliberate skip, regardless of the fail-open setting.
+
+Gates run on desktop only — they're inert on mobile, where a configured gate simply fires every time. The **Settings → Features → Scheduled tasks** list flags gated tasks inline, e.g. *"Every 5 minute(s) · gated"*.
+
+- **`CronCreate`** accepts `gateCommand`, `gateTimeoutSeconds`, and `gateFailOpen`.
+- **`CronUpdate`** accepts the same three to set or change the gate, and `clearGate: true` to remove it entirely.
+
+Example: `gateCommand: "test -s ~/inbox/pending.txt"` paired with a prompt of `Process the pending items:\n{{gateOutput}}` fires only when that file is non-empty. Because a gate is an arbitrary command run unattended, it carries the same trust profile as the existing `statusLineCommand` setting: it's authored by the same user who controls the vault.
+
 ## Cron MCP tools
 
 Under the hood, the scheduler is exposed to any thread as a set of MCP tools, so an agent can create, inspect, and manage scheduled tasks on its own without you going through Settings:

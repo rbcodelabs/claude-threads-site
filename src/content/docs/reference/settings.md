@@ -16,6 +16,7 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 | Context footer command | Shell command that produces the [status-line pills](/docs/reference/status-line/) (JSON tags or plaintext). Runs per-thread, in the background, against that thread's working directory. Desktop only. |
 | Keep computer awake | Prevent the Mac from sleeping while Claude is responding; shows a ☕ indicator in the status bar |
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
+| Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
 ## Agent
 
@@ -59,7 +60,7 @@ See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation)
 |---|---|
 | Permission mode | How the active Claude or Codex harness handles tool-use permission prompts — see the full [permission mode table](/docs/permissions/permission-modes-and-plan-mode/#permissions) |
 | Web Viewer tool | Lets Claude open URLs directly in the host Web Viewer panel (`host_open_url`). In Obsidian, this requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
-| Inline visualizations | Renders a `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
+| Inline visualizations | Renders a wrapped `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
 | Hidden built-in tools | Comma-separated Claude Code built-in tools to hide from sessions. `Cron*` tools are hidden by default — the plugin has its own [scheduler](/docs/automation/scheduled-tasks/). |
 
 ### Always-allowed tools
@@ -143,7 +144,7 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread — no hand-editing JSON required for the common case. This tab edits your **global** `~/.claude/settings.json`, shared by every vault and by the `claude` CLI itself. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, read-only `sdk` entries, and how the tab guards a malformed config.
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
 
 ## Mobile settings
 

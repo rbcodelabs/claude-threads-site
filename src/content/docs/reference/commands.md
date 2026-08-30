@@ -1,6 +1,6 @@
 ---
 title: Commands Reference
-description: All 22 command palette entries, the 3 ribbon icons, and keyboard shortcuts.
+description: All 23 command palette entries, the 3 ribbon icons, and keyboard shortcuts.
 category: reference
 order: 2
 ---
@@ -37,8 +37,9 @@ Every command below is reachable via `Cmd+P` and searchable by name.
 | `summarize-active-thread` | Summarize active thread | Manually regenerates the summary and tab name for the active thread (requires summarization to be enabled in Settings) |
 | `open-thread-orchestrator` | Open Thread Orchestrator | Opens (or creates) the [thread-orchestrator](/docs/views/thread-orchestrator/) supervisory thread |
 | `reload-plugin-safely` | Reload plugin (safe) | Reloads the plugin; if threads are running, prompts with Cancel / Interrupt & Reload / Force Reload — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
+| `generate-diagnostics-report` | Generate diagnostics report | Assembles a redacted, **local-only** diagnostics bundle (performance counters, renderer CPU/memory samples, longtask summary, recent log tail), copies the Markdown to your clipboard, and saves `.md` + `.json` files into a `claude-threads-diagnostics/` folder in the vault root. No message/file contents, absolute home paths, or env values are included. Desktop only — on mobile it shows a "desktop only" notice. Requires the [Diagnostics setting](/docs/reference/settings/) to be enabled for the counters/samples to be populated. |
 
-That's 4 view-opening commands + 1 dispatch shortcut + 2 tab-navigation commands + 9 thread-index commands + 6 thread-management commands = 22 total.
+That's 4 view-opening commands + 1 dispatch shortcut + 2 tab-navigation commands + 9 thread-index commands + 7 thread-management/diagnostics commands = 23 total.
 
 ## Keyboard shortcuts
 

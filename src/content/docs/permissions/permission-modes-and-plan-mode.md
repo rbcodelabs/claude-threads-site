@@ -22,7 +22,9 @@ The default behavior can be changed globally in **Settings → Tools → Permiss
 | `dontAsk` | Suppress all interactive permission dialogs; the agent proceeds without confirmation. Intended for scheduled/background sessions that run unattended |
 | `auto` | The agent autonomously decides when to prompt vs. proceed based on action risk |
 
-> **Note for scheduled sessions.** Threads created by the built-in scheduler automatically use `dontAsk` so [cron jobs](/docs/automation/scheduled-tasks/) never stall waiting for a permission dialog that nobody is watching. They also inherit any external MCP servers defined in `~/.claude/settings.json` (Compass, Helio, or any other user-configured HTTP/SSE/stdio server) alongside the plugin's built-in tools, so scheduled agents have the same tool surface as an interactive CLI session — `${VAR_NAME}` placeholders in that config are resolved from environment variables and keychain-stored secrets.
+> **Note for scheduled sessions.** Threads created by the built-in scheduler automatically use `dontAsk` so [cron jobs](/docs/automation/scheduled-tasks/) never stall waiting for a permission dialog that nobody is watching. They also inherit any external MCP servers configured under [Settings → MCP](/docs/integrations/mcp-servers/) (Compass, Helio, or any other user-configured HTTP/SSE/stdio server) alongside the plugin's built-in tools, so scheduled agents have the same tool surface as an interactive session — `${VAR_NAME}` placeholders in that config are resolved from environment variables and keychain-stored secrets, and a server with an unresolved placeholder is skipped for that run rather than started with a blank credential.
+
+> **Auto-denied tool calls.** In `auto` and `dontAsk` mode — or when a deny rule blocks a tool — a tool call can be denied without an interactive prompt. When that happens the conversation shows a distinct **"Auto-denied &lt;tool&gt;"** annotation, with the deciding reason (e.g. `rule` or `mode`), so the denial stays visible instead of only surfacing as a failed tool result.
 
 ## Plan Mode
 
