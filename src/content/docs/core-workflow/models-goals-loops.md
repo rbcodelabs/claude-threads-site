@@ -17,7 +17,7 @@ order: 2
 /model default  → resets to the plugin's Default model setting (or the CLI default)
 ```
 
-A **Default model** dropdown in Settings → Claude picks the model for threads that have no `/model` override. Family aliases (Fable / Opus / Sonnet / Haiku "latest") are always listed first; pinned model IDs are sourced from the SDK's `capabilities_discovered` event, which fires the first time a thread starts in the current Obsidian session. Before any thread has run, the dropdown falls back to a hardcoded list of current models — start a thread and reopen Settings to see the full CLI-sourced list, so no plugin update is needed when Anthropic adds a new model.
+A **Default model** dropdown in Settings → Agent picks the model for threads that have no `/model` override. Family aliases (Fable / Opus / Sonnet / Haiku "latest") are always listed first; pinned model IDs are sourced from the SDK's `capabilities_discovered` event, which fires the first time a thread starts in the current Obsidian session. Before any thread has run, the dropdown falls back to a hardcoded list of current models — start a thread and reopen Settings to see the full CLI-sourced list, so no plugin update is needed when Anthropic adds a new model.
 
 You can also switch models without typing: a **model switcher button** (CPU icon) sits in the conversation footer, left of the menu button. Hover it to see the active model; click it to pick Default / Opus / Sonnet / Haiku / Fable from a dropdown. The icon turns accent-colored whenever a per-thread override is active, and it stays in sync with the `/model` command.
 
@@ -25,7 +25,7 @@ The active model is shown as a badge in the thread info bar.
 
 ## Model escalation
 
-`/escalate` (the keyword is configurable) is a one-turn override — it routes just that message to the Escalation model chosen in Settings → Claude (Fable 5, Opus, Sonnet, or Haiku), then the thread model resumes for the next turn. Both the keyword and the target model are configurable in [Settings Reference → Claude](/docs/reference/settings/#claude), and (when escalation is enabled) the current keyword shows up alongside `/model`, `/goal`, etc. in the `/` autocomplete popup so it's discoverable without reading the docs — renaming the keyword or toggling escalation off in Settings updates the popup immediately.
+`/escalate` (the keyword is configurable) is a one-turn override — it routes just that message to the Escalation model chosen in Settings → Agent (Fable 5, Opus, Sonnet, or Haiku), then the thread model resumes for the next turn. Both the keyword and the target model are configurable in [Settings Reference → Agent](/docs/reference/settings/#agent), and (when escalation is enabled) the current keyword shows up alongside `/model`, `/goal`, etc. in the `/` autocomplete popup so it's discoverable without reading the docs — renaming the keyword or toggling escalation off in Settings updates the popup immediately.
 
 While an escalated turn is running, the model switcher button glows in the accent color and its tooltip names the escalated model, so you always have visible confirmation that the escalation took effect. A brief tooltip also pops up from the model button when the turn starts, fading in, holding for a moment, then fading out automatically — no interaction needed and zero layout shift. The glow clears automatically when the turn finishes.
 

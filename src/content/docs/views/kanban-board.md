@@ -10,7 +10,7 @@ Toggle the **Kanban** button in the Agent Dashboard toolbar (or run **Open Kanba
 | Column | Meaning |
 |---|---|
 | **Working** | Actively processing a turn — also covers a thread whose own turn has ended but a background subagent (`Agent(..., run_in_background: true)`) or `Workflow` task it spawned hasn't reported back yet, so it doesn't get miscategorized as New/Done/Ready while still doing work server-side |
-| **Awaiting** | Waiting on a permission prompt |
+| **Awaiting** | Waiting on a permission prompt or agent question |
 | **Waiting** | A `ScheduleWakeup` is pending — shows a live countdown, e.g. "Resumes in 4m — check CI status" |
 | **New** | Unreviewed — completed since you last looked |
 | **Done** | Finished and reviewed |
