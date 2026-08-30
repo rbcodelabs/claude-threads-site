@@ -123,10 +123,10 @@ Grouping works on both desktop and [mobile](/docs/integrations/remote-and-voice/
 Codex's bundled `visualize` skill answers a "show me the numbers" question by writing a small HTML chart to disk and marking where it belongs in its reply with a content reference on its own line:
 
 ```text
-visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
+visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
 ```
 
-That marker is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises it while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text.
+That canonical wrapped reference is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises the `visualize{…}` wrapper while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text. Legacy bare `visualize{…}` references remain supported so visualizations in existing conversations continue to render.
 
 The file on disk is an HTML *fragment*, not a page: no doctype, no `<html>`, no `<body>`. The plugin wraps it into a complete document before showing it, and that wrapper does three things worth knowing about:
 
