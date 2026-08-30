@@ -20,6 +20,10 @@ If you send a message while Claude is already processing, it goes into a queue â
 
 ![Message queue â€” stacked removable rows above the composer showing queued messages](../../../assets/screenshots/screenshot-queue-rows.png)
 
+## Task checklist
+
+Claude's `TodoWrite` / `TaskCreate` tools and Codex's `update_plan` tool render the same live task checklist above the composer. It updates as the agent moves items between pending, in-progress, and completed states, so you can follow a multi-step task without interrupting the thread.
+
 ## Activity indicator
 
 While Claude is processing, a typed status card appears above the input area showing what's happening:
