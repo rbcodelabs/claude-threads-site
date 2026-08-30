@@ -34,6 +34,17 @@ While Claude is processing, a typed status card appears above the input area sho
 
 ![Status rail — active-work card with a spinner above the composer](../../../assets/screenshots/screenshot-status-rail.png)
 
+## Tool call grouping
+
+Consecutive tool calls of the same kind — a run of file reads, or a string of edits — collapse into a single expandable group instead of a long scroll of individual pills. This happens live as the turn runs, not just after it settles, so a long agentic run never grows an unbounded wall of pills while Claude is still working. The in-progress group shows a "still running" pulse, a group you expand mid-turn stays expanded as more calls arrive, and a group containing a failed call auto-expands and stays flagged so errors are never hidden.
+
+Two refinements keep even a busy, fast-changing turn (reads, edits, and planning calls interleaved) from reading as a wall of short, choppy groups:
+
+- **Smoothing** — a short interruption of a different kind (for example, a single `TaskUpdate` between two runs of file reads) is folded back into the group on either side instead of breaking it into three separate short entries.
+- **A second collapsible tier** — if the list is still long after smoothing, it collapses one level further into a single "N tool calls, M steps" wrapper. While the turn is in progress, that wrapper's header live-updates to show the icon and name of whichever tool is currently running, so a long collapsed run doesn't read as frozen. It auto-expands through both levels if any call anywhere inside it fails, the same way a single group does.
+
+Both refinements are available on desktop; mobile gets the smoothing pass only.
+
 ## Errors and auto-retry
 
 Two failure modes are recovered automatically, shown as a transient amber "reconnecting" notice in the conversation rather than a hard error:
