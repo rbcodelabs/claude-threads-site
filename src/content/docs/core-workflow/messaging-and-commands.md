@@ -171,7 +171,7 @@ Summaries are cached in memory for the session. They regenerate on the next relo
 
 ## Background tasks
 
-Claude can kick off a long-running task in the background (for example, a `Bash` command run with `run_in_background: true`) and keep working while it finishes. When that task completes — even after its turn has already ended, or the thread has gone idle — the result is saved directly into the conversation as a compact pill, the same style used for live sub-agent progress rows. The pill shows a short summary and a success or failure indicator, and it's there whenever you next open the thread — no separate popup notification to catch.
+Claude can kick off a long-running task in the background (for example, a `Bash` command run with `run_in_background: true`) and keep working while it finishes. If the thread is still streaming when the task reports back, the result appears in its live task pill. If the thread has gone idle, a compact success or failure notice row is saved directly into the conversation, so the result is there whenever you next open the thread instead of disappearing as a transient popup.
 
 ## Thread summaries
 
