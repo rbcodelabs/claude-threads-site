@@ -7,6 +7,12 @@ order: 2
 
 When Claude or Codex starts child agents, Claude Threads keeps them attached to the conversation that launched them, without turning every child into a separate thread and without letting agent status take over the screen. Your conversation stays the conversation.
 
+## Explicit and proactive agents
+
+Both harnesses can start native child agents when a task or instruction explicitly calls for delegation. Codex can also decide proactively to divide suitable work when **Settings → Agent → Codex reasoning effort** is set to `Ultra`. Ultra increases the reasoning available for cleanly separable work, but it can also increase latency and compute use and does not guarantee that every task will fan out.
+
+Explicit and proactive agents use the same workspace described below. Claude Threads displays the native identities, hierarchy, activity, and lifecycle events reported by the active harness; it does not simulate a separate agent system.
+
 ## The agent pill
 
 While a thread has child agents, a compact pill appears in the composer footer. It reports how many agents are working, how many failed, or a plain count once everything has finished. The pill stays visible at rest for as long as agents exist, so you never have to hover to check on them. When a thread has no agent runs at all, the pill disappears and the footer returns to its normal hover-only behavior.
@@ -43,5 +49,4 @@ Background shell jobs and local workflow phases remain ordinary tasks rather tha
 
 The workspace exposes only controls that the active harness can support through a verified host-side API. Currently, Claude and Codex provide stable child identities and lifecycle/activity events, but neither exposes a verified host-callable path for messaging one child or interrupting only that child.
 
-For that reason, direct child-agent messaging and single-agent interruption remain unavailable. Claude Threads explains the limitation in the agent activity view and never silently redirects an attempted child action to the parent thread.
-
+For that reason, direct child-agent messaging and single-agent interruption remain unavailable, whether an agent was started explicitly or proactively. Claude Threads explains the limitation in the agent activity view and never silently redirects an attempted child action to the parent thread.

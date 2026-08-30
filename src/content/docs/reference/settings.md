@@ -1,6 +1,6 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
+description: Every setting in the plugin, organized by its actual tab — General, Agent, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
 category: reference
 order: 1
 ---
@@ -18,17 +18,19 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
 | Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
-## Claude
+## Agent
 
 | Setting | Description |
 |---|---|
 | Agent harness | Initial Claude or Codex default for new [Dashboard and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
+| Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
 | Default model | Model for new turns unless a thread overrides it with [`/model`](/docs/core-workflow/models-goals-loops/). "CLI default" defers to the Claude Code CLI configuration. Family aliases always track the latest version; pinned IDs lock to a specific release. Start a thread to populate the full model list from the CLI. |
 | Thinking mode | `Disabled` (default), `Adaptive` (Claude decides when to use extended thinking), or `Enabled` (fixed token budget) |
 | Thinking token budget | Maximum tokens for thinking when mode is `Enabled` (default: 8,000) |
 | Effort level | `Default` (CLI default), `Low`, `Medium`, `High`, `Extra high` (Opus 4.7+), or `Max` (Opus 4.6+, Sonnet 4.6) — how much reasoning effort Claude applies per turn |
+| Codex reasoning effort | `Default`, `Low`, `Medium`, `High`, `XHigh`, or `Ultra` — how much reasoning effort Codex applies per turn. `Ultra` enables Codex's supported proactive multi-agent mode for work that divides cleanly; it can increase latency and compute use, and does not guarantee that Codex will fan work out to child agents. |
 | Agent progress summaries | When enabled, running sub-agents emit an AI-generated progress summary roughly every 30 seconds |
 | Enable 1M context window (beta) | Passes the `context-1m-2025-08-07` beta header for Sonnet 4/4.5. Requires a model that supports it. |
 | Default working directory | Starting directory for new threads. Leave empty to use the vault root. |

@@ -5,7 +5,7 @@ category: getting-started
 order: 1
 ---
 
-Claude Threads embeds Claude Code directly in Obsidian. Each tab is an independent Claude Code session with its own working directory and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
+Claude Threads embeds Claude Code and OpenAI Codex directly in Obsidian. Each tab is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
 
 ## The three-panel model
 
@@ -28,9 +28,10 @@ On desktop, **Settings → General → Conversation placement** offers an opt-in
 ## Prerequisites
 
 - [Obsidian](https://obsidian.md) v1.0.0 or later (desktop only)
-- The [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed and authenticated
-  - The plugin auto-detects `claude` at `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. If your install lives somewhere else, set the path explicitly — see [Settings Reference → Claude](/docs/reference/settings/#claude).
-  - AWS Bedrock / SSO users: set `AWS_PROFILE` and `AWS_REGION` in the plugin's Extra Environment Variables setting instead of authenticating with a Claude account directly.
+- At least one authenticated agent CLI:
+  - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code). The plugin auto-detects `claude` at `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. AWS Bedrock / SSO users can set `AWS_PROFILE` and `AWS_REGION` under Extra environment variables.
+  - [OpenAI Codex CLI](https://developers.openai.com/codex/cli/). Select **OpenAI Codex** under **Settings → Agent → Agent harness**.
+- If either executable is installed outside your `$PATH`, set its binary path under [Settings Reference → Agent](/docs/reference/settings/#agent).
 
 ## Installation
 
