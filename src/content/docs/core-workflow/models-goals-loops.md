@@ -33,12 +33,16 @@ While an escalated turn is running, the model switcher button glows in the accen
 
 ## Goals
 
-`/goal <text>` pins a persistent goal on a thread. Setting a goal does two things:
+`/goal <text>` pins a persistent goal on a thread. If you already sent the request without `/goal`, right-click your latest sent, non-empty message in the main conversation and choose **Set as goal**. Older messages and messages without text do not offer this action.
 
-1. Claude immediately starts working toward it — no separate prompt needed.
-2. The goal is injected into the system prompt on **every subsequent turn**, so it survives context compaction, topic drift, and multi-day threads. Claude is instructed to keep working toward it until it's met or blocked on your input.
+Setting a goal does two things:
 
-`/goal` alone shows the current goal; `/goal clear` (or `off`/`done`) removes it.
+1. Once the goal is saved, the agent receives a kickoff and starts working toward it — no separate prompt needed. If the thread is busy, the kickoff waits for the active turn and any permission, tool, or background-work callbacks to settle safely.
+2. The goal is injected into the authoritative session context on **every subsequent turn**, so it survives context compaction, topic drift, and multi-day threads. The agent is instructed to keep working toward it until it's met or blocked on your input.
+
+Setting or replacing a goal safely refreshes the active Claude or Codex session after persistence. The refresh preserves the session's conversation continuity while ensuring the next turn uses only the latest goal; rapid replacements do not accumulate stale goal instructions.
+
+`/goal` alone shows the current goal; `/goal clear` (or `off`/`done`) removes it. Clearing also performs the same safe session refresh, without sending a kickoff, so the removed goal cannot linger in later turns.
 
 ## Loops
 
