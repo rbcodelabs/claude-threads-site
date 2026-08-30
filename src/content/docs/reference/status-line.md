@@ -9,6 +9,16 @@ A row of pills below the input area shows live context for each thread — git b
 
 ![Status-line footer pills — dev URL, git branch, a clickable PR pill, and an AWS status pill below the message input](../../../assets/screenshots/screenshot-status-line.png)
 
+## Scheduled activity
+
+The composer footer also shows a built-in scheduled-activity pill whenever the active thread has a pending one-time wakeup or recurring interval loop. Unlike the custom context tags described below, this pill needs no command or configuration.
+
+For one item, the pill summarizes its timing: `Resumes in 12m` for a wakeup or `Every 5m` for a loop. With multiple scheduled items, it shows whichever runs next plus the number of additional items, such as `Resumes in 12m · +1`. The timing updates in place.
+
+Click the pill to open a popover anchored above the composer. It lists every enabled wakeup and interval loop for the thread in next-run order, with the type, timing, and human-readable reason or prompt for each item. **Cancel** removes only its wakeup; **Stop** removes only its loop. The popover stays open while other items remain and closes when the last item is removed.
+
+The pill is keyboard-accessible: `Enter` or `Space` opens it, `Escape` closes it, and clicking outside dismisses it. It remains available while the thread is running so scheduled activity can still be inspected or stopped. When the thread has no scheduled activity, the pill is hidden.
+
 ## Output format
 
 The command can return either:
@@ -41,6 +51,10 @@ The command can return either:
 PR detection is fully script-driven: a `kind:"pr"` tag with a `url` (e.g. from `gh pr view`) populates the thread's `prUrl`, which is **sticky** — it survives after the PR merges so release tooling can still match the thread.
 
 This replaced an earlier approach that scanned assistant message prose for a GitHub PR URL, which missed the common case of a PR opened via `gh pr create` inside a Bash tool call (the URL lands in tool *output*, not assistant prose, so the scanner never saw it). Sourcing the PR tag from the script instead means it can read the actual result of a `gh pr view` call for the branch, rather than guessing from text.
+
+**Always emit the `pr` tag, even though it's usually hidden.** While the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar) is on screen it already shows the branch and a PR button, so the footer hides its own `pr` and `branch` pills to avoid printing the same values twice in adjacent rows. The tag is still doing the work: it is the only source of a thread's PR association, feeding the diff bar's **PR #N** button, the Kanban PR chip, MCP tools, and archive-on-merge. Dropping it to save a `gh` call silently disables all of them.
+
+**Sticky means thread-scoped, not branch-scoped.** Because `prUrl` is never cleared, it outlives the branch it came from — and outlives the *repository* too, if a thread is later pointed at a different project with `set_working_directory`. Branch-scoped UI therefore doesn't read it: the diff bar's button uses the live `pr` tag from the current poll, which vanishes as soon as the branch has no PR, and the footer's own sticky pill is suppressed when its PR provably belongs to a different repo than the thread's current one. A PR whose repo can't be determined (a non-GitHub remote, say) is always shown rather than hidden, so only a provable mismatch is filtered.
 
 **Opening links:** clicking a pill with a `url` opens it in Obsidian's in-app **Web Viewer** when that core plugin is enabled (reusing an existing tab); otherwise it opens in your system browser. **Cmd-click** (Ctrl-click on Windows/Linux) always opens in the system browser, even when the Web Viewer is enabled.
 

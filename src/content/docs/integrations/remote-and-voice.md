@@ -42,7 +42,7 @@ Opening this URL on any device with Obsidian Mobile + Claude Threads installed w
 - Copy any assistant message to clipboard with the ⎘ button
 - View the thread's **cwd chip**, **model**, and **message timestamps**
 - See **queue rows** for pending messages (tap to pull back into the composer, `×` to cancel)
-- View **tool pill icons** matching the desktop view
+- View **tool pill icons** matching the desktop view, including [live grouping](/docs/core-workflow/messaging-and-commands/#tool-call-visibility) of consecutive same-kind calls into a single expandable group
 
 ### Limitations (the thin client)
 

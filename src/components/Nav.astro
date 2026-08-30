@@ -21,6 +21,7 @@ const isDocsRoute = Astro.url.pathname.startsWith('/docs');
           <>
             <a href="/" class="transition-colors hover:text-[rgb(var(--color-text))]">Home</a>
             <a href="/docs/" class="transition-colors hover:text-[rgb(var(--color-text))]">Docs</a>
+            <a href="/changelog/" class="transition-colors hover:text-[rgb(var(--color-text))]">Changelog</a>
           </>
         ) : (
           <>
@@ -29,6 +30,7 @@ const isDocsRoute = Astro.url.pathname.startsWith('/docs');
             <a href="#install" class="transition-colors hover:text-[rgb(var(--color-text))]">Install</a>
             <a href="#roadmap" class="transition-colors hover:text-[rgb(var(--color-text))]">Roadmap</a>
             <a href="/docs/" class="transition-colors hover:text-[rgb(var(--color-text))]">Docs</a>
+            <a href="/changelog/" class="transition-colors hover:text-[rgb(var(--color-text))]">Changelog</a>
           </>
         )
       }

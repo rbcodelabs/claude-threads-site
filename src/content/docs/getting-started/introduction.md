@@ -5,7 +5,7 @@ category: getting-started
 order: 1
 ---
 
-Claude Threads embeds Claude Code directly in your Obsidian sidebar. Each tab is an independent Claude Code session with its own working directory and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
+Claude Threads embeds Claude Code directly in Obsidian. Each tab is an independent Claude Code session with its own working directory and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
 
 ## The three-panel model
 
@@ -13,11 +13,17 @@ Claude Threads is built around three panels that work together:
 
 | Panel | Location | What it does |
 |---|---|---|
-| **Chat** | Sidebar (usually left) | Full conversation history for each thread, with tabs for switching between sessions |
+| **Chat** | Sidebar by default; main area in Conversation first | Full conversation history for each thread, with tabs for switching between sessions |
 | **Agent Dashboard** | Sidebar (usually right) | Dispatch new tasks, monitor running agents at a glance, review results without switching tabs |
 | **Kanban Board** | Its own tab | A board view of every thread bucketed by status — an alternative to the Agent Dashboard's list view |
 
 You don't have to use all three at once. Many people run Chat and the Agent Dashboard side-by-side; others prefer working from the Kanban board and only opening Chat when they need to dig into a specific conversation. See [Dispatching your first task](/docs/getting-started/first-thread/), the [Agent Dashboard](/docs/views/agent-dashboard/) page, and the [Kanban board](/docs/views/kanban-board/) page for details on each.
+
+### Conversation-first workspace
+
+On desktop, **Settings → General → Conversation placement** offers an opt-in **Conversation first** prototype. It keeps exactly one Chat view in the main area and opens wikilinks, edited or bridged files, web pages, artifacts, and agent-triggered navigation in one reusable native companion beside it. Closing the companion returns that space to the conversation, and focusing edited files does not detach unrelated leaves.
+
+**Classic sidebar** remains the default. Conversation-first placement is desktop only; mobile behavior is unchanged.
 
 ## Prerequisites
 

@@ -11,8 +11,10 @@ The first time you install Claude Threads on a fresh vault, the plugin opens a t
 
 1. Click the **Agent Dashboard** ribbon icon, or run **Open Agent Dashboard** from the command palette (`Cmd+P`)
 2. Type a task into the **dispatch box** at the top — for example, `Summarize the README in my project folder`
-3. Press **Enter** — Claude spins up a new thread and starts working
+3. Check the Claude or Codex harness shown on the kickoff button, then press **Enter** (or click the button) — the selected harness spins up a new thread and starts working
 4. Watch progress in the dashboard; click any thread row to open the full conversation in Chat
+
+To choose the other harness before sending, open the button's selector; the choice affects new threads in that dashboard, not existing threads or your global default. See [Agent Dashboard → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for mouse, touch, and keyboard gestures.
 
 That's the whole loop. From here, most of what you'll do is send follow-up messages, review results, and dispatch new tasks — see [Sending messages and slash commands](/docs/core-workflow/messaging-and-commands/) for the details of composing and sending.
 
@@ -32,7 +34,7 @@ See the full [Commands Reference](/docs/reference/commands/) for every keyboard-
 
 ## Forking a thread
 
-Forking splits the current conversation into a new, independent thread. Run **Fork current Claude thread** from the command palette, or use the `fork_conversation` MCP tool from within a thread. A lightweight Claude call distills the existing history into a focused starting prompt for the new thread — so the fork doesn't just copy the whole transcript, it starts the new thread with the relevant context already summarized. The original thread continues completely unaffected.
+Forking splits the current conversation into a new, independent thread. Run **Fork current Claude thread** from the command palette or enter `/fork` in the chat input. A lightweight Claude call distills the existing history into a focused starting prompt for the new thread — so the fork doesn't just copy the whole transcript, it starts the new thread with the relevant context already summarized. The original thread continues completely unaffected.
 
 Forking is useful when a conversation has drifted onto a tangent you want to pursue separately, or when you want to hand off a sub-problem to its own thread without losing the parent thread's momentum.
 
