@@ -56,3 +56,8 @@ You can also send messages to any thread directly from the dashboard without swi
 ## Background tasks stay "Working"
 
 A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the dashboard (and the [Kanban board](/docs/views/kanban-board/)) keeps it under **Working** until the background task or workflow reports back, so you don't have to stumble onto a stray notification to realize something is still running.
+
+What happens when it reports back depends on whether the thread is still active:
+
+- **Thread still streaming:** the result appears inline through the running turn's live task pill.
+- **Thread has gone idle:** a ✓/✗ summary is appended to the conversation as a subtle centered notice row, so it remains available when you reopen the thread or scroll back instead of disappearing as a transient toast.
