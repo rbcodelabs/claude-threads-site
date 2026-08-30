@@ -23,6 +23,8 @@ Columns are sorted most-recently-active first. The board has its own floating di
 
 The kickoff button displays the selected Claude or Codex harness. Press Enter or click it to dispatch; right-click, press and hold, or use its keyboard menu to change the selection without sending. Selection is local to the mounted Kanban view, and Settings supplies only the initial default. See [Agent Dashboard → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for all selector gestures and harness behavior.
 
+The panel accepts the same `/model`, `/goal`, `/loop`, and `/design` prefixes as the Dashboard. `/design <brief>` creates a new native design-artifact thread, opens it in Chat, and launches the ArtifactView preview. Bare `/design` shows a usage notice and creates no thread. Image and text attachments are not accepted for design dispatch; Threads preserves the draft so you can remove them and try again. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode) for details.
+
 When a thread owns Claude or Codex child agents, its card also shows a compact native-agent count. Open the thread or [Agent Dashboard](/docs/views/agent-dashboard/) to inspect the nested team; see [Native Agent Workspace](/docs/views/native-agent-workspace/) for details.
 
 ![Kanban board grouped by status — Working, Awaiting, Waiting, New, Done, Failed, and Ready columns, each holding thread cards](../../../assets/screenshots/screenshot-kanban-status.png)

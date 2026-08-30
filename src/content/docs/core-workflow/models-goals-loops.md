@@ -65,12 +65,15 @@ For recurring tasks that should run independently of any single thread's lifecyc
 
 ## Dispatching with commands
 
-`/model`, `/goal`, and `/loop` also work as prefixes in the Agent Dashboard and Kanban dispatch boxes, applying to the newly created thread:
+`/model`, `/goal`, `/loop`, and `/design` also work as prefixes in the Agent Dashboard and Kanban dispatch boxes, applying to the newly created thread:
 
 - `/model opus fix the login bug` — creates the new thread with Opus set as its model and dispatches just the prompt
 - `/goal ship the v1 login flow` — creates the thread with that persistent goal and immediately starts working toward it (same kickoff as `/goal` inside a thread)
 - `/loop 10m check CI status` — creates the thread, sends the prompt now, and re-runs it every 10 minutes (stop it later with `/loop stop` inside the thread)
+- `/design a responsive settings page` — creates a native design-artifact thread, opens it in Chat, and launches Geode's ArtifactView preview
 
 A command with bad or missing arguments shows a notice and keeps your draft instead of creating a thread. The thread-management variants (`/goal clear`, `/loop stop`) only work inside an existing thread.
+
+Design dispatch requires a brief. Bare `/design` creates no thread, and design dispatch does not accept image or text attachments; the draft is preserved so you can remove them and retry. Inside Chat, `/design` without a brief instead reopens that thread's existing artifact. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode).
 
 `/escalate <prompt>` (when escalation is enabled) also appears in the dispatch box autocomplete — it creates the new thread and routes its first turn to the escalation model, same as using it mid-thread. A bare `/escalate` with no prompt shows a usage notice instead of dispatching.
