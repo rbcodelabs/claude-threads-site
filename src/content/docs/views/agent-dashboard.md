@@ -17,7 +17,7 @@ Use `/design <brief>` here to create a new native design-artifact thread, open i
 
 The kickoff button displays the harness that will own the new thread: **Claude** or **Codex**. Press Enter or click the button to dispatch with the harness shown. To change it without dispatching, right-click or press and hold the button; from the keyboard, focus it and use `Shift+F10`, the Context Menu key, or `Alt+Down`. Choosing Claude or Codex updates the button, and that choice stays local to the mounted dashboard while you launch more threads.
 
-**Settings → Claude → Agent harness** provides the initial default only. A dashboard choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Kanban dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
+**Settings → Agent → Agent harness** provides the initial default only. A dashboard choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Kanban dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
 
 You can resolve pending permission requests directly from dashboard rows without switching threads — see [Permissions](/docs/permissions/permission-modes-and-plan-mode/) for what those requests look like.
 
@@ -58,3 +58,8 @@ You can also send messages to any thread directly from the dashboard without swi
 ## Background tasks stay "Working"
 
 A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the dashboard (and the [Kanban board](/docs/views/kanban-board/)) keeps it under **Working** until the background task or workflow reports back, so you don't have to stumble onto a stray notification to realize something is still running.
+
+What happens when it reports back depends on whether the thread is still active:
+
+- **Thread still streaming:** the result appears inline through the running turn's live task pill.
+- **Thread has gone idle:** a ✓/✗ summary is appended to the conversation as a subtle centered notice row, so it remains available when you reopen the thread or scroll back instead of disappearing as a transient toast.

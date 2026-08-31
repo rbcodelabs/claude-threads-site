@@ -10,7 +10,7 @@ Toggle the **Kanban** button in the Agent Dashboard toolbar (or run **Open Kanba
 | Column | Meaning |
 |---|---|
 | **Working** | Actively processing a turn — also covers a thread whose own turn has ended but a background subagent (`Agent(..., run_in_background: true)`) or `Workflow` task it spawned hasn't reported back yet, so it doesn't get miscategorized as New/Done/Ready while still doing work server-side |
-| **Awaiting** | Waiting on a permission prompt |
+| **Awaiting** | Waiting on a permission prompt or agent question |
 | **Waiting** | A `ScheduleWakeup` is pending — shows a live countdown, e.g. "Resumes in 4m — check CI status" |
 | **New** | Unreviewed — completed since you last looked |
 | **Done** | Finished and reviewed |
@@ -33,7 +33,7 @@ When a thread owns Claude or Codex child agents, its card also shows a compact n
 
 ## Task list on cards
 
-When a thread has an active `TodoWrite` / `TaskCreate` checklist, its kanban card shows a compact task list: up to 5 items with status icons (✔ completed, ■ in-progress, ○ pending), a "X / Y done" progress line, and "+N more" when there are additional tasks. The list updates live as the agent ticks items off — useful for seeing exactly how far along a long-running task is without opening the conversation.
+When a thread has an active Claude `TodoWrite` / `TaskCreate` checklist or Codex `update_plan` checklist, its kanban card shows a compact task list: up to 5 items with status icons (✔ completed, ■ in-progress, ○ pending), a "X / Y done" progress line, and "+N more" when there are additional tasks. The list updates live as the agent ticks items off — useful for seeing exactly how far along a long-running task is without opening the conversation.
 
 ## Group by folder or project
 

@@ -1,6 +1,6 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Claude, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
+description: Every setting in the plugin, organized by its actual tab — General, Agent, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
 category: reference
 order: 1
 ---
@@ -16,18 +16,21 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 | Context footer command | Shell command that produces the [status-line pills](/docs/reference/status-line/) (JSON tags or plaintext). Runs per-thread, in the background, against that thread's working directory. Desktop only. |
 | Keep computer awake | Prevent the Mac from sleeping while Claude is responding; shows a ☕ indicator in the status bar |
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
+| Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
-## Claude
+## Agent
 
 | Setting | Description |
 |---|---|
 | Agent harness | Initial Claude or Codex default for new [Dashboard and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
+| Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
 | Default model | Model for new turns unless a thread overrides it with [`/model`](/docs/core-workflow/models-goals-loops/). "CLI default" defers to the Claude Code CLI configuration. Family aliases always track the latest version; pinned IDs lock to a specific release. Start a thread to populate the full model list from the CLI. |
 | Thinking mode | `Disabled` (default), `Adaptive` (Claude decides when to use extended thinking), or `Enabled` (fixed token budget) |
 | Thinking token budget | Maximum tokens for thinking when mode is `Enabled` (default: 8,000) |
 | Effort level | `Default` (CLI default), `Low`, `Medium`, `High`, `Extra high` (Opus 4.7+), or `Max` (Opus 4.6+, Sonnet 4.6) — how much reasoning effort Claude applies per turn |
+| Codex reasoning effort | `Default`, `Low`, `Medium`, `High`, `XHigh`, or `Ultra` — how much reasoning effort Codex applies per turn. `Ultra` enables Codex's supported proactive multi-agent mode for work that divides cleanly; it can increase latency and compute use, and does not guarantee that Codex will fan work out to child agents. |
 | Agent progress summaries | When enabled, running sub-agents emit an AI-generated progress summary roughly every 30 seconds |
 | Enable 1M context window (beta) | Passes the `context-1m-2025-08-07` beta header for Sonnet 4/4.5. Requires a model that supports it. |
 | Default working directory | Starting directory for new threads. Leave empty to use the vault root. |
@@ -57,7 +60,7 @@ See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation)
 |---|---|
 | Permission mode | How the active Claude or Codex harness handles tool-use permission prompts — see the full [permission mode table](/docs/permissions/permission-modes-and-plan-mode/#permissions) |
 | Web Viewer tool | Lets Claude open URLs directly in the host Web Viewer panel (`host_open_url`). In Obsidian, this requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
-| Inline visualizations | Renders a `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
+| Inline visualizations | Renders a wrapped `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
 | Hidden built-in tools | Comma-separated Claude Code built-in tools to hide from sessions. `Cron*` tools are hidden by default — the plugin has its own [scheduler](/docs/automation/scheduled-tasks/). |
 
 ### Always-allowed tools
@@ -145,7 +148,7 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread — no hand-editing JSON required for the common case. This tab edits your **global** `~/.claude/settings.json`, shared by every vault and by the `claude` CLI itself. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, read-only `sdk` entries, and how the tab guards a malformed config.
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
 
 ## Mobile settings
 

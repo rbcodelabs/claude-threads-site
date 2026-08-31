@@ -20,6 +20,10 @@ If you send a message while Claude is already processing, it goes into a queue �
 
 ![Message queue — stacked removable rows above the composer showing queued messages](../../../assets/screenshots/screenshot-queue-rows.png)
 
+## Task checklist
+
+Claude's `TodoWrite` / `TaskCreate` tools and Codex's `update_plan` tool render the same live task checklist above the composer. It updates as the agent moves items between pending, in-progress, and completed states, so you can follow a multi-step task without interrupting the thread.
+
 ## Activity indicator
 
 While Claude is processing, a typed status card appears above the input area showing what's happening:
@@ -29,6 +33,17 @@ While Claude is processing, a typed status card appears above the input area sho
 - **Model escalation tip** — when a turn is routed to the escalation model, a brief tooltip pops up from the model button rather than reshuffling the layout. See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation) for the full behavior.
 
 ![Status rail — active-work card with a spinner above the composer](../../../assets/screenshots/screenshot-status-rail.png)
+
+## Tool call grouping
+
+Consecutive tool calls of the same kind — a run of file reads, or a string of edits — collapse into a single expandable group instead of a long scroll of individual pills. This happens live as the turn runs, not just after it settles, so a long agentic run never grows an unbounded wall of pills while Claude is still working. The in-progress group shows a "still running" pulse, a group you expand mid-turn stays expanded as more calls arrive, and a group containing a failed call auto-expands and stays flagged so errors are never hidden.
+
+Two refinements keep even a busy, fast-changing turn (reads, edits, and planning calls interleaved) from reading as a wall of short, choppy groups:
+
+- **Smoothing** — a short interruption of a different kind (for example, a single `TaskUpdate` between two runs of file reads) is folded back into the group on either side instead of breaking it into three separate short entries.
+- **A second collapsible tier** — if the list is still long after smoothing, it collapses one level further into a single "N tool calls, M steps" wrapper. While the turn is in progress, that wrapper's header live-updates to show the icon and name of whichever tool is currently running, so a long collapsed run doesn't read as frozen. It auto-expands through both levels if any call anywhere inside it fails, the same way a single group does.
+
+Both refinements are available on desktop; mobile gets the smoothing pass only.
 
 ## Errors and auto-retry
 
@@ -82,7 +97,7 @@ These commands answer three different questions:
 - **`/cost`** remains the existing harness-native session command for token usage and cost.
 - **`/usage`** opens Claude Threads' cross-provider usage view. It shows thread or session token totals, last-turn tokens when the provider reports them, Claude cost explicitly labelled as estimated, and each available quota window with percentage used and reset time. With supported Codex-service authentication, it also shows cumulative account metrics and recent daily token activity.
 
-Provider capabilities are not identical. Claude account activity is not available through the SDK, and Claude quota data appears only after the SDK emits a rate-limit event during the session. Codex can read current multi-window limits and Codex account daily/cumulative activity, but API-key-only or Bedrock authentication may not expose account activity. The view reports unavailable fields directly rather than estimating or manufacturing parity between providers.
+Provider capabilities are not identical. Claude account activity is not available through the SDK. Claude quota windows (5-hour and 7-day) show live utilization for subscription sessions: `/usage` pulls the current percentages proactively from the SDK's structured usage data, so you see them at any point in the window rather than only after a rate-limit event. API-key, Bedrock, and Vertex sessions have no plan limits, so those windows show a dash instead of a percentage. Codex can read current multi-window limits and Codex account daily/cumulative activity, but API-key-only or Bedrock authentication may not expose account activity. The view reports unavailable fields directly rather than estimating or manufacturing parity between providers.
 
 **Command pills** — when you complete a built-in command (type `/goal ` or pick one from the dropdown), it turns into a pill chip at the left of the input box. Type the arguments after it; a single Backspace at the start of the input (or clicking the pill's `×`) deletes the whole command. After a command, argument autocomplete kicks in — `/model ` offers `fable|opus|sonnet|haiku|default`.
 
@@ -119,10 +134,10 @@ Grouping works on both desktop and [mobile](/docs/integrations/remote-and-voice/
 Codex's bundled `visualize` skill answers a "show me the numbers" question by writing a small HTML chart to disk and marking where it belongs in its reply with a content reference on its own line:
 
 ```text
-visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
+visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
 ```
 
-That marker is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises it while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text.
+That canonical wrapped reference is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises the `visualize{…}` wrapper while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text. Legacy bare `visualize{…}` references remain supported so visualizations in existing conversations continue to render.
 
 The file on disk is an HTML *fragment*, not a page: no doctype, no `<html>`, no `<body>`. The plugin wraps it into a complete document before showing it, and that wrapper does three things worth knowing about:
 
@@ -153,6 +168,10 @@ Long agentic threads — especially ones with many tool calls spread across doze
 - Toggle the menu item again (now labelled **Expand view**) to return to the normal conversation view.
 
 Summaries are cached in memory for the session. They regenerate on the next reload — which keeps storage simple while keeping the background work cheap (the in-process model is fast and inexpensive).
+
+## Background tasks
+
+Claude can kick off a long-running task in the background (for example, a `Bash` command run with `run_in_background: true`) and keep working while it finishes. If the thread is still streaming when the task reports back, the result appears in its live task pill. If the thread has gone idle, a compact success or failure notice row is saved directly into the conversation, so the result is there whenever you next open the thread instead of disappearing as a transient popup.
 
 ## Thread summaries
 
