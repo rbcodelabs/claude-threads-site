@@ -27,6 +27,20 @@ Use **Create with Claude** to open a thread with a scheduling prompt, then descr
 
 See [Settings Reference → Scheduled](/docs/reference/settings/#scheduled) for a compact reference to the dashboard.
 
+## Working directories and Projects
+
+For a standalone job that opens a new thread, Claude Threads resolves the working directory at fire time in this order:
+
+1. The scheduled item's explicit cwd
+2. The current effective cwd of its [Project](/docs/integrations/git-and-vault/#projects)
+3. The global default working directory
+
+A gate command and the thread it spawns use the same resolved cwd. A Project-derived job therefore follows later Project cwd edits, while a job with an explicit cwd stays pinned to that path.
+
+New-thread jobs never dispatch with a stale or deleted Project association: creation and updates reject unknown Project IDs, and a saved job whose Project was later deleted records an error instead of falling back — even when that job also stores an explicit cwd.
+
+Existing-thread `/loop` schedules and `ScheduleWakeup` timers behave differently. They resume the existing thread in its existing cwd rather than opening a new Project-derived thread, so they can continue after their Project is deleted. If such an item has a gate that still needs to resolve the deleted Project's cwd, that gate records an error instead.
+
 ## Active-hours windows
 
 A scheduled task can be restricted to a local time-of-day window, so it only fires during — say — business hours. Ask Claude to scope it (*"…but only between 7am and 10pm"*), or set it directly through the Cron tools with `activeHoursStart` / `activeHoursEnd` (24-hour `HH:MM`).
@@ -55,7 +69,7 @@ Gates run on desktop only — they're inert on mobile, where a configured gate s
 - **`CronCreate`** accepts `gateCommand`, `gateTimeoutSeconds`, and `gateFailOpen`.
 - **`CronUpdate`** accepts the same three to set or change the gate, and `clearGate: true` to remove it entirely.
 
-Example: `gateCommand: "test -s ~/inbox/pending.txt"` paired with a prompt of `Process the pending items:\n{{gateOutput}}` fires only when that file is non-empty. Because a gate is an arbitrary command run unattended, it carries the same trust profile as the existing `statusLineCommand` setting: it's authored by the same user who controls the vault.
+ Example: `gateCommand: "test -s ~/inbox/pending.txt"` paired with a prompt of `Process the pending items:\n{{gateOutput}}` fires only when that file is non-empty. Because a gate is an arbitrary command run unattended, it carries the same trust profile as the existing `statusLineCommand` setting: it's authored by the same user who controls the vault.
 
 ## Cron MCP tools
 

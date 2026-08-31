@@ -1,15 +1,15 @@
 ---
-title: Thread Orchestrator
+title: Project and Portfolio Orchestrators
 description: The bundled thread-orchestrator skill — a supervisory agent that tracks peer threads and proposes replies for human approval.
 category: views
 order: 4
 ---
 
-The **thread-orchestrator** is a bundled Claude Code skill (`resources/skills/thread-orchestrator`) that turns one thread into a supervisor over several peers. Open it with **Open Thread Orchestrator** from the command palette, or the `open-thread-orchestrator` command ID.
+The **thread-orchestrator** bundled skill supports two roles: one Project Orchestrator per Project and one Portfolio Orchestrator for unassigned work and Project-level rollups. Open the portfolio role with **Open Portfolio Orchestrator**; create/open a Project role from its Settings row. Project activity also creates its orchestrator automatically on the first completed turn.
 
 ## What it does
 
-The orchestrator thread uses the [thread-coordination tools](/docs/reference/agent-tools/#thread-coordination-tools) — `threads_list`, `threads_get_messages`, `threads_set_notes`, and `threads_set_proposed_reply` — to poll every other running thread, track what each one is doing, and surface next steps for you to review.
+Each orchestrator uses the [thread-coordination tools](/docs/reference/agent-tools/#thread-coordination-tools) inside its scope. Project Orchestrators own their Project notes and proposals. Portfolio cross-Project raw access is explicit per call, and elevation does not transfer Project-note ownership.
 
 **Structured notes.** For each thread it's watching, the orchestrator maintains free-form tracking notes — an inferred goal, current status, and a last-reviewed cursor — set via `threads_set_notes`. These are shown in a collapsible "Manager Notes" panel in the Chat view, but are never injected into that thread's own session context, so they don't pollute the conversation the orchestrator is watching.
 
@@ -17,7 +17,7 @@ The orchestrator thread uses the [thread-coordination tools](/docs/reference/age
 
 ## Identifying the orchestrator thread
 
-Once created, the orchestrator thread carries a small bot badge next to its title — in Agent Dashboard rows, Kanban cards, and the thread switcher — so it's easy to pick out among your other threads at a glance. **Settings → Features → Orchestrator** shows its live status: setup guidance if it hasn't been created yet, an **Open** button once it resolves to a real thread, or a warning if the stored thread was deleted or archived outside the plugin. Because there's only ever one orchestrator thread, closing or archiving it from the thread switcher asks for confirmation first, so you don't lose it by accident while tidying up other tabs.
+Portfolio and Project orchestrators carry distinct bot-badge classes and tooltips in Agent Dashboard rows, Kanban cards, and the thread switcher. Closing, archiving, reassigning, or automatically archiving a referenced orchestrator is protected; explicit archive still requires confirmation.
 
 ## Wake-up cadence
 
