@@ -35,7 +35,7 @@ Every command below is reachable via `Cmd+P` and searchable by name.
 | `fork-claude-thread` | Fork current Claude thread | [Forks](/docs/getting-started/first-thread/#forking-a-thread) the active thread into a new, independent thread |
 | `interrupt-active-thread` | Interrupt active thread | Stops the active thread's in-flight response |
 | `summarize-active-thread` | Summarize active thread | Manually regenerates the summary and tab name for the active thread (requires summarization to be enabled in Settings) |
-| `open-thread-orchestrator` | Open Thread Orchestrator | Opens (or creates) the [thread-orchestrator](/docs/views/thread-orchestrator/) supervisory thread |
+| `open-thread-orchestrator` | Open Portfolio Orchestrator | Opens (or creates) the portfolio-level [thread orchestrator](/docs/views/thread-orchestrator/) |
 | `reload-plugin-safely` | Reload plugin (safe) | Reloads the plugin; if threads are running, prompts with Cancel / Interrupt & Reload / Force Reload — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
 
 That's 4 view-opening commands + 1 dispatch shortcut + 2 tab-navigation commands + 9 thread-index commands + 6 thread-management commands = 22 total.

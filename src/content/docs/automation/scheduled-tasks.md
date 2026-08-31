@@ -27,6 +27,20 @@ Use **Create with Claude** to open a thread with a scheduling prompt, then descr
 
 See [Settings Reference → Scheduled](/docs/reference/settings/#scheduled) for a compact reference to the dashboard.
 
+## Working directories and Projects
+
+For a standalone job that opens a new thread, Claude Threads resolves the working directory at fire time in this order:
+
+1. The scheduled item's explicit cwd
+2. The current effective cwd of its [Project](/docs/integrations/git-and-vault/#projects)
+3. The global default working directory
+
+A gate command and the thread it spawns use the same resolved cwd. A Project-derived job therefore follows later Project cwd edits, while a job with an explicit cwd stays pinned to that path.
+
+New-thread jobs never dispatch with a stale or deleted Project association: creation and updates reject unknown Project IDs, and a saved job whose Project was later deleted records an error instead of falling back — even when that job also stores an explicit cwd.
+
+Existing-thread `/loop` schedules and `ScheduleWakeup` timers behave differently. They resume the existing thread in its existing cwd rather than opening a new Project-derived thread, so they can continue after their Project is deleted. If such an item has a gate that still needs to resolve the deleted Project's cwd, that gate records an error instead.
+
 ## Cron MCP tools
 
 Under the hood, the scheduler is exposed to any thread as a set of MCP tools, so an agent can create, inspect, and manage scheduled tasks on its own without you going through Settings:

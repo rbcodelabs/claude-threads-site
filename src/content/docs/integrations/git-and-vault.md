@@ -57,13 +57,17 @@ Edits made directly to vault files are unaffected — they don't match any bridg
 
 ## Projects
 
-Projects group threads by vault sub-folder and inject shared context into every message, so Claude always knows what it's working on.
+Projects group threads, choose their initial working directory, inject shared context, and may own a Project Orchestrator, so Claude always knows what it's working on.
 
-**Creating a project:** Go to Settings → Vault → Projects → enter a project name and vault folder path → click **Create project**. You can also add a project context prompt — a few sentences describing the project's goals, conventions, and key files that Claude should always keep in mind.
+**Creating a project:** Go to Settings → Vault → Projects, enter a project name and vault folder path, and click **Add**. By default, the working directory is derived as `<vault root>/<vault folder>`. Use the optional filesystem cwd override when the work belongs in a repo or directory outside the vault. Settings always shows the resolved effective cwd, and clearing the override returns the Project to its vault-derived path. You can also add a project context prompt — a few sentences describing the project's goals, conventions, and key files that Claude should always keep in mind.
 
-**Opening a thread in a project:** When you create a new thread, select a project from the dropdown near the input box. The thread's working directory is set to the project's vault folder, and the project context is prepended to every message you send.
+**Opening a thread in a project:** The Agent Dashboard and Kanban dispatch panels have an accessible **Project** selector. Choose a Project before dispatching, or leave it **Unassigned** to use the global default working directory. The new thread starts in the Project's effective cwd, and the Project context is prepended to every message you send.
 
-**Managing projects:** Edit the name, folder, or context prompt at any time in Settings → Vault → Projects. Deleting a project keeps all its threads — they just lose the project association.
+**Reassigning an existing thread:** `threads_set_project` changes only the Project association by default; it does not silently relocate an existing session. Pass `alignCwd: true` to align an assigned thread through the safe next-turn cwd reset path. Detaching a thread from a Project never changes its current cwd.
+
+**Managing projects:** Edit the name, cwd override, or context prompt at any time in Settings → Vault → Projects. Create or open its Project Orchestrator from the same row; the first completed Project thread also creates one automatically without changing focus. Deleting a Project detaches its threads, clears pending proposed replies, removes the Project heartbeat, and pins its schedules to the former effective cwd.
+
+> **Projects focus context; they are not security boundaries.** Thread-coordination tools are operationally Project-scoped, but vault tools, MCP servers, skills, secrets, and filesystem permissions are not. Use harness permissions, operating-system permissions, and tool/server configuration for access control.
 
 Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
 

@@ -54,16 +54,18 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 | Tool | Parameters | Description |
 |---|---|---|
 | `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
-| `threads_list` | — | Returns the same metadata for every thread, including live `isRunning` state. |
+| `threads_list` | `projectId?` | Returns authorized thread metadata. The Portfolio Orchestrator passes a Project id for explicit one-call elevation. |
 | `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. |
-| `threads_list_projects` | — | Returns configured projects and their vault folders. |
+| `threads_list_projects` | — | Returns configured Projects, including each `vaultFolder`, optional `cwdOverride`, and resolved `effectiveCwd`. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
-| `threads_set_project` | `threadId`, `projectId` | Assigns a thread to a project, or detaches it with `null`. |
+| `threads_set_project` | `threadId`, `projectId`, `alignCwd?` | Assigns a thread to a Project, or detaches it with `null`. Association-only by default; `alignCwd: true` switches to a non-null Project's cwd on the next safe turn. Detaching never relocates the thread. |
 | `threads_get_messages` | `threadId`, `limit?` | Returns recent user and assistant messages. |
 | `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
 | `threads_wait` | `threadId`, `timeoutSeconds?` | Waits until a target thread becomes idle. |
 | `threads_send_message` | `threadId`, `message` | Queues a message on another thread and triggers it. |
-| `threads_archive` | `threadId`, `confirm?` | Saves and removes a completed thread. A scheduled thread may target itself; the tool acknowledges with `deferred: true` and archives it only after the current run settles. Interactive threads cannot archive themselves. Archiving the Thread Orchestrator requires `confirm: true`. |
+| `threads_archive` | `threadId`, `confirm?`, `elevatedProjectId?` | Saves and removes a completed thread. A scheduled thread may target itself; the tool acknowledges with `deferred: true`. Archiving any referenced orchestrator requires `confirm: true`. |
+
+Project members and Project Orchestrators coordinate only inside their Project. Unassigned threads coordinate only with unassigned threads. The Portfolio Orchestrator sees unassigned work by default and must provide a matching `projectId`/`elevatedProjectId` on each raw cross-Project call. Project manager notes remain owned by the Project Orchestrator even during portfolio elevation.
 | `threads_set_notes` | `threadId`, `notes` | Sets orchestrator tracking notes. |
 | `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval. |
 | `threads_clear_proposed_reply` | `threadId` | Clears a stale proposed reply. |
