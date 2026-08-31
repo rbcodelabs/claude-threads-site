@@ -41,7 +41,7 @@ The group-by toggle in the board header (the icon next to search) cycles through
 
 ### Folder swimlanes
 
-One horizontal lane per app/project, so you can see every conversation for a given codebase together. Each lane is keyed by the thread's assigned [Project](/docs/integrations/git-and-vault/#projects), falling back to a working-directory label (git repo name) when no project is set, and an **Unassigned** lane catches threads with no folder. Inside each lane the cards are still grouped into the same status columns (empty columns are hidden to keep lanes compact). Lanes are ordered alphabetically (case-insensitive), with Unassigned pinned last.
+One horizontal lane per app/project, so you can see every conversation for a given codebase together. An explicitly assigned [Project](/docs/integrations/git-and-vault/#projects) always wins. For an unassigned thread, the board resolves its origin repository or effective working directory; when that root matches a configured Project's effective root, the thread joins that Project's lane. Otherwise it falls back to the git repository name or working-directory label, and an **Unassigned** lane catches threads with no folder. Inside each lane the cards are still grouped into the same status columns (empty columns are hidden to keep lanes compact). Lanes are ordered alphabetically (case-insensitive), with Unassigned pinned last.
 
 ![Kanban board grouped by folder — one horizontal swimlane per app/project, each with its own nested status columns](../../../assets/screenshots/screenshot-kanban-folder.png)
 
