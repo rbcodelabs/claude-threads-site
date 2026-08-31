@@ -65,7 +65,7 @@ Projects group threads, choose their initial working directory, inject shared co
 
 **Reassigning an existing thread:** `threads_set_project` changes only the Project association by default; it does not silently relocate an existing session. Pass `alignCwd: true` to align an assigned thread through the safe next-turn cwd reset path. Detaching a thread from a Project never changes its current cwd.
 
-**Managing projects:** Edit the name, cwd override, or context prompt at any time in Settings → Vault → Projects. Create or open its Project Orchestrator from the same row; the first completed Project thread also creates one automatically without changing focus. Deleting a Project detaches its threads, clears pending proposed replies, removes the Project heartbeat, and pins its schedules to the former effective cwd.
+**Managing projects:** Edit the name, cwd override, or context prompt at any time in Settings → Vault → Projects. Create or open its Project Orchestrator from the same row; the first completed Project thread also creates one automatically without changing focus. Intentionally archiving the Project Orchestrator disables automatic recreation and completion wakeups, including after synced `data.json` is loaded on restart. Choosing **Create/Open** again deliberately re-enables it. Deleting a Project detaches its threads, clears pending proposed replies, removes the Project heartbeat, and pins its schedules to the former effective cwd.
 
 > **Projects focus context; they are not security boundaries.** Thread-coordination tools are operationally Project-scoped, but vault tools, MCP servers, skills, secrets, and filesystem permissions are not. Use harness permissions, operating-system permissions, and tool/server configuration for access control.
 
