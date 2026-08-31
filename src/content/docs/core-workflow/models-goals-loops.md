@@ -23,6 +23,8 @@ You can also switch models without typing: a **model switcher button** (CPU icon
 
 The active model is shown as a badge in the thread info bar.
 
+If Claude refuses a response and retries on a configured fallback model, Claude Threads shows a notice identifying the fallback model. If no fallback is available, it shows a clear refusal notice instead.
+
 ## Model escalation
 
 `/escalate` (the keyword is configurable) is a one-turn override — it routes just that message to the Escalation model chosen in Settings → Agent (Fable 5, Opus, Sonnet, or Haiku), then the thread model resumes for the next turn. Both the keyword and the target model are configurable in [Settings Reference → Agent](/docs/reference/settings/#agent), and (when escalation is enabled) the current keyword shows up alongside `/model`, `/goal`, etc. in the `/` autocomplete popup so it's discoverable without reading the docs — renaming the keyword or toggling escalation off in Settings updates the popup immediately.
