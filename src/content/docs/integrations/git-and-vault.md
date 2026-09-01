@@ -69,7 +69,7 @@ Projects group threads, choose their initial working directory, inject shared co
 
 > **Projects focus context; they are not security boundaries.** Thread-coordination tools are operationally Project-scoped, but vault tools, MCP servers, skills, secrets, and filesystem permissions are not. Use harness permissions, operating-system permissions, and tool/server configuration for access control.
 
-Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
+Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder-or-project) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
 
 ## Vault tools
 
