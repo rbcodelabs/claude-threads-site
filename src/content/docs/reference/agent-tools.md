@@ -58,6 +58,7 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 | `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. |
 | `threads_list_projects` | — | Returns configured Projects, including each `vaultFolder`, optional `cwdOverride`, and resolved `effectiveCwd`. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
+| `threads_update_project` | `projectId`, `name?`, `description?`, `cwdOverride?`, `elevatedProjectId?` | Durably updates the caller's Project name, context description, or cwd override and returns the complete updated Project snapshot, including its resolved `effectiveCwd`. |
 | `threads_set_project` | `threadId`, `projectId`, `alignCwd?` | Assigns a thread to a Project, or detaches it with `null`. Association-only by default; `alignCwd: true` switches to a non-null Project's cwd on the next safe turn. Detaching never relocates the thread. |
 | `threads_get_messages` | `threadId`, `limit?` | Returns recent user and assistant messages. |
 | `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
@@ -66,6 +67,10 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 | `threads_archive` | `threadId`, `confirm?`, `elevatedProjectId?` | Saves and removes a completed thread. A scheduled thread may target itself; the tool acknowledges with `deferred: true`. Archiving any referenced orchestrator requires `confirm: true`. |
 
 Project members and Project Orchestrators coordinate only inside their Project. Unassigned threads coordinate only with unassigned threads. The Portfolio Orchestrator sees unassigned work by default and must provide a matching `projectId`/`elevatedProjectId` on each raw cross-Project call. Project manager notes remain owned by the Project Orchestrator even during portfolio elevation.
+
+For `threads_update_project`, `projectId` is required and at least one editable field must actually change. `name` is trimmed and must remain nonblank. Omitted fields are preserved; pass `null` for `description` or `cwdOverride` to clear that field. A non-null `cwdOverride` is trimmed and must be an absolute filesystem path. Project members and Project Orchestrators may update their own Project; unassigned and cross-Project callers are denied, while the Portfolio Orchestrator must pass `elevatedProjectId` matching the target. Existing threads keep their current cwd and live session. New Project threads and dynamic Project schedules resolve the updated cwd, and newly initialized sessions receive updated context. The deprecated compatibility name is `obsidian_update_project` on the former `obsidian` server.
+
+This tool updates stored Project configuration only. Automatic vault-relative/repo-relative path disambiguation is a separate product follow-up and is not injected by this feature.
 | `threads_set_notes` | `threadId`, `notes` | Sets orchestrator tracking notes. |
 | `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval. |
 | `threads_clear_proposed_reply` | `threadId` | Clears a stale proposed reply. |
