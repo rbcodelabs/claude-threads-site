@@ -108,7 +108,7 @@ See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk
 | Setting | Description |
 |---|---|
 | Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Kanban board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
-| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs)'s Scheduled Jobs section |
+| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and within each Project's New, Reviewed, or Ready groups in the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs) |
 
 ### Portfolio Orchestrator
 
@@ -116,7 +116,7 @@ Shows the status of the [thread-orchestrator](/docs/views/thread-orchestrator/) 
 
 ## Scheduled
 
-The Scheduled tab is the Agents List for [scheduled work](/docs/automation/scheduled-tasks/):
+The Scheduled tab is a dashboard for managing and inspecting [scheduled work](/docs/automation/scheduled-tasks/):
 
 | Section or control | Description |
 |---|---|

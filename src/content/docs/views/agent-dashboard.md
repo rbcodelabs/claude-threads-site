@@ -37,15 +37,15 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
 
-## Auto-generated summaries (idle threads)
+## Completed-response previews (idle threads)
 
-After each completed response, the summarizer runs in a lightweight background process (a separate Claude Code instance using a small model) and writes a multi-sentence recap of what that thread worked on. This summary is shown in the Agents List row so you can re-orient yourself to any thread at a glance — what it accomplished, what files it touched, what's left to do.
+For an idle thread, the secondary line previews the latest assistant response. The preview is flattened to one line and truncated to keep the row compact. The separately generated thread summary remains searchable, but it is not displayed in the Agents List row.
 
-This combination means you can dispatch several threads in parallel, switch to other work, then return to the Agents List to understand the state of every agent without reading through each conversation. Summarization behavior — auto vs. manual, and which model does the summarizing — is configurable in [Settings Reference → Features](/docs/reference/settings/#features).
+After each completed response, the summarizer can run in a lightweight background process (a separate Claude Code instance using a small model) to create a multi-sentence recap and suggested title. Summarization behavior — auto vs. manual, and which model does the summarizing — is configurable in [Settings Reference → Features](/docs/reference/settings/#features).
 
 ## Scheduled Jobs
 
-An hourly (or more frequent) [scheduled task](/docs/automation/scheduled-tasks/) can produce dozens of quiet threads a day, burying the manually-created ones you actually need to triage. When a run created by the scheduler is unreviewed, reviewed, or empty — never one that's running, awaiting a permission/question, or errored — it's pulled out of its normal group into a **Scheduled Jobs** section at the bottom of the Agents List, one collapsed row per job showing its name, run count, and the latest run's time. Click a row to expand it into the individual runs.
+An hourly (or more frequent) [scheduled task](/docs/automation/scheduled-tasks/) can produce dozens of quiet threads a day, burying the manually-created ones you actually need to triage. When a run created by the scheduler is unreviewed, reviewed, or empty — never one that's working, waiting, awaiting a permission/question/plan, or failed — it is collapsed with runs from the same job inside that Project’s **New**, **Reviewed**, or **Ready** group. Each job rollup shows its name, run count, and latest run time. Click it to expand the individual runs.
 
 Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads**, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
 
@@ -53,7 +53,7 @@ Enabled by default — disable via **Settings → Features → Kanban board → 
 
 Run **Jump to latest unreviewed completed agent** from the command palette to open the Agents List (if it isn't already open) and jump straight to the most recently completed thread you haven't looked at yet. This is the fastest way to work through a backlog of finished agents after dispatching several tasks in parallel.
 
-You can also send messages to any thread directly from the Agents List without switching tabs.
+Click any thread row to open it in Chat, where you can read the conversation and send the next message.
 
 ## Background tasks stay "Working"
 
