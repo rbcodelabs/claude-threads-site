@@ -14,10 +14,10 @@ Claude Threads is built around three panels that work together:
 | Panel | Location | What it does |
 |---|---|---|
 | **Chat** | Sidebar by default; main area in Conversation first | Full conversation history for each thread, with tabs for switching between sessions |
-| **Agent Dashboard** | Sidebar (usually right) | Dispatch new tasks, monitor running agents at a glance, review results without switching tabs |
-| **Kanban Board** | Its own tab | A board view of every thread bucketed by status — an alternative to the Agent Dashboard's list view |
+| **Agents List** | Sidebar (usually right) | Dispatch new tasks and scan running agents in a responsive two-line list |
+| **Kanban Board** | Its own tab | A board view of every thread bucketed by status — the more visual alternative to the Agents List |
 
-You don't have to use all three at once. Many people run Chat and the Agent Dashboard side-by-side; others prefer working from the Kanban board and only opening Chat when they need to dig into a specific conversation. See [Dispatching your first task](/docs/getting-started/first-thread/), the [Agent Dashboard](/docs/views/agent-dashboard/) page, and the [Kanban board](/docs/views/kanban-board/) page for details on each.
+You don't have to use all three at once. Many people run Chat and the Agents List side-by-side; others prefer working from the Kanban board and only opening Chat when they need to dig into a specific conversation. See [Dispatching your first task](/docs/getting-started/first-thread/), the [Agents List](/docs/views/agent-dashboard/) page, and the [Kanban board](/docs/views/kanban-board/) page for details on each.
 
 ### Conversation-first workspace
 

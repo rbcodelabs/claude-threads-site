@@ -17,7 +17,7 @@ Each orchestrator uses the [thread-coordination tools](/docs/reference/agent-too
 
 ## Identifying the orchestrator thread
 
-Portfolio and Project orchestrators carry distinct bot-badge classes and tooltips in Agent Dashboard rows, Kanban cards, and the thread switcher. Closing, archiving, reassigning, or automatically archiving a referenced orchestrator is protected; explicit archive still requires confirmation.
+Portfolio and Project orchestrators carry distinct bot-badge classes and tooltips in Agents List rows, Kanban cards, and the thread switcher. Closing, archiving, reassigning, or automatically archiving a referenced orchestrator is protected; explicit archive still requires confirmation.
 
 ## Wake-up cadence
 
