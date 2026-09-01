@@ -7,7 +7,7 @@ order: 1
 
 ## Permissions
 
-When the active Claude or Codex agent needs to write a file or run a command, a permission card appears inline in the conversation asking you to **Allow**, **Deny**, or **Always Allow**. Always Allow adds the tool to a per-vault allowlist so you're never asked again for that tool. You can also resolve permissions directly from the [Agent Dashboard](/docs/views/agent-dashboard/) without switching threads.
+When the active Claude or Codex agent needs to write a file or run a command, a permission card appears inline in the conversation asking you to **Allow**, **Deny**, or **Always Allow**. Always Allow adds the tool to a per-vault allowlist so you're never asked again for that tool. You can also resolve permissions directly from the [Agents List](/docs/views/agent-dashboard/) without switching threads.
 
 ![Inline permission dialog — Deny / Allow / Always Allow before Claude writes a file](../../../assets/screenshots/screenshot-permission.png)
 

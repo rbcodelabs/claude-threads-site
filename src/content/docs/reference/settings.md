@@ -22,7 +22,7 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 
 | Setting | Description |
 |---|---|
-| Agent harness | Initial Claude or Codex default for new [Dashboard and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
+| Agent harness | Initial Claude or Codex default for new [Agents List and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
 | Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
@@ -108,7 +108,7 @@ See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk
 | Setting | Description |
 |---|---|
 | Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Kanban board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
-| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and the [Agent Dashboard](/docs/views/agent-dashboard/#scheduled-jobs)'s Scheduled Jobs section |
+| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs)'s Scheduled Jobs section |
 
 ### Portfolio Orchestrator
 
@@ -116,7 +116,7 @@ Shows the status of the [thread-orchestrator](/docs/views/thread-orchestrator/) 
 
 ## Scheduled
 
-The Scheduled tab is the dashboard for [scheduled work](/docs/automation/scheduled-tasks/):
+The Scheduled tab is the Agents List for [scheduled work](/docs/automation/scheduled-tasks/):
 
 | Section or control | Description |
 |---|---|
