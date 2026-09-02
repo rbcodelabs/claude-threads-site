@@ -31,11 +31,11 @@ A sticky breadcrumb at the top reads `Main conversation › parent › child`. E
 
 The composer stays live the whole time. Its placeholder notes that a message goes to the main conversation, and sending one visibly returns you there rather than quietly redirecting it out of sight.
 
-## Dashboard and Kanban visibility
+## Agents List and Kanban visibility
 
-The [Agent Dashboard](/docs/views/agent-dashboard/) shows the same child-agent hierarchy beneath its owning thread. Agent role, task, and current activity are included in dashboard search, so you can find a specific child without opening each conversation first.
+The [Agents List](/docs/views/agent-dashboard/) shows a compact child-agent count beneath its owning thread. Agent role, task, and current activity are included in list search, so you can find a specific child without opening each conversation first.
 
-In the [Kanban board](/docs/views/kanban-board/), a compact count on each thread card shows how many native agents belong to that thread. Open the thread or dashboard detail to inspect them.
+In the [Kanban board](/docs/views/kanban-board/), a compact count on each thread card shows how many native agents belong to that thread. Open the thread or Agents List detail to inspect them.
 
 ## Persistence and recovery
 

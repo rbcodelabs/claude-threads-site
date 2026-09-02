@@ -5,16 +5,16 @@ category: getting-started
 order: 2
 ---
 
-The first time you install Claude Threads on a fresh vault, the plugin opens a three-panel workspace for you automatically: the Chat view in the left sidebar, a bundled "Getting Started" guide in the center editor, and the Agent Dashboard in the right sidebar — so the layout makes sense before you write a single message. A welcome notice confirms it's ready. This only happens once; the plugin sets a flag so it won't reappear on later launches, and it's skipped entirely if you already had threads before upgrading (existing users aren't dropped into onboarding).
+The first time you install Claude Threads on a fresh vault, the plugin opens a three-panel workspace for you automatically: the Chat view in the left sidebar, a bundled "Getting Started" guide in the center editor, and the Agents List in the right sidebar — so the layout makes sense before you write a single message. A welcome notice confirms it's ready. This only happens once; the plugin sets a flag so it won't reappear on later launches, and it's skipped entirely if you already had threads before upgrading (existing users aren't dropped into onboarding).
 
 ## Starting your first task
 
-1. Click the **Agent Dashboard** ribbon icon, or run **Open Agent Dashboard** from the command palette (`Cmd+P`)
-2. Type a task into the **dispatch box** at the top — for example, `Summarize the README in my project folder`
+1. Click the **Agents List** ribbon icon, or run **Open Agents List** from the command palette (`Cmd+P`)
+2. Type a task into the **dispatch box** at the bottom — for example, `Summarize the README in my project folder`
 3. Check the Claude or Codex harness shown on the kickoff button, then press **Enter** (or click the button) — the selected harness spins up a new thread and starts working
-4. Watch progress in the dashboard; click any thread row to open the full conversation in Chat
+4. Watch progress in the Agents List; click any thread row to open the full conversation in Chat
 
-To choose the other harness before sending, open the button's selector; the choice affects new threads in that dashboard, not existing threads or your global default. See [Agent Dashboard → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for mouse, touch, and keyboard gestures.
+To choose the other harness before sending, open the button's selector; the choice affects new threads in that list, not existing threads or your global default. See [Agents List → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for mouse, touch, and keyboard gestures.
 
 That's the whole loop. From here, most of what you'll do is send follow-up messages, review results, and dispatch new tasks — see [Sending messages and slash commands](/docs/core-workflow/messaging-and-commands/) for the details of composing and sending.
 
