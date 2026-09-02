@@ -14,6 +14,12 @@ order: 1
 
 **Collapsible input panels.** All three message-input panels (Chat, Agents List sidebar, and Kanban dispatch) collapse to a minimal bar at rest — just the textarea and send button. Hover over the panel or click into the textarea to expand secondary controls (attach, mic, model picker, more menu, working-directory chip) with a smooth animation. The panel border softens when collapsed so it reads as a quiet background element rather than competing for attention.
 
+On wide conversation panes, the complete timeline and composer are centered together in a readable-width column. Narrow panes remain full width so the available space is not reduced further.
+
+## Opening note links
+
+Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[label](path.md)` Markdown links. Both formats open the target note in classic and conversation-first placement. OS-absolute paths also resolve when they point inside the vault, including heading and block anchors. An absolute path outside the vault remains inert and shows a notice instead of opening or creating anything.
+
 ## Message queue
 
 If you send a message while Claude is already processing, it goes into a queue — displayed as stacked, removable rows above the composer. Each row shows a preview of the queued message and an `×` button to discard it. Click any row to pull it back into the input box for editing (an inline confirm prompt prevents you from accidentally discarding your current draft). The queue drains automatically as Claude finishes each turn. Queued messages survive thread switches and plugin reloads.
