@@ -61,6 +61,7 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 | `threads_update_project` | `projectId`, `name?`, `description?`, `cwdOverride?`, `elevatedProjectId?` | Durably updates the caller's Project name, context description, or cwd override and returns the complete updated Project snapshot, including its resolved `effectiveCwd`. |
 | `threads_set_project` | `threadId`, `projectId`, `alignCwd?` | Assigns a thread to a Project, or detaches it with `null`. Association-only by default; `alignCwd: true` switches to a non-null Project's cwd on the next safe turn. Detaching never relocates the thread. |
 | `threads_get_messages` | `threadId`, `limit?` | Returns recent user and assistant messages. |
+| `threads_open` | `threadId`, `elevatedProjectId?` | Opens and focuses the exact thread UUID. A successful open marks it reviewed and persists the active selection. |
 | `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
 | `threads_wait` | `threadId`, `timeoutSeconds?` | Waits until a target thread becomes idle. |
 | `threads_send_message` | `threadId`, `message` | Queues a message on another thread and triggers it. |
