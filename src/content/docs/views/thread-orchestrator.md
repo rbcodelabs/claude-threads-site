@@ -5,7 +5,7 @@ category: views
 order: 4
 ---
 
-The **thread-orchestrator** bundled skill supports two roles: one Project Orchestrator per Project and one Portfolio Orchestrator for unassigned work and Project-level rollups. Open the portfolio role with **Open Portfolio Orchestrator**; create/open a Project role from its Settings row. Project activity also creates its orchestrator automatically on the first completed turn.
+The **thread-orchestrator** bundled skill supports two roles: one Project Orchestrator per Project and one Portfolio Orchestrator for unassigned work and Project-level rollups. Open the portfolio role with **Open Portfolio Orchestrator**; create/open a Project role from its Settings row. Project activity also creates its orchestrator automatically on the first completed turn unless that Project's orchestrator was intentionally archived.
 
 ## What it does
 
@@ -18,6 +18,12 @@ Each orchestrator uses the [thread-coordination tools](/docs/reference/agent-too
 ## Identifying the orchestrator thread
 
 Portfolio and Project orchestrators carry distinct bot-badge classes and tooltips in Agents List rows, Kanban cards, and the thread switcher. Closing, archiving, reassigning, or automatically archiving a referenced orchestrator is protected; explicit archive still requires confirmation.
+
+## Disabling and re-enabling a Project Orchestrator
+
+Intentionally archiving a Project Orchestrator disables automatic orchestration for that Project. The plugin removes its hourly heartbeat, discards queued or in-flight thread-completion wakeups, and does not recreate or message a replacement when another Project thread finishes.
+
+This disabled state is persisted in `data.json`, so it remains in effect after an Obsidian restart or plugin reload, including when the settings file was synced from another device. Deliberately choosing **Create/Open** for that Project re-enables orchestration and creates or reuses its orchestrator. This lifecycle applies to Project Orchestrators; the Portfolio Orchestrator remains managed separately.
 
 ## Wake-up cadence
 

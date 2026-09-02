@@ -80,7 +80,7 @@ A list of tools granted automatically without prompting. Tools land here when yo
 
 Add a new Project with a name and vault folder. Its working directory defaults to `<vault root>/<vault folder>`; set a filesystem cwd override for work outside the vault. Each Project shows its resolved effective cwd, and clearing the override returns it to the vault-derived path.
 
-Edit existing [Projects](/docs/integrations/git-and-vault/#projects) inline — rename, create/open its orchestrator, delete with an impact preview, change the cwd override, or edit the context prompt. Deletion detaches threads and preserves scheduled work at the former effective cwd.
+Edit existing [Projects](/docs/integrations/git-and-vault/#projects) inline — rename, create/open its orchestrator, delete with an impact preview, change the cwd override, or edit the context prompt. Intentionally archiving a Project Orchestrator disables its heartbeat, completion wakeups, and automatic recreation; the disabled state survives reloads from synced `data.json`. Deliberately choosing **Create/Open** re-enables it. Deletion detaches threads and preserves scheduled work at the former effective cwd.
 
 > Projects focus initial context; they do not restrict vault tools, MCP servers, skills, secrets, filesystem permissions, or thread-coordination tools.
 
