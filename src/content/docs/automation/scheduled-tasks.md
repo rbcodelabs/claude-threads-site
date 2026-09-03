@@ -92,4 +92,8 @@ Each scheduled run normally remains as a thread, which is useful when it found s
 
 The self-archive call returns success with `deferred: true` rather than removing the live thread immediately. Claude Threads waits until the run has fully settled, then saves and archives it. Runs with useful findings remain available for review, while no-report runs can clean themselves up without losing their final tool result or transcript.
 
+### Clear accumulated runs by hand
+
+For runs that have already piled up, you don't have to open each one. On desktop, right-click the job's rollup row in the [Agents List](/docs/views/agent-dashboard/#archive-from-the-list-right-click) — or a stack card's header row on the [Kanban board](/docs/views/kanban-board/#archive-from-a-card-right-click) — and choose **Archive these N runs**. When that job also has runs sitting in other status groups or Projects, an **Archive all M runs of this job** item appears alongside it. Bulk archiving always asks for confirmation first, and cancels any pending `ScheduleWakeup` on the runs it archives.
+
 `CronList` also surfaces any pending [`ScheduleWakeup`](/docs/reference/agent-tools/#session-tools) timers as `"Wakeup: <reason>"` entries. A wakeup is implemented as the same kind of durable, disk-persisted scheduled item as a Cron task — it survives an Obsidian restart, plugin reload, or the machine sleeping, and self-deletes once it fires (rather than repeating like a recurring Cron task).
