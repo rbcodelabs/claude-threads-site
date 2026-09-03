@@ -13,7 +13,7 @@ Each orchestrator uses the [thread-coordination tools](/docs/reference/agent-too
 
 **Structured notes.** For each thread it's watching, the orchestrator maintains free-form tracking notes — an inferred goal, current status, and a last-reviewed cursor — set via `threads_set_notes`. These are shown in a collapsible "Manager Notes" panel in the Chat view, but are never injected into that thread's own session context, so they don't pollute the conversation the orchestrator is watching.
 
-**Proposed replies, never auto-sent.** When the orchestrator decides a thread needs a follow-up message, it doesn't send one on your behalf. It calls `threads_set_proposed_reply`, which renders as a banner above that thread's compose box with **Approve & Send**, **Edit**, and **Discard** actions. Nothing is ever sent automatically — a human always makes the final call. This is a deliberate design choice: the orchestrator's job is to keep you oriented across many parallel agents, not to act as one more agent making decisions unsupervised.
+**Proposed replies, never auto-sent.** When the orchestrator decides a thread needs a follow-up message, it doesn't send one on your behalf. It calls `threads_set_proposed_reply`, which renders as a scrollable card inline in that thread's conversation flow — alongside plan-approval and question cards — with **Approve & Send**, **Edit**, and **Discard** actions. Nothing is ever sent automatically — a human always makes the final call. This is a deliberate design choice: the orchestrator's job is to keep you oriented across many parallel agents, not to act as one more agent making decisions unsupervised.
 
 ## Identifying the orchestrator thread
 
