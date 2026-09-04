@@ -120,10 +120,11 @@ The Scheduled tab is a dashboard for managing and inspecting [scheduled work](/d
 
 | Section or control | Description |
 |---|---|
-| Next up | Enabled jobs sorted by their persisted `nextRun`, with the exact local time and a relative countdown. Past-due work is marked as overdue and catching up. |
+| Schedule rows | Each non-system schedule appears once in its group. Rows are collapsed by default and summarize status, cadence, next occurrence, Project, and actual execution behavior. |
+| Ordering | Enabled schedules are sorted by next occurrence. Paused schedules appear last. Past-due work is marked as overdue and catching up. |
 | Next run / Next check | Ordinary jobs show **Next run**. Gated jobs show **Next check**, since a gate may skip that occurrence. |
 | Scheduled work groups | Recurring standalone jobs are separated from thread-specific loops and one-shot wakeups. The internal orchestrator heartbeat is omitted from the primary list. |
-| Job details | Shows active hours, project, working directory, gate, and recent outcomes/history, including runs, skipped checks, and errors. |
+| Expanded details | Shows the prompt, working directory, active hours and gate when applicable, execution details, and recent outcomes/history, including runs, skipped checks, and errors. The native disclosure is keyboard accessible. |
 | Pause / Resume | Disables or enables future occurrences without deleting the job. |
 | Open last run | Opens the most recent thread created by the job, when one is available. |
 | Delete | Permanently removes the scheduled item. |
