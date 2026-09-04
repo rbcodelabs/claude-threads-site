@@ -33,7 +33,7 @@ That distinction matters for long-lived threads. `prUrl` is thread-scoped *histo
 
 If no context footer command is configured, the button simply stays on **Create PR**.
 
-> **If you use a custom context footer command:** keep emitting the `pr` tag even though it's usually hidden behind the bar. It isn't only a pill — it's the sole source of a thread's PR association, and it feeds the diff bar's **PR #N** button, the Kanban PR chip, and archive-on-merge. Dropping it to save a `gh` call turns all three off.
+> **If you use a custom context footer command:** keep emitting the `pr` tag even though it's usually hidden behind the bar. It isn't only a pill — it's the sole source of a thread's PR association, and it feeds the diff bar's **PR #N** button, the Agent Board PR chip, and archive-on-merge. Dropping it to save a `gh` call turns all three off.
 
 ## Vault Bridges integration
 
@@ -61,7 +61,7 @@ Projects group threads, choose their initial working directory, inject shared co
 
 **Creating a project:** Go to Settings → Vault → Projects, enter a project name and vault folder path, and click **Add**. By default, the working directory is derived as `<vault root>/<vault folder>`. Use the optional filesystem cwd override when the work belongs in a repo or directory outside the vault. Settings always shows the resolved effective cwd, and clearing the override returns the Project to its vault-derived path. You can also add a project context prompt — a few sentences describing the project's goals, conventions, and key files that Claude should always keep in mind.
 
-**Opening a thread in a project:** The Agents List and Kanban dispatch panels have an accessible **Project** selector. Choose a Project before dispatching, or leave it **Unassigned** to use the global default working directory. The new thread starts in the Project's effective cwd, and the Project context is prepended to every message you send.
+**Opening a thread in a project:** The Agents List and Agent Board dispatch panels have an accessible **Project** selector. Choose a Project before dispatching, or leave it **Unassigned** to use the global default working directory. The new thread starts in the Project's effective cwd, and the Project context is prepended to every message you send.
 
 **Reassigning an existing thread:** `threads_set_project` changes only the Project association by default; it does not silently relocate an existing session. Pass `alignCwd: true` to align an assigned thread through the safe next-turn cwd reset path. Detaching a thread from a Project never changes its current cwd.
 
@@ -71,7 +71,7 @@ Updating a Project does not relocate existing threads or restart their live sess
 
 > **Projects focus context; they are not security boundaries.** Thread-coordination tools are operationally Project-scoped, but vault tools, MCP servers, skills, secrets, and filesystem permissions are not. Use harness permissions, operating-system permissions, and tool/server configuration for access control.
 
-Projects are also how the [Kanban board's folder swimlanes](/docs/views/kanban-board/#group-by-folder-or-project) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_update_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
+Projects are also how the [Agent Board's folder swimlanes](/docs/views/kanban-board/#group-by-folder-or-project) group threads, and how `threads_list_projects` / `threads_create_project` / `threads_update_project` / `threads_set_project` work for [agent-driven project management](/docs/reference/agent-tools/#thread-coordination-tools).
 
 ## Vault tools
 

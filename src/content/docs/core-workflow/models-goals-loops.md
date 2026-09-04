@@ -67,7 +67,7 @@ For recurring tasks that should run independently of any single thread's lifecyc
 
 ## Dispatching with commands
 
-`/model`, `/goal`, `/loop`, and `/design` also work as prefixes in the Agents List and Kanban dispatch boxes, applying to the newly created thread:
+`/model`, `/goal`, `/loop`, and `/design` also work as prefixes in the Agents List and Agent Board dispatch boxes, applying to the newly created thread:
 
 - `/model opus fix the login bug` — creates the new thread with Opus set as its model and dispatches just the prompt
 - `/goal ship the v1 login flow` — creates the thread with that persistent goal and immediately starts working toward it (same kickoff as `/goal` inside a thread)

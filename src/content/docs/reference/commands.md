@@ -25,7 +25,7 @@ Every command below is reachable via `Cmd+P` and searchable by name.
 |---|---|---|
 | `open-claude-threads` | Open Claude Threads | Opens the Chat view |
 | `open-agent-dashboard` | Open Agents List | Opens the [Agents List](/docs/views/agent-dashboard/) |
-| `open-kanban-board` | Open Kanban Board | Opens the [Kanban board](/docs/views/kanban-board/) |
+| `open-kanban-board` | Open Agent Board | Opens the [Agent Board](/docs/views/kanban-board/) |
 | `open-skills-manager` | Open Skills Manager | Opens the [Skills Manager](/docs/automation/skills-manager/) |
 | `new-claude-thread` | New Claude Thread | Opens the Agents List and focuses its dispatch input, ready to type a new task |
 | `next-claude-thread` | Next Claude Thread | Switches to the next tab in Chat |

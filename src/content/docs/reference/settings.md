@@ -22,7 +22,7 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 
 | Setting | Description |
 |---|---|
-| Agent harness | Initial Claude or Codex default for new [Agents List and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
+| Agent harness | Initial Claude or Codex default for new [Agents List and Agent Board kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
 | Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
@@ -103,12 +103,14 @@ Edit existing [Projects](/docs/integrations/git-and-vault/#projects) inline — 
 
 See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk-voice-input) for the recording behavior these settings control.
 
-### Kanban board
+<a id="kanban-board"></a>
+
+### Agent Board
 
 | Setting | Description |
 |---|---|
-| Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Kanban board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
-| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and within each Project's New, Reviewed, or Ready groups in the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs) |
+| Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Agent Board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
+| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Agent Board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and within each Project's New, Reviewed, or Ready groups in the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs) |
 
 ### Portfolio Orchestrator
 
