@@ -55,6 +55,10 @@ Repeat runs of the same [scheduled task](/docs/automation/scheduled-tasks/) pile
 
 Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads** if you'd rather see every run as its own card, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
 
+## Archive from a card (right-click)
+
+Cards carry the same right-click **Archive thread** action as Agents List rows, including the bulk archive for stacked scheduled-job runs — right-click the stack card's header row for **Archive these N runs**, plus **Archive all M runs of this job** when that job has runs the card isn't showing. Desktop only. See [Agents List → Archive from the list](/docs/views/agent-dashboard/#archive-from-the-list-right-click) for the confirmation rules and full behavior.
+
 ## Auto-collapse side panels
 
 Set **Settings → Features → Kanban board → Auto-collapse side panel** to `Left sidebar`, `Right sidebar`, or `Both sidebars` to automatically collapse Obsidian's sidebar panel(s) when the Kanban tab opens, giving the board more horizontal room. Only the panel(s) the Kanban view collapsed are restored when you close the tab, so it won't fight a panel you collapsed or expanded manually. Defaults to `None` (opt-in) — see [Settings Reference → Features](/docs/reference/settings/#features).

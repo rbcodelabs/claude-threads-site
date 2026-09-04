@@ -49,6 +49,24 @@ An hourly (or more frequent) [scheduled task](/docs/automation/scheduled-tasks/)
 
 Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads**, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
 
+## Archive from the list (right-click)
+
+Right-click any thread row for a single menu item — **Archive thread** — so you no longer have to open a thread just to close it. Archiving writes the thread to its vault note and removes it from the live list, exactly like the `×` on a thread tab; a run with no messages is dropped without leaving an empty note behind. [Kanban](/docs/views/kanban-board/#archive-from-a-card-right-click) cards carry the same menu.
+
+Right-clicking a **Scheduled Jobs** rollup row archives that whole rollup at once — **Archive these N runs**. Because one job's runs can be split across status groups (New, Reviewed, Ready) and across Projects, a single job can render as several rollups, so a second item — **Archive all M runs of this job** — appears only when the job has runs the rollup you clicked isn't showing. That turns "clear 14 runs of last night's cron job" into one action instead of fourteen.
+
+You are asked to confirm only when there is something to lose, and never more than once per action. There are three triggers:
+
+- Archiving a thread that is still running — archiving stops that session.
+- Archiving a Portfolio Orchestrator or a Project Orchestrator — it stops portfolio or Project review until one is recreated, see [Project and Portfolio Orchestrators](/docs/views/thread-orchestrator/).
+- Archiving more than one run at a time.
+
+A combination — say, a bulk archive that includes a running orchestrator — still asks exactly once, in a single dialog listing every reason. Archiving a single idle, non-orchestrator thread happens immediately, with no dialog.
+
+Any pending [`ScheduleWakeup`](/docs/reference/agent-tools/#session-tools) on an archived thread is cancelled, so an archived thread can't come back to life afterwards. The last remaining thread cannot be archived.
+
+This is a desktop-only interaction: Obsidian Mobile does not fire a right-click (`contextmenu`) gesture.
+
 ## Jump to latest unreviewed
 
 Run **Jump to latest unreviewed completed agent** from the command palette to open the Agents List (if it isn't already open) and jump straight to the most recently completed thread you haven't looked at yet. This is the fastest way to work through a backlog of finished agents after dispatching several tasks in parallel.
