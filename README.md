@@ -1,6 +1,6 @@
-# Claude Threads — Marketing Site
+# Agent Threads — Marketing Site
 
-Landing page for the [Claude Threads](https://github.com/rbcodelabs/obsidian-claude-threads) Obsidian plugin.
+Landing page for the [Agent Threads](https://github.com/rbcodelabs/obsidian-claude-threads) Obsidian plugin.
 
 Built with [Astro](https://astro.build) + Tailwind CSS v4, deployed on Vercel.
 
@@ -16,4 +16,3 @@ npm run preview  # preview the production build locally
 
 All copy is sourced from the plugin's own README. See
 [`.claude/pr-guidelines.md`](.claude/pr-guidelines.md) for the pre-PR checklist.
-

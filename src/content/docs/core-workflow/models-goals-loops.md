@@ -23,7 +23,7 @@ You can also switch models without typing: a **model switcher button** (CPU icon
 
 The active model is shown as a badge in the thread info bar.
 
-If Claude refuses a response and retries on a configured fallback model, Claude Threads shows a notice identifying the fallback model. If no fallback is available, it shows a clear refusal notice instead.
+If Claude refuses a response and retries on a configured fallback model, Agent Threads shows a notice identifying the fallback model. If no fallback is available, it shows a clear refusal notice instead.
 
 ## Model escalation
 

@@ -20,7 +20,7 @@ const prevDoc = currentIndex > 0 ? sorted[currentIndex - 1] : null;
 const nextDoc = currentIndex >= 0 && currentIndex < sorted.length - 1 ? sorted[currentIndex + 1] : null;
 ---
 
-<Layout title={`${title} — Claude Threads Docs`} description={description}>
+<Layout title={`${title} — Agent Threads Docs`} description={description}>
   <div class="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:flex lg:items-start lg:gap-12">
     <DocsSidebar docs={sorted} currentId={currentId} />
 

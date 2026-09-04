@@ -1,15 +1,15 @@
 ---
 title: Introduction
-description: What Claude Threads is, the three-panel model, prerequisites, and how to install it.
+description: What Agent Threads is, the three-panel model, prerequisites, and how to install it.
 category: getting-started
 order: 1
 ---
 
-Claude Threads embeds Claude Code and OpenAI Codex directly in Obsidian. Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
+Agent Threads embeds Claude Code and OpenAI Codex directly in Obsidian. Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
 
 ## The three-panel model
 
-Claude Threads is built around three panels that work together:
+Agent Threads is built around three panels that work together:
 
 | Panel | Location | What it does |
 |---|---|---|
@@ -40,7 +40,7 @@ On desktop, **Settings → General → Conversation placement** offers an opt-in
 1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat) from Obsidian's Community Plugins
 2. Open BRAT settings → **Add Beta Plugin**
 3. Enter: `rbcodelabs/obsidian-claude-threads`
-4. Enable **Claude Threads** in Settings → Community Plugins
+4. Enable **Agent Threads** in Settings → Community Plugins
 
 BRAT tracks the GitHub repo directly, so you'll get new releases as soon as they ship — useful while the plugin is moving quickly.
 
@@ -48,8 +48,10 @@ BRAT tracks the GitHub repo directly, so you'll get new releases as soon as they
 
 1. Download the latest release from [GitHub Releases](https://github.com/rbcodelabs/obsidian-claude-threads/releases)
 2. Extract into your vault's plugin folder: `<vault>/.obsidian/plugins/claude-threads/`
-3. Enable **Claude Threads** in Settings → Community Plugins
+3. Enable **Agent Threads** in Settings → Community Plugins
+
+> **Why the old technical names remain:** Agent Threads is an in-place rename. The repository, plugin ID, install folder, command IDs, saved workspace view types, and `claude_threads` MCP namespace keep their historical names so existing installations, hotkeys, layouts, and automations continue to work.
 
 ## Next steps
 
-Once installed, open **Claude Threads** from the ribbon icon (a message-square icon on the left edge of the window) or run **Open Claude Threads** from the command palette. Continue to [Dispatching your first task](/docs/getting-started/first-thread/) to send your first message.
+Once installed, open **Agent Threads** from the ribbon icon (a message-square icon on the left edge of the window) or run **Open Agent Threads** from the command palette. Continue to [Dispatching your first task](/docs/getting-started/first-thread/) to send your first message.

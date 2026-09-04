@@ -5,7 +5,7 @@ category: integrations
 order: 3
 ---
 
-Every Claude Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
+Every Agent Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
 
 Beyond that built-in surface, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and every new thread picks them up automatically, on both the Claude and Codex harnesses.
 
@@ -15,13 +15,13 @@ Those external servers are stored in **this plugin's own `data.json`**, not in a
 
 ## Opening the tab
 
-Open **Settings → Claude Threads** and select the **MCP** tab. On mobile, the settings screen is reduced to pairing and reload controls — MCP servers are managed from desktop only.
+Open **Settings → Agent Threads** and select the **MCP** tab. On mobile, the settings screen is reduced to pairing and reload controls — MCP servers are managed from desktop only.
 
 ## This is per-vault plugin data, not a Claude Code config file
 
 **The MCP tab edits this plugin's own `data.json`** for the current vault — not `~/.claude/settings.json`, and not any other Claude Code config. That means:
 
-- Servers you add here are **scoped to this vault**; they don't show up in other vaults running Claude Threads, and they aren't shared with the `claude` CLI run outside the plugin.
+- Servers you add here are **scoped to this vault**; they don't show up in other vaults running Agent Threads, and they aren't shared with the `claude` CLI run outside the plugin.
 - The `claude` CLI's own `~/.claude/settings.json` is never read or written by this tab — a server added there doesn't appear here, and vice versa.
 - Each configured server is injected into a session's tool set **at runtime**, when a thread starts, on whichever harness (Claude or Codex) that thread uses.
 

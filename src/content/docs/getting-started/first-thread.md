@@ -5,7 +5,7 @@ category: getting-started
 order: 2
 ---
 
-The first time you install Claude Threads on a fresh vault, the plugin opens a three-panel workspace for you automatically: the Chat view in the left sidebar, a bundled "Getting Started" guide in the center editor, and the Agents List in the right sidebar — so the layout makes sense before you write a single message. A welcome notice confirms it's ready. This only happens once; the plugin sets a flag so it won't reappear on later launches, and it's skipped entirely if you already had threads before upgrading (existing users aren't dropped into onboarding).
+The first time you install Agent Threads on a fresh vault, the plugin opens a three-panel workspace for you automatically: the Chat view in the left sidebar, a bundled "Getting Started" guide in the center editor, and the Agents List in the right sidebar — so the layout makes sense before you write a single message. A welcome notice confirms it's ready. This only happens once; the plugin sets a flag so it won't reappear on later launches, and it's skipped entirely if you already had threads before upgrading (existing users aren't dropped into onboarding).
 
 ## Starting your first task
 

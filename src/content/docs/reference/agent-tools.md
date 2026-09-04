@@ -41,7 +41,7 @@ Control the current thread's session state.
 | Tool | Parameters | Description |
 |---|---|---|
 | `set_working_directory` | `path` | Changes the working directory for this session. Accepts an absolute path; `~` is expanded. Takes effect on the next turn. |
-| `EnterPlanMode` | — | Requests Plan mode without asking for permission. For Codex, the current turn hands off at a safe boundary and Claude Threads starts one fresh native Plan collaboration turn under a read-only sandbox; its structured plan opens the existing Approve/Edit/Reject card. Claude uses its native plan-mode capability for the equivalent transition. |
+| `EnterPlanMode` | — | Requests Plan mode without asking for permission. For Codex, the current turn hands off at a safe boundary and Agent Threads starts one fresh native Plan collaboration turn under a read-only sandbox; its structured plan opens the existing Approve/Edit/Reject card. Claude uses its native plan-mode capability for the equivalent transition. |
 | `ScheduleWakeup` | `delaySeconds`, `prompt`, `reason` | Schedules a message to be injected into this thread after a delay. Useful for polling CI, waiting for a deploy, or self-pacing a loop. While the wake-up is pending, the [Agents List](/docs/views/agent-dashboard/#waiting-threads) and [Kanban board](/docs/views/kanban-board/) keep the thread in **Waiting** with a live countdown (`Resumes in 4m — <reason>`). In the conversation, a compact [scheduled-activity pill](/docs/reference/status-line/#scheduled-activity) shows the countdown instead of a permanent banner; click it to inspect all wakeups and loops for the thread and cancel only the selected wakeup. Wakeups are persisted to disk (the same durable store backing [Scheduled Tasks](/docs/automation/scheduled-tasks/)), so a pending wakeup survives an Obsidian restart, plugin reload, or the machine sleeping — it fires on schedule, or immediately on next load if the fire time already passed. |
 | `EnterWorktree` | `branch?`, `baseBranch?`, `repoPath?` | Creates a git worktree for the current repo and switches the session cwd to it. Automatically routed to the plugin's MCP implementation, which tracks the in-session cwd correctly after `set_working_directory`. |
 | `ExitWorktree` | `worktreePath?`, `force?` | Removes the worktree and restores the session cwd to the original repo root. Defaults to the current effective cwd. Pass `force: true` to remove even if there are uncommitted changes. |
@@ -104,7 +104,7 @@ Both tools return a clear error if the vault-bridges plugin is not installed or 
 
 ### Bridge-aware edits
 
-When an agent edits files inside a bridged repo (rather than the synced vault copy), Claude Threads detects it automatically at the end of the turn:
+When an agent edits files inside a bridged repo (rather than the synced vault copy), Agent Threads detects it automatically at the end of the turn:
 
 - **Auto-pull** — each affected bridge is synced once per turn, so the vault copies update immediately (a notice confirms success or failure).
 - **Vault-relative links** — edited-file chips, the focus button, and absolute repo paths in Claude's messages all resolve to the synced vault note: chips show the vault path and open the note in Obsidian, and message paths become clickable internal links (only when the vault copy exists).

@@ -7,19 +7,19 @@ order: 2
 
 ## Remote access (mobile)
 
-Claude Threads can mirror your desktop sessions to Obsidian Mobile in real time. Your phone becomes a thin client: you can read the conversation as it streams, send messages, approve permission requests, answer agent questions, and switch between threads — all over a secure WebSocket relay. The desktop runs the active Claude or Codex harness; mobile just shows the state.
+Agent Threads can mirror your desktop sessions to Obsidian Mobile in real time. Your phone becomes a thin client: you can read the conversation as it streams, send messages, approve permission requests, answer agent questions, and switch between threads — all over a secure WebSocket relay. The desktop runs the active Claude or Codex harness; mobile just shows the state.
 
 **Prerequisites:**
 
-- Obsidian desktop with Claude Threads installed and running
-- Obsidian Mobile with Claude Threads installed via [BRAT](https://github.com/TfTHacker/obsidian42-brat)
+- Obsidian desktop with Agent Threads installed and running
+- Obsidian Mobile with Agent Threads installed via [BRAT](https://github.com/TfTHacker/obsidian42-brat)
 - Both devices on any internet connection (no LAN required)
 
 ### Setup
 
-1. On desktop: open **Settings → Claude Threads → Remote** and toggle **Enable remote access** on
+1. On desktop: open **Settings → Agent Threads → Remote** and toggle **Enable remote access** on
 2. Click **Show pairing QR code** — a QR code appears with a **5-minute expiry window**
-3. On mobile: open the Claude Threads ribbon icon, tap **Connect to Desktop**, then scan the QR code (or tap the `claude-threads://pair` link if you're on the same device)
+3. On mobile: open the Agent Threads ribbon icon, tap **Connect to Desktop**, then scan the QR code (or tap the `claude-threads://pair` link if you're on the same device)
 4. The mobile view refreshes to show all your desktop threads
 
 ### Manual pairing (URI scheme)
@@ -30,7 +30,7 @@ If you can't scan a QR code, send yourself the pairing link directly:
 claude-threads://pair?roomId=<ROOM_ID>&relay=<RELAY_URL>
 ```
 
-Opening this URL on any device with Obsidian Mobile + Claude Threads installed will pair it to your desktop.
+Opening this URL on any device with Obsidian Mobile + Agent Threads installed will pair it to your desktop.
 
 ### What you can do on mobile
 

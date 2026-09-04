@@ -158,5 +158,5 @@ Obsidian Mobile shows a reduced settings screen instead of the eight tabs above:
 |---|---|
 | Pairing code | Paste the code shown on desktop to connect manually, as an alternative to scanning the QR code |
 | Paired room | Shows the masked room ID once paired, with a **Disconnect** button |
-| Reload plugin | Reload Claude Threads; if threads are currently running you're warned before the plugin restarts — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
+| Reload plugin | Reload Agent Threads; if threads are currently running you're warned before the plugin restarts — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
 | Relay URL | WebSocket relay server. Change only if self-hosting. |
