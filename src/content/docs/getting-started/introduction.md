@@ -5,7 +5,7 @@ category: getting-started
 order: 1
 ---
 
-Claude Threads embeds Claude Code and OpenAI Codex directly in Obsidian. Each tab is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
+Claude Threads embeds Claude Code and OpenAI Codex directly in Obsidian. Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
 
 ## The three-panel model
 
@@ -13,7 +13,7 @@ Claude Threads is built around three panels that work together:
 
 | Panel | Location | What it does |
 |---|---|---|
-| **Chat** | Sidebar by default; main area in Conversation first | Full conversation history for each thread, with tabs for switching between sessions |
+| **Chat** | Sidebar by default; main area in Conversation first | Full conversation history, with a rich switcher for moving between threads |
 | **Agents List** | Sidebar (usually right) | Dispatch new tasks and scan running agents in a responsive two-line list |
 | **Kanban Board** | Its own tab | A board view of every thread bucketed by status — the more visual alternative to the Agents List |
 
@@ -21,7 +21,7 @@ You don't have to use all three at once. Many people run Chat and the Agents Lis
 
 ### Conversation-first workspace
 
-On desktop, **Settings → General → Conversation placement** offers an opt-in **Conversation first** prototype. It keeps exactly one Chat view in the main area and opens wikilinks, edited or bridged files, web pages, artifacts, and agent-triggered navigation in one reusable native companion beside it. Closing the companion returns that space to the conversation, and focusing edited files does not detach unrelated leaves.
+On desktop, **Settings → General → Conversation placement** offers an opt-in **Conversation first** prototype. It keeps exactly one Chat view in the main area and opens wikilinks, edited or bridged files, web pages, artifacts, and agent-triggered navigation in one reusable native companion beside it. In the main area, Chat uses the host's native document title and header actions; **Classic sidebar** keeps the compact custom thread controls. Dragging Chat between the main area and a sidebar adapts the header automatically. Closing the companion returns that space to the conversation, and focusing edited files does not detach unrelated leaves.
 
 **Classic sidebar** remains the default. Conversation-first placement is desktop only; mobile behavior is unchanged.
 
