@@ -7,6 +7,8 @@ order: 1
 
 Open the **Agents List** from the ribbon or command palette to see all threads at a glance. Threads are grouped by Project and status. Each adaptive row uses two lines: status, title, and recency on the primary line; live activity, repository/path, and child-agent count on the secondary line. Lower-priority metadata truncates before the row can overflow a narrow sidebar.
 
+The selected thread has an accent-tinted background and a trailing accent bar, making it visible in both light and dark themes without obscuring its status indicator.
+
 ## Dispatch box
 
 A floating dispatch box sits at the bottom of the Agents List. Type a task and press Enter to spin up a new thread and start it working immediately — this is the fastest way to launch a task without first opening Chat. The dispatch box also accepts the `/model`, `/goal`, `/loop`, and `/design` prefixes described in [Dispatching with commands](/docs/core-workflow/models-goals-loops/#dispatching-with-commands), and supports attaching images or files via the paperclip button or drag-and-drop.
@@ -35,7 +37,7 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ## Native agent teams
 
-When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
+When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. The count is green only while at least one child is starting, working, or waiting; once every run is terminal or unavailable, it uses the same faint secondary treatment as recency. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
 
 ## Completed-response previews (idle threads)
 
