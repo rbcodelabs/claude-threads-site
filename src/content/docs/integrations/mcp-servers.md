@@ -41,8 +41,10 @@ not need to enter server URLs, copy access tokens, or maintain Google tool schem
 
 ### Connect your account
 
-1. Install and enable Google Docs Sync in the same desktop host and vault. Connect
-   the intended Google account in that plugin's settings.
+1. Install and enable a compatible Google Docs Sync release with guarded
+   connection-refresh support in the same desktop host and vault. Older releases
+   show an update message in the Google Workspace section. Connect the intended
+   Google account in that plugin's settings.
 2. If your organization hosts its own auth service, use Google Docs Sync's
    **Auth proxy URL** setting. Disconnect the old account before changing hosts,
    then reconnect. Use current versions of the plugin and auth service with
@@ -54,6 +56,9 @@ Google credentials are refreshed through the existing connection as requests are
 made. If the connection is unavailable, the settings section provides connection
 guidance. After switching accounts or auth hosts, start a new thread so an
 existing conversation does not silently gain access to a different account.
+Normal access-token refresh is automatic. If Google rotates the refresh token,
+start a new thread. Disabling a service revokes existing Google connections;
+re-enabling it requires a new thread.
 
 ### Google Cloud prerequisites
 
