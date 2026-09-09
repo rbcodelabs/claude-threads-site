@@ -68,7 +68,7 @@ An agent in an interactive desktop thread can call `mcp_register_server` to prop
 
 Registration is **create-only**. If the same name already has an identical configuration, retrying succeeds as an unchanged no-op. If the name belongs to a different configuration, the tool reports a conflict and changes nothing; use **Settings → MCP** when you intentionally need to edit, rename, or remove a server.
 
-The result has `success`, `status`, and `message` fields. `status` is one of `registered`, `unchanged`, `conflict`, `invalid`, `cancelled`, `unavailable`, or `failed`; only `registered` and `unchanged` are successful. The response never repeats the submitted configuration or a credential value.
+The result has `success`, `status`, and `message` fields. `status` is one of `registered`, `unchanged`, `conflict`, `invalid`, `cancelled`, `unavailable`, or `failed`; only `registered` and `unchanged` are successful. Those successful results also include `requiredVariables`, a sorted array of every `${VAR_NAME}` referenced by the configuration. The names are returned unresolved and are not checked for availability until a session initializes. The response never repeats the submitted configuration, a resolved variable, or a credential value.
 
 Before saving a new configuration, the host shows its own confirmation dialog even if the thread's ordinary tool approvals are bypassed. This is a separate safety boundary because a `stdio` server will run its configured command automatically when a later session initializes. The dialog also makes clear that the registration is global to this vault's plugin settings, not limited to the calling Project. Cancelling leaves settings unchanged.
 
