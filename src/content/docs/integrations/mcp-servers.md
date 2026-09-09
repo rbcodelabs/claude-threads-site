@@ -7,7 +7,7 @@ order: 3
 
 Every Claude Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
 
-Beyond that built-in surface, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and every new thread picks them up automatically, on both the Claude and Codex harnesses.
+Beyond that built-in surface, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and newly initialized sessions pick them up automatically, on both the Claude and Codex harnesses.
 
 Those external servers are stored in **this plugin's own `data.json`**, not in any Claude Code config file. The **Settings → MCP** tab lets you list, add, edit, and remove them from inside the host app, so the common cases never require hand-editing JSON.
 
@@ -23,9 +23,9 @@ Open **Settings → Claude Threads** and select the **MCP** tab. On mobile, the 
 
 - Servers you add here are **scoped to this vault**; they don't show up in other vaults running Claude Threads, and they aren't shared with the `claude` CLI run outside the plugin.
 - The `claude` CLI's own `~/.claude/settings.json` is never read or written by this tab — a server added there doesn't appear here, and vice versa.
-- Each configured server is injected into a session's tool set **at runtime**, when a thread starts, on whichever harness (Claude or Codex) that thread uses.
+- Each configured server is injected into a session's tool set **at runtime**, when a session is initialized, on whichever harness (Claude or Codex) that thread uses.
 
-Changes take effect for **new threads only** — sessions already running keep whatever MCP servers they started with.
+Changes take effect for **newly initialized sessions**. A registration does not hot-load a server into the session that made the request; an already-running session keeps the MCP servers it started with. New threads receive the new configuration, as does an existing thread if its session is later initialized again through the normal lifecycle.
 
 ## The server list
 
@@ -51,6 +51,49 @@ If no servers are configured yet, the list shows an empty state instead of rows.
 | **HTTP or SSE** | Name, URL, transport (`http` or `sse`), Headers (`KEY=VALUE` per line) |
 
 Names may contain only letters, numbers, hyphens, and underscores, and must be unique. The form validates required fields (a command for stdio, a URL for HTTP/SSE) before saving, and renaming an entry moves it to the new key rather than leaving a duplicate behind.
+
+## Registering a server from a thread
+
+An agent in an interactive desktop thread can call `mcp_register_server` to propose a new external server without opening Settings. The tool accepts the same flat configuration shape that the MCP tab stores:
+
+| Field | Applies to | Description |
+|---|---|---|
+| `name` | All | Unique server name containing letters, numbers, hyphens, or underscores. Built-in and unsafe object-property names are reserved case-insensitively. |
+| `type` | All | `stdio`, `http`, or `sse`. |
+| `command` | `stdio` | Executable or command to start. Required for `stdio`. |
+| `args` | `stdio` | Optional array of command arguments. |
+| `env` | `stdio` | Optional object of environment-variable names and values. |
+| `url` | `http`, `sse` | HTTP(S) endpoint. Required for remote transports; embedded URL credentials are rejected. |
+| `headers` | `http`, `sse` | Optional object of HTTP header names and values. |
+
+Registration is **create-only**. If the same name already has an identical configuration, retrying succeeds as an unchanged no-op. If the name belongs to a different configuration, the tool reports a conflict and changes nothing; use **Settings → MCP** when you intentionally need to edit, rename, or remove a server.
+
+The result has `success`, `status`, and `message` fields. `status` is one of `registered`, `unchanged`, `conflict`, `invalid`, `cancelled`, `unavailable`, or `failed`; only `registered` and `unchanged` are successful. The response never repeats the submitted configuration or a credential value.
+
+Before saving a new configuration, the host shows its own confirmation dialog even if the thread's ordinary tool approvals are bypassed. This is a separate safety boundary because a `stdio` server will run its configured command automatically when a later session initializes. The dialog also makes clear that the registration is global to this vault's plugin settings, not limited to the calling Project. Cancelling leaves settings unchanged.
+
+The confirmation dialog is available only from an interactive desktop thread. Scheduled and other noninteractive sessions cannot approve a registration and receive an unavailable result instead; they cannot silently add an MCP server while running under `dontAsk`.
+
+The tool does not launch a command or contact a remote endpoint while registering it. After the host confirms, it saves the unresolved configuration to `data.json`. The successful result means the save completed; it does not mean the external server is reachable.
+
+### Credentials in agent registrations
+
+Never put an API key, token, password, cookie, or other secret directly in a tool call. Put a `${VAR_NAME}` placeholder in the configuration, then call `request_secret` so the user can enter the value into the OS keychain without exposing it in the conversation.
+
+The registration tool rejects a literal value when a command argument, URL query parameter, environment-variable name, or header name looks credential-related (for example, `Authorization`, `API_TOKEN`, `password`, or `cookie`). Placeholder forms such as `${NOTES_API_TOKEN}`, `Bearer ${NOTES_API_TOKEN}`, and `Basic ${NOTES_API_TOKEN}` are accepted. This check is deliberately conservative, but it is a name-based safety check rather than a secret detector: arbitrary literals in fields that do not look credential-related are allowed and **must contain only nonsecret configuration**.
+
+For example, an agent can propose this remote server configuration and then request `NOTES_API_TOKEN` separately:
+
+```json
+{
+  "name": "notes_api",
+  "type": "http",
+  "url": "https://notes.example.com/mcp",
+  "headers": {
+    "Authorization": "Bearer ${NOTES_API_TOKEN}"
+  }
+}
+```
 
 ### Placeholders and secrets
 
