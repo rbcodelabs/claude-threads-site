@@ -18,6 +18,8 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
 | Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
+With **Conversation first**, Geode hosts that support durable companions reuse the same companion split after reloads, workspace restoration, and placement changes. Closing only its destination tab preserves sibling tabs and allows the next contextual item to open in that split. Older Geode versions and Obsidian keep their existing reload behavior. See [Conversation-first workspace](/docs/getting-started/introduction/#conversation-first-workspace) for closure and one-time cleanup details.
+
 ## Agent
 
 | Setting | Description |
