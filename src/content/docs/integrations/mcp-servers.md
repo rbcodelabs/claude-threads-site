@@ -29,6 +29,10 @@ Changes take effect for **new threads only** — sessions already running keep w
 
 ## Google Workspace
 
+Available in **Claude Threads v0.35.0** as an opt-in beta, with **Google Docs Sync
+v0.7.1 or later**. Live four-service validation across both harnesses remains
+pending; test with non-sensitive content before using it for important work.
+
 The **Google Workspace** section connects Google's hosted MCP servers using the
 Google account already connected in the **Google Docs Sync** plugin in the same
 vault. Enable **Google Docs**, **Google Drive**, **Google Sheets**, and
@@ -41,8 +45,8 @@ not need to enter server URLs, copy access tokens, or maintain Google tool schem
 
 ### Connect your account
 
-1. Install and enable a compatible Google Docs Sync release with guarded
-   connection-refresh support in the same desktop host and vault. Older releases
+1. Install and enable Google Docs Sync **v0.7.1 or later**, which includes guarded
+   connection-refresh support, in the same desktop host and vault. Older releases
    show an update message in the Google Workspace section. Connect the intended
    Google account in that plugin's settings.
 2. If your organization hosts its own auth service, use Google Docs Sync's
