@@ -55,7 +55,8 @@ not need to enter server URLs, copy access tokens, or maintain Google tool schem
 Google credentials are refreshed through the existing connection as requests are
 made. If the connection is unavailable, the settings section provides connection
 guidance. After switching accounts or auth hosts, start a new thread so an
-existing conversation does not silently gain access to a different account.
+existing conversation does not silently gain access to a different account. The
+thread's account binding is retained across app restarts.
 Normal access-token refresh is automatic. If Google rotates the refresh token,
 start a new thread. Disabling a service revokes existing Google connections;
 re-enabling it requires a new thread.
