@@ -27,7 +27,62 @@ Open **Settings → Claude Threads** and select the **MCP** tab. On mobile, the 
 
 Changes take effect for **new threads only** — sessions already running keep whatever MCP servers they started with.
 
-## The server list
+## Google Workspace
+
+The **Google Workspace** section connects Google's hosted MCP servers using the
+Google account already connected in the **Google Docs Sync** plugin in the same
+vault. Enable **Google Docs**, **Google Drive**, **Google Sheets**, and
+**Google Slides** individually. All four start disabled.
+
+Each enabled service exposes Google's available tools, including read and write
+operations, to new Claude and Codex threads. The existing harness permission mode
+controls tool approvals. Scheduled threads use the same selected services. You do
+not need to enter server URLs, copy access tokens, or maintain Google tool schemas.
+
+### Connect your account
+
+1. Install and enable Google Docs Sync in the same desktop host and vault. Connect
+   the intended Google account in that plugin's settings.
+2. If your organization hosts its own auth service, use Google Docs Sync's
+   **Auth proxy URL** setting. Disconnect the old account before changing hosts,
+   then reconnect. Use current versions of the plugin and auth service with
+   Geode-aware callbacks and the scopes below.
+3. Enable the desired services under **Settings → Claude Threads → MCP →
+   Google Workspace**, then start a new thread.
+
+Google credentials are refreshed through the existing connection as requests are
+made. If the connection is unavailable, the settings section provides connection
+guidance. After switching accounts or auth hosts, start a new thread so an
+existing conversation does not silently gain access to a different account.
+
+### Google Cloud prerequisites
+
+Google's Workspace MCP servers are currently in Developer Preview. Confirm both
+your Workspace developer-account approval and registration of the specific Google
+Cloud project backing the OAuth client. Then enable the ordinary API and MCP API
+for each service:
+
+| Service | APIs to enable | OAuth scopes requested by the auth service |
+|---|---|---|
+| Drive | `drive.googleapis.com`, `drivemcp.googleapis.com` | `drive.readonly`, `drive.file` |
+| Docs | `docs.googleapis.com`, `docsmcp.googleapis.com` | Drive scopes plus `documents.readonly`, `documents` |
+| Sheets | `sheets.googleapis.com`, `sheetsmcp.googleapis.com` | Drive scopes plus `spreadsheets.readonly`, `spreadsheets` |
+| Slides | `slides.googleapis.com`, `slidesmcp.googleapis.com` | Drive scopes plus `presentations.readonly`, `presentations` |
+
+Scope names in the table have the prefix `https://www.googleapis.com/auth/`.
+Include the explicit read-only scopes even when requesting their write-capable
+counterparts. After the auth service adds scopes, reconnect the account to grant
+them; refreshing an old token does not add permissions.
+
+See Google's [setup guide](https://developers.google.com/workspace/guides/configure-mcp-servers)
+and [Developer Preview Program](https://developers.google.com/workspace/preview).
+Immediately after project registration, preview errors may persist or alternate
+with successful calls while Google's checks propagate. Once registration and API
+enablement are confirmed, retry over several minutes before changing configuration.
+Successful initialization or tool discovery alone does not prove tool execution
+is authorized; test a read against a non-sensitive file in each selected service.
+
+## The external server list
 
 Each configured server is shown as a row with:
 
