@@ -150,6 +150,12 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
 
+The MCP tab also has a **Google Workspace** section with opt-in **Google Docs**,
+**Google Drive**, **Google Sheets**, and **Google Slides** toggles. It uses the
+Google Docs Sync account connected in the same vault and exposes Google's hosted
+tools to new threads on either harness. See [Google Workspace setup](/docs/integrations/mcp-servers/#google-workspace)
+for connection, OAuth scopes, and preview-enrollment prerequisites.
+
 ## Mobile settings
 
 Obsidian Mobile shows a reduced settings screen instead of the eight tabs above:
