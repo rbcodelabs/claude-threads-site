@@ -17,6 +17,8 @@ Use the themed **Project** menu to choose the new thread's Project and initial w
 
 Use `/design <brief>` here to create a new native design-artifact thread, open it in Chat, and launch Geode's ArtifactView preview. Bare `/design` shows a usage notice and creates no thread. Design dispatch does not accept image or text attachments; if any are present, Threads keeps the draft and asks you to remove them. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode) for the artifact workflow and in-Chat revision behavior.
 
+Right-clicking a Markdown note — in the file explorer or inside the open note — and choosing **Chat about this document** also lands here: the dispatch box is seeded with an `@[[note]]` mention and focused, so the thread you dispatch starts with that note's full content as context. See [Chat about this document](/docs/core-workflow/messaging-and-commands/#chat-about-this-document).
+
 The kickoff button displays the harness that will own the new thread: **Claude** or **Codex**. Press Enter or click the button to dispatch with the harness shown. To change it without dispatching, right-click or press and hold the button; from the keyboard, focus it and use `Shift+F10`, the Context Menu key, or `Alt+Down`. Choosing Claude or Codex updates the button, and that choice stays local to the mounted list while you launch more threads.
 
 **Settings → Agent → Agent harness** provides the initial default only. An Agents List choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Kanban dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
