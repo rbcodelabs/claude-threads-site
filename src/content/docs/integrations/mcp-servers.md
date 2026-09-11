@@ -92,6 +92,78 @@ enablement are confirmed, retry over several minutes before changing configurati
 Successful initialization or tool discovery alone does not prove tool execution
 is authorized; test a read against a non-sensitive file in each selected service.
 
+## OAuth-gated servers
+
+Available in **Claude Threads v0.36.0** or later. A remote MCP server that requires
+its own OAuth 2.1 + PKCE sign-in — Vercel's, for example — registers with
+`type: "oauth"` instead of `"http"`. The plugin brokers the entire flow itself:
+discovery, Dynamic Client Registration, consent, token custody, refresh, and
+revocation. Neither Claude nor Codex needs any OAuth-specific code — both
+harnesses see the server as a plain authenticated HTTP endpoint behind a local,
+per-server proxy that injects the current access token on every request.
+
+Unlike the stdio/HTTP/SSE transports above, registering an `oauth` server is
+**asynchronous and interactive**, not a one-shot confirm-and-save:
+
+1. An agent calls `mcp_register_server` with `type: "oauth"` and the upstream
+   server's URL.
+2. The plugin discovers the authorization server and registers a client (unless
+   you supplied a known `clientId`).
+3. Your OAuth consent screen opens in the host's Web Viewer. You have up to
+   5 minutes to complete sign-in.
+4. On success, the plugin exchanges the authorization code for tokens, starts
+   the local proxy, and saves the server — newly initialized threads on both
+   harnesses can use it from then on.
+
+Denying consent, closing the tab, or letting the window lapse leaves no partial
+state behind: nothing is saved, and no proxy keeps running. The same
+interactive-host requirement as other registrations applies — a scheduled
+thread gets an unavailable result instead of a stalled consent dialog.
+
+Optional fields narrow what the registration does:
+
+| Field | Meaning |
+|---|---|
+| `scopes` | Space-separated OAuth scopes to request. Omit to use the authorization server's default. |
+| `tools.allow` | Expose only these tool names through the proxy. Mutually exclusive with `tools.deny`. |
+| `tools.deny` | Hide these tool names from discovery and block calling them (a clean MCP-level error, not a silent failure). Mutually exclusive with `tools.allow`. |
+| `clientId` | Skip Dynamic Client Registration with a known public client ID. |
+| `authorizationServerUrl` | Skip protected-resource discovery by pointing directly at the authorization server. |
+
+For example, connecting Vercel's MCP server while blocking its spend-money tools:
+
+```json
+{
+  "name": "vercel",
+  "type": "oauth",
+  "url": "https://mcp.vercel.com/",
+  "scopes": "openid profile email",
+  "tools": { "deny": ["buy_pro", "buy_credits", "buy_addon", "buy_domain"] }
+}
+```
+
+**Access and refresh tokens live only in the OS keychain** — never in `data.json`,
+never returned to the calling thread. The token refreshes proactively ahead of
+expiry and, as a fallback, transparently on the next request if the upstream
+briefly rejects it. If the authorization server later revokes access or a
+refresh attempt fails, the server's status changes to "Needs re-authorization"
+and the next thread request to it fails cleanly, the same as any other
+unreachable endpoint would.
+
+### Managing a connected OAuth server
+
+**Settings → Claude Threads → MCP → OAuth MCP servers** lists every connected
+server with a live status — connected with an expiry countdown, expiring soon,
+needs re-authorization, or not configured — and a **Disconnect** button, which
+revokes the tokens with the authorization server, clears the keychain, and stops
+the proxy.
+
+There is no manual "Add" form in this section: connecting an OAuth server
+always goes through an agent's `mcp_register_server` call, since the flow needs
+a real consent screen to drive.
+
+![Settings MCP tab: OAuth MCP servers section showing two connected servers with status dots and expiry countdowns, and a Disconnect button on each row](../../../assets/screenshots/screenshot-mcp-oauth-servers.png)
+
 ## The external server list
 
 Each configured server is shown as a row with:
@@ -119,17 +191,17 @@ Names may contain only letters, numbers, hyphens, and underscores, and must be u
 
 ## Registering a server from a thread
 
-An agent in an interactive desktop thread can call `mcp_register_server` to propose a new external server without opening Settings. The tool accepts the same flat configuration shape that the MCP tab stores:
+An agent in an interactive desktop thread can call `mcp_register_server` to propose a new external server without opening Settings. For `stdio`, `http`, and `sse`, the tool accepts the same flat configuration shape that the MCP tab stores; `oauth` uses a different field set and a multi-step interactive flow, described in [OAuth-gated servers](#oauth-gated-servers) above.
 
 | Field | Applies to | Description |
 |---|---|---|
 | `name` | All | Unique server name containing letters, numbers, hyphens, or underscores. Built-in and unsafe object-property names are reserved case-insensitively. |
-| `type` | All | `stdio`, `http`, or `sse`. |
+| `type` | All | `stdio`, `http`, `sse`, or `oauth`. |
 | `command` | `stdio` | Executable or command to start. Required for `stdio`. |
 | `args` | `stdio` | Optional array of command arguments. |
 | `env` | `stdio` | Optional object of environment-variable names and values. |
-| `url` | `http`, `sse` | HTTP(S) endpoint. Required for remote transports; embedded URL credentials are rejected. |
-| `headers` | `http`, `sse` | Optional object of HTTP header names and values. |
+| `url` | `http`, `sse`, `oauth` | HTTP(S) endpoint. Required for remote transports; embedded URL credentials are rejected. For `oauth`, this is the upstream MCP server's root URL and must be `https://`. |
+| `headers` | `http`, `sse` | Optional object of HTTP header names and values. Not used for `oauth` — see `scopes`/`tools` in [OAuth-gated servers](#oauth-gated-servers). |
 
 Registration is **create-only**. If the same name already has an identical configuration, retrying succeeds as an unchanged no-op. If the name belongs to a different configuration, the tool reports a conflict and changes nothing; use **Settings → MCP** when you intentionally need to edit, rename, or remove a server.
 
