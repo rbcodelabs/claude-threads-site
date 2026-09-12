@@ -32,6 +32,14 @@ Two more nodes sit at the bottom:
 
 > **Where installs go.** Everything the Skills Manager installs or imports lands in `<vault>/.obsidian/plugins/claude-threads/skills/`, beside the plugin's `skill-sources/` clones — never in `~/.claude/`. That folder shares the plugin folder's fate: community-plugin *updates* leave unknown subdirectories alone, but manually uninstalling and reinstalling the plugin will delete your installed skills along with it.
 
+## Authoring local skills
+
+Choose **New skill**, enter a lowercase identifier such as `meeting-notes`, and edit the starter `SKILL.md`. Authored packages appear under **Local skills** and live in `<vault>/Skills/<identifier>/`. **Settings → Skills → Local skills folder** selects another vault-relative folder; changing it does not move files. Installs, imports, and GitHub clones retain their current paths. There is no migration.
+
+Agents can create complete packages with `skills_create_local({ skillId, skillMd, files? })` and patch them with `skills_update_local({ skillId, files?, deleteFiles? })`. File entries contain a package-relative `path`, `encoding` (`utf8` or `base64`), and `content`. Updates preserve omitted files and remove only explicitly listed paths. `SKILL.md` requires a frontmatter `name` matching the identifier and a nonempty `description`; it cannot be deleted. Supporting files are managed through these tools or the filesystem.
+
+Authored skills are available as `/local:<identifier>` in newly started Claude and Codex sessions. Active sessions are not restarted. Use qualified identifiers returned by `skills_list_installed`, such as `local:meeting-notes`, for inspection or removal when names overlap. `skills_update` continues to pull GitHub sources.
+
 ## Browse tab
 
 Search the [skills.sh](https://skills.sh) registry. Results show the skill name, GitHub source, and install count. Click a result to see details and an **Install** button that clones the skill from GitHub into `<vault>/.obsidian/plugins/claude-threads/skills/`. Installed skills are invoked as `/vault:<name>`.

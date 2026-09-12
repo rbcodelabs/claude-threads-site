@@ -126,6 +126,8 @@ Everything the Skills Manager panel can do — browse the [skills.sh](https://sk
 | `skills_get` | `identifier` | Returns full detail for one skill, whether installed or not. Pass an installed skill's name, or a marketplace slug in `owner/repo/skill-id` form (as returned by `skills_search`). Installed skills include their full `SKILL.md` content. |
 | `skills_list_sources` | — | Lists configured skill sources (GitHub-cloned or local-path plugin sources) plus the built-in skills.sh registry, with id, name, type, and (for GitHub sources) staleness info. |
 | `skills_check_updates` | — | Checks every configured GitHub-type skill source for upstream commits it's behind (`git fetch` + count). Returns each source's id, name, and either its refreshed `behindCount`/`lastFetched` or an `error` if the check failed (e.g. offline). |
-| `skills_install` | `slug`, `skillId`, `source`, `name` | Installs a skill from the marketplace into `~/.claude/skills/`. Pass the four fields exactly as returned by `skills_search` for the skill you want. |
-| `skills_uninstall` | `name` | Permanently deletes an installed skill by name. |
+| `skills_install` | `slug`, `skillId`, `source`, `name` | Installs a marketplace package in the vault's plugin-managed `skills/` folder. Pass the four fields from `skills_search`. |
+| `skills_uninstall` | `name` | Permanently deletes an installed or authored vault package. Use a qualified identifier from `skills_list_installed` when names overlap. Home skills are read-only. |
+| `skills_create_local` | `skillId`, `skillMd`, `files?` | Creates a complete authored package in the configured vault folder, default `Skills/`. Available in new sessions. |
+| `skills_update_local` | `skillId`, `files?`, `deleteFiles?` | Patches an authored package, preserves omitted files, and protects `SKILL.md` from deletion. |
 | `skills_update` | `sourceId` | Pulls the latest commits for a configured GitHub-type skill source (`git pull` on its local clone), refreshing every skill it provides. Use the source id from `skills_list_sources` — not `"registry"`, which has no single-source update (reinstall individual skills instead). |
