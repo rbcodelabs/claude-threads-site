@@ -15,13 +15,13 @@ This is distinct from [`/loop`](/docs/core-workflow/models-goals-loops/#loops), 
 
 ## Managing scheduled tasks
 
-Open **Settings → Scheduled** for a dashboard of scheduled work. **Next up** sorts enabled jobs by their persisted next run time, so the order survives plugin reloads and Obsidian restarts. Each entry shows the exact local time and a relative countdown. An overdue item is labeled as catching up instead of appearing to be a future run.
+Open **Settings → Scheduled** for a dashboard of scheduled work. Each non-system schedule appears once in its group: recurring standalone jobs, thread-specific loops, or one-shot wakeups. The plugin's internal orchestrator heartbeat is omitted so it does not distract from work you created.
+
+Schedules use compact disclosure rows that are collapsed by default. At a glance, each row shows its status, cadence, next occurrence, Project, and how it will actually execute — for example, whether it will open a new thread with the current defaults or resume an existing thread with that thread's settings. Enabled schedules are sorted by next occurrence, while paused schedules appear last. Upcoming work includes the exact local time and a relative countdown; an overdue item is labeled as catching up instead of appearing to be a future run.
 
 For an ordinary job, the dashboard labels the upcoming time **Next run**. For a job with a gate, it uses **Next check**, because the gate may decide that no thread needs to run.
 
-The dashboard separates recurring standalone jobs from thread-specific loops and one-shot wakeups. The plugin's internal orchestrator heartbeat is omitted from the primary list so it does not distract from work you created.
-
-Each item shows its active hours, project, working directory, and gate. From the dashboard you can pause or resume a job, delete it, and use **Open last run** when the job has a previous thread. You can expand its recent run history to review runs, skipped checks, and errors.
+Expand a row to inspect its prompt, working directory, active-hours window and gate when applicable, execution details, and recent run history, including runs, skipped checks, and errors. The native disclosure works with standard keyboard controls. From the expanded row you can pause or resume the schedule, use **Open last run** when a previous thread is available, or delete the schedule.
 
 Use **Create with Claude** to open a thread with a scheduling prompt, then describe the work and cadence in natural language. This release does not include a manual schedule form, direct editing in Settings, or a **Run now** control. To change an existing job, ask Claude to update it with the Cron tools described below.
 
@@ -47,7 +47,7 @@ A scheduled task can be restricted to a local time-of-day window, so it only fir
 
 When a cycle comes due **outside** the window, the scheduler skips it entirely — no thread is opened, no prompt is sent — and jumps straight to the next window-open time. An every-6-hour job scoped to `07:00`–`22:00` therefore never wastes an overnight run; it simply resumes at 07:00. Overnight windows work too: set the start after the end (e.g. `22:00`–`06:00`) and the window wraps past midnight.
 
-The **Settings → Features → Scheduled tasks** list shows the window inline in each task's schedule description, e.g. *"Every 6 hour(s) (07:00-22:00 only)"*.
+The **Settings → Scheduled** dashboard shows the window in the expanded schedule details.
 
 This replaces the older pattern of baking a business-hours check into the prompt itself (e.g. *"if the current hour is before 7 or after 22, stop immediately"*), which burned a whole thread and turn every time the task fired outside hours just to check the clock and bail. With an active-hours window the out-of-hours run never happens at all.
 
@@ -64,7 +64,7 @@ On a fire, the gate's stdout is fed into the prompt: it replaces a `{{gateOutput
 
 If the gate can't be evaluated — exit `75`, timeout, or spawn failure such as command not found — the task **fails open and fires anyway** by default, so a broken check never silently blackholes a real cron job. Set `gateFailOpen: false` to fail closed and skip instead. Failed-evaluation diagnostics are stripped of unsafe control sequences, redacted against configured keychain secret names and values, bounded to 4 KiB, and retained in run history for troubleshooting.
 
-Gates run on desktop only — they're inert on mobile, where a configured gate simply fires every time. The **Settings → Features → Scheduled tasks** list flags gated tasks inline, e.g. *"Every 5 minute(s) · gated"*.
+Gates run on desktop only — they're inert on mobile, where a configured gate simply fires every time. The **Settings → Scheduled** dashboard identifies gated tasks in their schedule and expanded details.
 
 - **`CronCreate`** accepts `gateCommand`, `gateTimeoutSeconds`, and `gateFailOpen`.
 - **`CronUpdate`** accepts the same three to set or change the gate, and `clearGate: true` to remove it entirely.

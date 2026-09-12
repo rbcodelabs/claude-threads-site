@@ -33,9 +33,9 @@ The composer stays live the whole time. Its placeholder notes that a message goe
 
 ## Agents List and Agent Board visibility
 
-The [Agents List](/docs/views/agent-dashboard/) shows a compact child-agent count beneath its owning thread. Agent role, task, and current activity are included in list search, so you can find a specific child without opening each conversation first.
+The [Agents List](/docs/views/agent-dashboard/) shows a compact child-agent count beneath its owning thread. The count is green only while at least one child is starting, working, or waiting; otherwise it uses the same faint secondary treatment as recency. Agent role, task, and current activity are included in list search, so you can find a specific child without opening each conversation first.
 
-In the [Agent Board](/docs/views/kanban-board/), a compact count on each thread card shows how many native agents belong to that thread. Open the thread or Agents List detail to inspect them.
+In the [Agent Board](/docs/views/kanban-board/), a compact count on each thread card shows how many native agents belong to that thread and follows the same active-versus-faint color rule. Open the thread or Agents List detail to inspect them.
 
 ## Persistence and recovery
 
