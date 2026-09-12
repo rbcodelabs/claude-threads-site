@@ -26,7 +26,7 @@ Each thread in the Chat view gets its own tab, and tabs rename themselves automa
 |---|---|
 | New thread | Click `+` in the tab bar |
 | Close thread | Hover a tab → click `×` |
-| Rename thread | Double-click the tab label |
+| Rename thread | Right-click the workspace tab → **Rename thread**, click the header pencil, or choose **Rename thread** in the thread switcher. You can also double-click the conversation title (inside the pane). Enter saves; Escape cancels. |
 | Switch to tab N | `Cmd+1` through `Cmd+9` |
 | Next / previous tab | `Cmd+]` / `Cmd+[` |
 

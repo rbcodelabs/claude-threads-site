@@ -40,7 +40,7 @@ The command can return either:
   | `url` | Makes the pill a clickable link (opens in your browser). |
   | `icon` | [Lucide](https://lucide.dev) icon name. Defaults from `kind` if omitted. |
   | `tone` | `normal` (default), `warn`, or `error` — colors the pill. |
-  | `kind` | `pr`, `branch`, `dev`, `aws`, or any custom string. A `kind:"pr"` tag (or any `url` ending in `/pull/N`) becomes the thread's PR — shown as the PR pill and surfaced to the Kanban board, MCP tools, and release automation. |
+  | `kind` | `pr`, `branch`, `dev`, `aws`, or any custom string. A `kind:"pr"` tag (or any `url` ending in `/pull/N`) becomes the thread's PR — shown as the PR pill and surfaced to the Agent Board, MCP tools, and release automation. |
 
 - **Plaintext** (the Claude Code statusline convention) — segments split on 2+ spaces, with heuristic icons (URL→globe, `PR #N`→pull-request, `AWS …`→cloud, else→branch). Existing scripts keep working unchanged.
 
@@ -52,7 +52,7 @@ PR detection is fully script-driven: a `kind:"pr"` tag with a `url` (e.g. from `
 
 This replaced an earlier approach that scanned assistant message prose for a GitHub PR URL, which missed the common case of a PR opened via `gh pr create` inside a Bash tool call (the URL lands in tool *output*, not assistant prose, so the scanner never saw it). Sourcing the PR tag from the script instead means it can read the actual result of a `gh pr view` call for the branch, rather than guessing from text.
 
-**Always emit the `pr` tag, even though it's usually hidden.** While the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar) is on screen it already shows the branch and a PR button, so the footer hides its own `pr` and `branch` pills to avoid printing the same values twice in adjacent rows. The tag is still doing the work: it is the only source of a thread's PR association, feeding the diff bar's **PR #N** button, the Kanban PR chip, MCP tools, and archive-on-merge. Dropping it to save a `gh` call silently disables all of them.
+**Always emit the `pr` tag, even though it's usually hidden.** While the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar) is on screen it already shows the branch and a PR button, so the footer hides its own `pr` and `branch` pills to avoid printing the same values twice in adjacent rows. The tag is still doing the work: it is the only source of a thread's PR association, feeding the diff bar's **PR #N** button, the Agent Board PR chip, MCP tools, and archive-on-merge. Dropping it to save a `gh` call silently disables all of them.
 
 **Sticky means thread-scoped, not branch-scoped.** Because `prUrl` is never cleared, it outlives the branch it came from — and outlives the *repository* too, if a thread is later pointed at a different project with `set_working_directory`. Branch-scoped UI therefore doesn't read it: the diff bar's button uses the live `pr` tag from the current poll, which vanishes as soon as the branch has no PR, and the footer's own sticky pill is suppressed when its PR provably belongs to a different repo than the thread's current one. A PR whose repo can't be determined (a non-GitHub remote, say) is always shown rather than hidden, so only a provable mismatch is filtered.
 

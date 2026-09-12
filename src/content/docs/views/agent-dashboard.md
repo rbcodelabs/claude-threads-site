@@ -7,17 +7,21 @@ order: 1
 
 Open the **Agents List** from the ribbon or command palette to see all threads at a glance. Threads are grouped by Project and status. Each adaptive row uses two lines: status, title, and recency on the primary line; live activity, repository/path, and child-agent count on the secondary line. Lower-priority metadata truncates before the row can overflow a narrow sidebar.
 
+The selected thread has an accent-tinted background and a trailing accent bar, making it visible in both light and dark themes without obscuring its status indicator.
+
 ## Dispatch box
 
 A floating dispatch box sits at the bottom of the Agents List. Type a task and press Enter to spin up a new thread and start it working immediately — this is the fastest way to launch a task without first opening Chat. The dispatch box also accepts the `/model`, `/goal`, `/loop`, and `/design` prefixes described in [Dispatching with commands](/docs/core-workflow/models-goals-loops/#dispatching-with-commands), and supports attaching images or files via the paperclip button or drag-and-drop.
 
-Use the accessible **Project** selector to choose the new thread's Project and initial working directory. **Unassigned** uses the global default cwd. Your Project choice remains selected while you add or change harness, model, goal, loop, attachment, or image options. See [Projects](/docs/integrations/git-and-vault/#projects) for cwd resolution and the distinction between context focus and access control.
+Use the themed **Project** menu to choose the new thread's Project and initial working directory. The pill shows your current choice, and a checkmark marks it in the menu. **No Project** uses the global default cwd. Your Project choice remains selected while you add or change harness, model, goal, loop, attachment, or image options. See [Projects](/docs/integrations/git-and-vault/#projects) for cwd resolution and the distinction between context focus and access control.
 
 Use `/design <brief>` here to create a new native design-artifact thread, open it in Chat, and launch Geode's ArtifactView preview. Bare `/design` shows a usage notice and creates no thread. Design dispatch does not accept image or text attachments; if any are present, Threads keeps the draft and asks you to remove them. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode) for the artifact workflow and in-Chat revision behavior.
 
+Right-clicking a Markdown note — in the file explorer or inside the open note — and choosing **Chat about this document** also lands here: the dispatch box is seeded with an `@[[note]]` mention and focused, so the thread you dispatch starts with that note's full content as context. See [Chat about this document](/docs/core-workflow/messaging-and-commands/#chat-about-this-document).
+
 The kickoff button displays the harness that will own the new thread: **Claude** or **Codex**. Press Enter or click the button to dispatch with the harness shown. To change it without dispatching, right-click or press and hold the button; from the keyboard, focus it and use `Shift+F10`, the Context Menu key, or `Alt+Down`. Choosing Claude or Codex updates the button, and that choice stays local to the mounted list while you launch more threads.
 
-**Settings → Agent → Agent harness** provides the initial default only. An Agents List choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Kanban dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
+**Settings → Agent → Agent harness** provides the initial default only. An Agents List choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Agent Board dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
 
 You can resolve pending permission requests directly from Agents List rows without switching threads — see [Permissions](/docs/permissions/permission-modes-and-plan-mode/) for what those requests look like.
 
@@ -35,7 +39,7 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ## Native agent teams
 
-When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
+When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. The count is green only while at least one child is starting, working, or waiting; once every run is terminal or unavailable, it uses the same faint secondary treatment as recency. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
 
 ## Completed-response previews (idle threads)
 
@@ -47,11 +51,11 @@ After each completed response, the summarizer can run in a lightweight backgroun
 
 An hourly (or more frequent) [scheduled task](/docs/automation/scheduled-tasks/) can produce dozens of quiet threads a day, burying the manually-created ones you actually need to triage. When a run created by the scheduler is unreviewed, reviewed, or empty — never one that's working, waiting, awaiting a permission/question/plan, or failed — it is collapsed with runs from the same job inside that Project’s **New**, **Reviewed**, or **Ready** group. Each job rollup shows its name, run count, and latest run time. Click it to expand the individual runs.
 
-Enabled by default — disable via **Settings → Features → Kanban board → Stack scheduled job threads**, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
+Enabled by default — disable via **Settings → Features → Agent Board → Stack scheduled job threads**, see [Settings Reference → Features](/docs/reference/settings/#kanban-board).
 
 ## Archive from the list (right-click)
 
-Right-click any thread row for a single menu item — **Archive thread** — so you no longer have to open a thread just to close it. Archiving writes the thread to its vault note and removes it from the live list, exactly like the `×` on a thread tab; a run with no messages is dropped without leaving an empty note behind. [Kanban](/docs/views/kanban-board/#archive-from-a-card-right-click) cards carry the same menu.
+Right-click any thread row for a single menu item — **Archive thread** — so you no longer have to open a thread just to close it. Archiving writes the thread to its vault note and removes it from the live list, exactly like the `×` on a thread tab; a run with no messages is dropped without leaving an empty note behind. [Agent Board](/docs/views/kanban-board/#archive-from-a-card-right-click) cards carry the same menu.
 
 Right-clicking a **Scheduled Jobs** rollup row archives that whole rollup at once — **Archive these N runs**. Because one job's runs can be split across status groups (New, Reviewed, Ready) and across Projects, a single job can render as several rollups, so a second item — **Archive all M runs of this job** — appears only when the job has runs the rollup you clicked isn't showing. That turns "clear 14 runs of last night's cron job" into one action instead of fourteen.
 
@@ -75,7 +79,7 @@ Click any thread row to open it in Chat, where you can read the conversation and
 
 ## Background tasks stay "Working"
 
-A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the Agents List (and the [Kanban board](/docs/views/kanban-board/)) keeps it under **Working** until the background task or workflow reports back, so you don't have to stumble onto a stray notification to realize something is still running.
+A thread that spawns a background subagent (`Agent(..., run_in_background: true)`) or runs the `Workflow` tool can have its own turn finish — and its activity line stop updating — before that spawned work actually completes server-side. Rather than misclassifying the thread as New/Reviewed/Ready the moment the outer turn ends, the Agents List (and the [Agent Board](/docs/views/kanban-board/)) keeps it under **Working** until the background task or workflow reports back, so you don't have to stumble onto a stray notification to realize something is still running.
 
 What happens when it reports back depends on whether the thread is still active:
 

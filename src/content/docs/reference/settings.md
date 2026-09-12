@@ -11,18 +11,20 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 
 | Setting | Description |
 |---|---|
-| Conversation placement | `Classic sidebar` (default), or the opt-in `Conversation first` prototype. On desktop, Conversation first keeps one Chat view in the main area and reuses an adjacent native companion for contextual content without detaching unrelated leaves. Mobile is unchanged. |
+| Conversation placement | `Conversation first` (default on new installs), or `Classic sidebar` for the original layout. On desktop, Conversation first keeps one Chat view in the main area and reuses an adjacent native companion for contextual content without detaching unrelated leaves; the Agents List and Skills Manager open in the right sidebar to match. Existing installs keep whichever placement they were already using. Mobile is unchanged. |
 | Layout density | `Compact`, `Comfortable` (default), or `Spacious` — controls message spacing and padding in the conversation view |
 | Context footer command | Shell command that produces the [status-line pills](/docs/reference/status-line/) (JSON tags or plaintext). Runs per-thread, in the background, against that thread's working directory. Desktop only. |
 | Keep computer awake | Prevent the Mac from sleeping while Claude is responding; shows a ☕ indicator in the status bar |
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
 | Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
+With **Conversation first**, Geode hosts that support durable companions reuse the same companion split after reloads, workspace restoration, and placement changes. Closing only its destination tab preserves sibling tabs and allows the next contextual item to open in that split. Older Geode versions and Obsidian keep their existing reload behavior. See [Conversation-first workspace](/docs/getting-started/introduction/#conversation-first-workspace) for closure and one-time cleanup details.
+
 ## Agent
 
 | Setting | Description |
 |---|---|
-| Agent harness | Initial Claude or Codex default for new [Agents List and Kanban kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
+| Agent harness | Initial Claude or Codex default for new [Agents List and Agent Board kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
 | Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
@@ -103,12 +105,14 @@ Edit existing [Projects](/docs/integrations/git-and-vault/#projects) inline — 
 
 See [Push-to-talk voice input](/docs/integrations/remote-and-voice/#push-to-talk-voice-input) for the recording behavior these settings control.
 
-### Kanban board
+<a id="kanban-board"></a>
+
+### Agent Board
 
 | Setting | Description |
 |---|---|
-| Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Kanban board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
-| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Kanban board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and within each Project's New, Reviewed, or Ready groups in the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs) |
+| Auto-collapse side panel | `None` (default), `Left sidebar`, `Right sidebar`, or `Both sidebars` — collapses the chosen sidebar(s) when the [Agent Board](/docs/views/kanban-board/#auto-collapse-side-panels) opens, restoring them when it closes |
+| Stack scheduled job threads | On by default — collapses repeat runs of the same scheduled/cron job into an expandable rollup in the [Agent Board](/docs/views/kanban-board/#stacked-scheduled-job-threads)'s quiet columns and within each Project's New, Reviewed, or Ready groups in the [Agents List](/docs/views/agent-dashboard/#scheduled-jobs) |
 
 ### Portfolio Orchestrator
 
@@ -120,10 +124,11 @@ The Scheduled tab is a dashboard for managing and inspecting [scheduled work](/d
 
 | Section or control | Description |
 |---|---|
-| Next up | Enabled jobs sorted by their persisted `nextRun`, with the exact local time and a relative countdown. Past-due work is marked as overdue and catching up. |
+| Schedule rows | Each non-system schedule appears once in its group. Rows are collapsed by default and summarize status, cadence, next occurrence, Project, and actual execution behavior. |
+| Ordering | Enabled schedules are sorted by next occurrence. Paused schedules appear last. Past-due work is marked as overdue and catching up. |
 | Next run / Next check | Ordinary jobs show **Next run**. Gated jobs show **Next check**, since a gate may skip that occurrence. |
 | Scheduled work groups | Recurring standalone jobs are separated from thread-specific loops and one-shot wakeups. The internal orchestrator heartbeat is omitted from the primary list. |
-| Job details | Shows active hours, project, working directory, gate, and recent outcomes/history, including runs, skipped checks, and errors. |
+| Expanded details | Shows the prompt, working directory, active hours and gate when applicable, execution details, and recent outcomes/history, including runs, skipped checks, and errors. The native disclosure is keyboard accessible. |
 | Pause / Resume | Disables or enables future occurrences without deleting the job. |
 | Open last run | Opens the most recent thread created by the job, when one is available. |
 | Delete | Permanently removes the scheduled item. |
@@ -148,7 +153,13 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into newly initialized sessions on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. An interactive desktop agent can also propose a create-only registration with `mcp_register_server`, subject to a separate host confirmation. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including agent registration, the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
+
+The MCP tab also has a **Google Workspace** section with opt-in **Google Docs**,
+**Google Drive**, **Google Sheets**, and **Google Slides** toggles. It uses the
+Google Docs Sync account connected in the same vault and exposes Google's hosted
+tools to new threads on either harness. See [Google Workspace setup](/docs/integrations/mcp-servers/#google-workspace)
+for connection, OAuth scopes, and preview-enrollment prerequisites.
 
 ## Mobile settings
 

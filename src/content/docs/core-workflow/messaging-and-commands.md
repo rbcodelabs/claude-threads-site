@@ -12,7 +12,7 @@ order: 1
 - **`/`** — opens slash command autocomplete
 - **Escape** — cancel the running session; the sent message is restored to the input box so you can edit and re-send
 
-**Collapsible input panels.** All three message-input panels (Chat, Agents List sidebar, and Kanban dispatch) collapse to a minimal bar at rest — just the textarea and send button. Hover over the panel or click into the textarea to expand secondary controls (attach, mic, model picker, more menu, working-directory chip) with a smooth animation. The panel border softens when collapsed so it reads as a quiet background element rather than competing for attention.
+**Collapsible input panels.** All three message-input panels (Chat, Agents List sidebar, and Agent Board dispatch) collapse to a minimal bar at rest — just the textarea and send button. Hover over the panel or click into the textarea to expand secondary controls (attach, mic, model picker, more menu, working-directory chip) with a smooth animation. The panel border softens when collapsed so it reads as a quiet background element rather than competing for attention.
 
 On wide conversation panes, the complete timeline and composer are centered together in a readable-width column. Narrow panes remain full width so the available space is not reduced further.
 
@@ -82,18 +82,24 @@ Type `/` in the input box to see built-in context commands and your installed Cl
 | `/usage` | Show cross-provider token totals, quota windows and resets, and account activity where available |
 | `/create-pr` | Ask Claude to push the branch and open a PR (`gh pr create`) — same action as the [git diff bar](/docs/integrations/git-and-vault/#git-diff-bar)'s Create PR button |
 | `/create-pr --draft` | Same, but opens a draft PR — same as the git diff bar's Create draft PR button |
-| `/design <brief>` | Start a new design thread from Agents List/Kanban, or create or revise a secure static UI artifact in Chat, and open it in Geode's ArtifactView |
+| `/design <brief>` | Start a new design thread from Agents List/Agent Board, or create or revise a secure static UI artifact in Chat, and open it in Geode's ArtifactView |
 | `/escalate <prompt>` | Route just this turn to the [escalation model](/docs/core-workflow/models-goals-loops/#model-escalation) (default keyword `/escalate`; keyword and target model are configurable in Settings, and the row only appears here when escalation is enabled) |
 
 ### Design artifacts in Geode
 
-Use `/design <brief>` from the Agents List or Kanban dispatch box to create a new native design-artifact thread, or use it in Chat to create or revise the current thread's artifact. Threads creates a zero-install static UI artifact under `.geode/artifacts/` in your vault, and the agent edits ordinary `index.html`, `styles.css`, `app.js`, and local asset files. The persisted artifact card keeps **Open preview**, **Capture**, and **Reveal source** available after the turn and after reopening the thread.
+Use `/design <brief>` from the Agents List or Agent Board dispatch box to create a new native design-artifact thread, or use it in Chat to create or revise the current thread's artifact. Threads creates a zero-install static UI artifact under `.geode/artifacts/` in your vault, and the agent edits ordinary `index.html`, `styles.css`, `app.js`, and local asset files. The persisted artifact card keeps **Open preview**, **Capture**, and **Reveal source** available after the turn and after reopening the thread.
 
-Inside Chat, `/design` without a brief reopens the existing preview. In Agents List or Kanban, a brief is required: bare `/design` shows a usage notice, preserves the draft, and creates no thread. New-thread design dispatch does not accept image or text attachments; remove them and send again. Other dispatch commands can still use attachments normally.
+Inside Chat, `/design` without a brief reopens the existing preview. In Agents List or Agent Board, a brief is required: bare `/design` shows a usage notice, preserves the draft, and creates no thread. New-thread design dispatch does not accept image or text attachments; remove them and send again. Other dispatch commands can still use attachments normally.
+
+Agents can start this experience themselves with `EnterDesignMode({ brief })`. The tool creates or reuses the calling thread's artifact, focuses the thread, opens the preview, and shows its artifact controls. It returns the source paths and design instructions to the calling agent, which continues working in the same turn. It does not start another thread or send a second message. A nonblank brief and normal write permission are required; finish Plan mode and resolve any pending plan approval first.
+
+The result distinguishes an opened preview from a source-reveal fallback or preview failure. A saved artifact remains available for retry when its preview cannot open. On older plugin versions where the tool is unavailable, submit `/design <brief>` in the composer yourself; asking an agent to send that text through a generic thread-message tool does not activate the command.
+
+There is no persistent on/off Design setting or exit command. To move on, tell the agent that the design is approved and specify the next task. The artifact remains available as a reference. `/design off` is interpreted as a design brief, not an exit command.
 
 Geode's ArtifactView provides live reload, desktop/tablet/mobile viewport controls, runtime diagnostics, and PNG capture. The preview runs in an isolated, ephemeral, Node-less guest with network, clipboard, downloads, popups, and external navigation denied. Outside Geode, Threads reveals the source instead of launching it without that sandbox.
 
-Agents List and Kanban dispatch behavior for `/model`, `/goal`, `/loop`, `/design`, and `/escalate` is summarized on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/#dispatching-with-commands).
+Agents List and Agent Board dispatch behavior for `/model`, `/goal`, `/loop`, `/design`, and `/escalate` is summarized on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/#dispatching-with-commands).
 
 ### Context, cost, and usage
 
@@ -118,6 +124,20 @@ Type `@` anywhere in the input box to search vault files by name. A dropdown app
 Selecting a file inserts `@[[filename]]` into your message. When you send the message, the plugin resolves each mention and appends the file's full content as context for Claude — useful for asking Claude to work with a specific note, doc, or config file without copying and pasting.
 
 Type `@this` (no search needed) to instantly reference the currently active file in Obsidian. It resolves to the same `@[[filename]]` injection at send time.
+
+### Chat about this document
+
+You don't have to start from the composer. Right-click a Markdown note in the file explorer — or right-click anywhere inside an open note — and choose **Chat about this document**. The command palette carries the same entry, `chat-about-active-document`, which only appears when the active file is a Markdown note.
+
+All three entry points do the same thing: open the [Agents List](/docs/views/agent-dashboard/) and seed its dispatch box with `@[[note name]]`, focusing the box with the caret parked *after* the mention so you can type the actual question straight away. Nothing is sent yet — the thread is created when you submit, so this always starts a **new** thread rather than appending to one you already have open. At send time the mention resolves exactly like any other `@` mention, inlining the note's full content as context.
+
+Three behaviors worth knowing:
+
+- **Markdown only** — the menu item does not appear on PDFs, images, canvas files, or folders. The mention resolver only reads Markdown files, so offering it elsewhere would produce a mention that silently resolves to nothing.
+- **It appends rather than clobbers** — a draft already in the dispatch box is preserved, and the mention is added to the end of it.
+- **Repeating it is harmless** — triggering it twice on the same note will not inline that file twice.
+
+Desktop only, like the plugin's other commands.
 
 ## Context compaction
 
