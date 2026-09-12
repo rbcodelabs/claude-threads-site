@@ -102,11 +102,18 @@ revocation. Neither Claude nor Codex needs any OAuth-specific code — both
 harnesses see the server as a plain authenticated HTTP endpoint behind a local,
 per-server proxy that injects the current access token on every request.
 
-Unlike the stdio/HTTP/SSE transports above, registering an `oauth` server is
+You can connect one two ways, and both run the same flow with the same
+validation:
+
+- **Settings → Claude Threads → MCP → Add MCP server → OAuth.** Enter a name
+  and the server's URL; everything else is optional.
+- **Ask an agent** to call `mcp_register_server` with `type: "oauth"`.
+
+Unlike the stdio/HTTP/SSE transports above, connecting an `oauth` server is
 **asynchronous and interactive**, not a one-shot confirm-and-save:
 
-1. An agent calls `mcp_register_server` with `type: "oauth"` and the upstream
-   server's URL.
+1. You submit the form, or an agent calls `mcp_register_server` with
+   `type: "oauth"` and the upstream server's URL.
 2. The plugin discovers the authorization server and registers a client (unless
    you supplied a known `clientId`).
 3. Your OAuth consent screen opens in the host's Web Viewer. You have up to
@@ -158,9 +165,12 @@ needs re-authorization, or not configured — and a **Disconnect** button, which
 revokes the tokens with the authorization server, clears the keychain, and stops
 the proxy.
 
-There is no manual "Add" form in this section: connecting an OAuth server
-always goes through an agent's `mcp_register_server` call, since the flow needs
-a real consent screen to drive.
+This section itself has no "Add" button — you connect a server from the
+**Add MCP server** button at the bottom of the MCP tab, choosing the **OAuth**
+type. The option appears only when adding, never when editing an existing
+server: a connected server's tokens live in the keychain, so changing its
+configuration means Disconnect followed by a fresh consent round-trip rather
+than an in-place edit.
 
 ![Settings MCP tab: OAuth MCP servers section showing two connected servers with status dots and expiry countdowns, and a Disconnect button on each row](../../../assets/screenshots/screenshot-mcp-oauth-servers.png)
 
