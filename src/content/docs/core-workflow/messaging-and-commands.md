@@ -107,7 +107,7 @@ These commands answer three different questions:
 
 - **`/context`** shows what currently occupies the active model context window, broken down into categories such as the system prompt, tools, skills, MCP tools, and conversation.
 - **`/cost`** remains the existing harness-native session command for token usage and cost.
-- **`/usage`** opens Claude Threads' cross-provider usage view. It shows thread or session token totals, last-turn tokens when the provider reports them, Claude cost explicitly labelled as estimated, and each available quota window with percentage used and reset time. With supported Codex-service authentication, it also shows cumulative account metrics and recent daily token activity.
+- **`/usage`** opens Agent Threads' cross-provider usage view. It shows thread or session token totals, last-turn tokens when the provider reports them, Claude cost explicitly labelled as estimated, and each available quota window with percentage used and reset time. With supported Codex-service authentication, it also shows cumulative account metrics and recent daily token activity.
 
 Provider capabilities are not identical. Claude account activity is not available through the SDK. Claude quota windows (5-hour and 7-day) show live utilization for subscription sessions: `/usage` pulls the current percentages proactively from the SDK's structured usage data, so you see them at any point in the window rather than only after a rate-limit event. API-key, Bedrock, and Vertex sessions have no plan limits, so those windows show a dash instead of a percentage. Codex can read current multi-window limits and Codex account daily/cumulative activity, but API-key-only or Bedrock authentication may not expose account activity. The view reports unavailable fields directly rather than estimating or manufacturing parity between providers.
 
@@ -163,7 +163,7 @@ Codex's bundled `visualize` skill answers a "show me the numbers" question by wr
 visualize{"path":"/abs/path/to/quarterly-revenue.html","title":"Quarterly revenue"}
 ```
 
-That canonical wrapped reference is not a tool call, so nothing in the harness layer sees it. Claude Threads recognises the `visualize{…}` wrapper while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text. Legacy bare `visualize{…}` references remain supported so visualizations in existing conversations continue to render.
+That canonical wrapped reference is not a tool call, so nothing in the harness layer sees it. Agent Threads recognises the `visualize{…}` wrapper while rendering the message and replaces it with the visualization itself — live and interactive, in the exact spot the model intended, instead of a line of raw text. Legacy bare `visualize{…}` references remain supported so visualizations in existing conversations continue to render.
 
 The file on disk is an HTML *fragment*, not a page: no doctype, no `<html>`, no `<body>`. The plugin wraps it into a complete document before showing it, and that wrapper does three things worth knowing about:
 

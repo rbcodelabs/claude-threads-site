@@ -5,7 +5,7 @@ category: automation
 order: 1
 ---
 
-Claude Threads has a built-in scheduler for tasks that should run on a recurring basis — independent of any single thread's lifecycle, and surviving Obsidian restarts.
+Agent Threads has a built-in scheduler for tasks that should run on a recurring basis — independent of any single thread's lifecycle, and surviving Obsidian restarts.
 
 ## Creating a scheduled task
 
@@ -29,7 +29,7 @@ See [Settings Reference → Scheduled](/docs/reference/settings/#scheduled) for 
 
 ## Working directories and Projects
 
-For a standalone job that opens a new thread, Claude Threads resolves the working directory at fire time in this order:
+For a standalone job that opens a new thread, Agent Threads resolves the working directory at fire time in this order:
 
 1. The scheduled item's explicit cwd
 2. The current effective cwd of its [Project](/docs/integrations/git-and-vault/#projects)
@@ -90,7 +90,7 @@ Threads created by the scheduler run with the `dontAsk` permission mode automati
 
 Each scheduled run normally remains as a thread, which is useful when it found something meaningful to report. For checks that often find nothing, include an instruction in the scheduled prompt such as: *"If there is nothing to report, call `threads_archive` with your own thread ID."* Scheduled threads are allowed to archive themselves; interactive threads are not.
 
-The self-archive call returns success with `deferred: true` rather than removing the live thread immediately. Claude Threads waits until the run has fully settled, then saves and archives it. Runs with useful findings remain available for review, while no-report runs can clean themselves up without losing their final tool result or transcript.
+The self-archive call returns success with `deferred: true` rather than removing the live thread immediately. Agent Threads waits until the run has fully settled, then saves and archives it. Runs with useful findings remain available for review, while no-report runs can clean themselves up without losing their final tool result or transcript.
 
 ### Clear accumulated runs by hand
 

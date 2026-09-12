@@ -5,13 +5,13 @@ category: views
 order: 2
 ---
 
-When Claude or Codex starts child agents, Claude Threads keeps them attached to the conversation that launched them, without turning every child into a separate thread and without letting agent status take over the screen. Your conversation stays the conversation.
+When Claude or Codex starts child agents, Agent Threads keeps them attached to the conversation that launched them, without turning every child into a separate thread and without letting agent status take over the screen. Your conversation stays the conversation.
 
 ## Explicit and proactive agents
 
 Both harnesses can start native child agents when a task or instruction explicitly calls for delegation. Codex can also decide proactively to divide suitable work when **Settings → Agent → Codex reasoning effort** is set to `Ultra`. Ultra increases the reasoning available for cleanly separable work, but it can also increase latency and compute use and does not guarantee that every task will fan out.
 
-Explicit and proactive agents use the same workspace described below. Claude Threads displays the native identities, hierarchy, activity, and lifecycle events reported by the active harness; it does not simulate a separate agent system.
+Explicit and proactive agents use the same workspace described below. Agent Threads displays the native identities, hierarchy, activity, and lifecycle events reported by the active harness; it does not simulate a separate agent system.
 
 ## The agent pill
 
@@ -41,7 +41,7 @@ In the [Agent Board](/docs/views/kanban-board/), a compact count on each thread 
 
 Agent history is stored with the owning thread, so completed activity and results survive an Obsidian reload. Duplicate native events do not create duplicate agents, and a child whose parent is reported later is reattached automatically.
 
-If Obsidian closes while an agent is active, Claude Threads does not guess that it finished. On reload, the run is marked **unavailable** until its harness reports live activity again.
+If Obsidian closes while an agent is active, Agent Threads does not guess that it finished. On reload, the run is marked **unavailable** until its harness reports live activity again.
 
 Background shell jobs and local workflow phases remain ordinary tasks rather than appearing as conversational agents.
 
@@ -49,4 +49,4 @@ Background shell jobs and local workflow phases remain ordinary tasks rather tha
 
 The workspace exposes only controls that the active harness can support through a verified host-side API. Currently, Claude and Codex provide stable child identities and lifecycle/activity events, but neither exposes a verified host-callable path for messaging one child or interrupting only that child.
 
-For that reason, direct child-agent messaging and single-agent interruption remain unavailable, whether an agent was started explicitly or proactively. Claude Threads explains the limitation in the agent activity view and never silently redirects an attempted child action to the parent thread.
+For that reason, direct child-agent messaging and single-agent interruption remain unavailable, whether an agent was started explicitly or proactively. Agent Threads explains the limitation in the agent activity view and never silently redirects an attempted child action to the parent thread.

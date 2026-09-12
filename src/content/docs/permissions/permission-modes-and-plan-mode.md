@@ -30,7 +30,7 @@ The default behavior can be changed globally in **Settings → Tools → Permiss
 
 Set **Permission Mode → `plan`** globally in Settings, or use the **shield button** in the thread footer to set it for a single thread. Claude and Codex can then investigate without mutating files or external state until they produce a plan for your approval. Read-only commands and other non-mutating research are still available.
 
-Codex can also call its no-argument `EnterPlanMode` control when a task needs investigation before implementation. The current turn hands off at a safe boundary, then Claude Threads starts one fresh native Codex Plan collaboration turn under a read-only sandbox. Claude provides the equivalent transition through its native plan-mode capability.
+Codex can also call its no-argument `EnterPlanMode` control when a task needs investigation before implementation. The current turn hands off at a safe boundary, then Agent Threads starts one fresh native Codex Plan collaboration turn under a read-only sandbox. Claude provides the equivalent transition through its native plan-mode capability.
 
 **The flow:**
 
@@ -46,7 +46,7 @@ Plan Mode is useful for risky or large-scale tasks where you want to review the 
 
 ## Agent questions
 
-When Claude or Codex needs your input before it can continue, Claude Threads shows a persisted question card inline in the conversation. This is the same flow for Claude's `AskUserQuestion` and Codex app-server `item/tool/requestUserInput` requests: the card remains available until you answer it, including after switching threads or reloading the workspace.
+When Claude or Codex needs your input before it can continue, Agent Threads shows a persisted question card inline in the conversation. This is the same flow for Claude's `AskUserQuestion` and Codex app-server `item/tool/requestUserInput` requests: the card remains available until you answer it, including after switching threads or reloading the workspace.
 
 Claude questions can offer single-select or multi-select choices plus an **Other** response. Codex questions preserve their stable IDs and can offer a single-select choice list, **Other** or free-text input, and masked secret input. Codex questions are always single-select; the plugin does not infer multi-select behavior that Codex did not request.
 
@@ -56,7 +56,7 @@ Agent questions are separate from permission cards, which authorize tool actions
 
 ## MCP Elicitation
 
-Some MCP servers need a credential or a form filled before they can proceed — for example, an OAuth flow or a confirmation dialog. When this happens, Claude Threads renders an elicitation card inline in the conversation rather than silently failing.
+Some MCP servers need a credential or a form filled before they can proceed — for example, an OAuth flow or a confirmation dialog. When this happens, Agent Threads renders an elicitation card inline in the conversation rather than silently failing.
 
 - **URL auth card** — displays a clickable link for the OAuth URL. Click it to open the auth page in Obsidian's Web Viewer (or your system browser), complete the flow, then return to the thread. Claude resumes automatically once the server receives the credential.
 - **Form card** — renders input fields derived from the server's JSON schema (text fields, selects, checkboxes). Fill in the form and submit; the response is forwarded to the MCP server and the session continues.

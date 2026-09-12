@@ -76,7 +76,7 @@ A list of tools granted automatically without prompting. Tools land here when yo
 | Save threads to vault | Auto-save conversations as Obsidian notes after each response |
 | Save raw JSONL logs | Append each thread's raw event stream (tool calls, results, usage) to `<vault folder>/logs/<thread id>.jsonl`, linked from the note's `raw_log` frontmatter. Lets agents retrieve and analyze the full transcript. |
 | Auto-archive idle threads after (days) | Automatically archive a waiting thread once it has been idle (no activity) for this many days. Archiving writes the thread to its markdown note, with any images embedded, and removes it from the live thread list, so finished threads stop accumulating and `data.json` does not grow without bound. Only waiting threads qualify; active threads, the orchestrator thread, and threads awaiting a plan or question are never touched. Default: `14`. Set to `0` to disable auto-archiving entirely. |
-| Vault folder | Where thread notes are saved, relative to the vault root (default: `Claude`) |
+| Vault folder | Where thread notes are saved, relative to the vault root (default: `Agent Threads`) |
 
 ### Projects
 
@@ -169,5 +169,5 @@ Obsidian Mobile shows a reduced settings screen instead of the eight tabs above:
 |---|---|
 | Pairing code | Paste the code shown on desktop to connect manually, as an alternative to scanning the QR code |
 | Paired room | Shows the masked room ID once paired, with a **Disconnect** button |
-| Reload plugin | Reload Claude Threads; if threads are currently running you're warned before the plugin restarts — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
+| Reload plugin | Reload Agent Threads; if threads are currently running you're warned before the plugin restarts — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
 | Relay URL | WebSocket relay server. Change only if self-hosting. |

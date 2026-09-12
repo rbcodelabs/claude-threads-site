@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 :root {
-  /* Claude Threads — dark-mode-first brand palette */
+  /* Agent Threads — dark-mode-first brand palette */
   --color-bg: 11 11 16;              /* #0B0B10 */
   --color-surface: 23 23 31;         /* #17171F */
   --color-surface-alt: 28 27 36;     /* #1C1B24 */

@@ -7,7 +7,7 @@ order: 1
 
 ## Safe plugin reload
 
-Use **Claude Threads: Reload plugin (safe)** from the command palette instead of Obsidian's built-in "Reload plugin" button.
+Use **Agent Threads: Reload plugin (safe)** from the command palette instead of Obsidian's built-in "Reload plugin" button.
 
 - **No threads running** — the plugin reloads immediately.
 - **Threads active** — a modal appears showing their names with three choices:

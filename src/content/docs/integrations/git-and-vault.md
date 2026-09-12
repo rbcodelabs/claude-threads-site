@@ -48,7 +48,7 @@ Both tools return a clear error if the Vault Bridges plugin is not installed or 
 
 ### Bridge-aware edits
 
-When an agent edits files inside a bridged repo (rather than the synced vault copy), Claude Threads detects it automatically at the end of the turn:
+When an agent edits files inside a bridged repo (rather than the synced vault copy), Agent Threads detects it automatically at the end of the turn:
 
 - **Auto-pull** — each affected bridge is synced once per turn, so the vault copies update immediately (a notice confirms success or failure).
 - **Vault-relative links** — edited-file chips, the focus button, and absolute repo paths in Claude's messages all resolve to the synced vault note: chips show the vault path and open the note in Obsidian, and message paths become clickable internal links (only when the vault copy exists).

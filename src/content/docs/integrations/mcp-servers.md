@@ -5,7 +5,7 @@ category: integrations
 order: 3
 ---
 
-Every Claude Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
+Every Agent Threads session ships with a built-in, host-neutral `claude_threads` MCP server (vault access, thread control, worktrees, and more) that needs no configuration. Codex receives the same canonical tool definitions through its dynamic-tool protocol. The former `obsidian` server and `obsidian_*` tool names remain callable as deprecated compatibility aliases until the next major release, but new prompts, permissions, and automation should use `claude_threads` and the canonical names in the [Agent Tools Reference](/docs/reference/agent-tools/).
 
 Beyond that built-in surface, you can wire in **external MCP servers** — Compass, Helio, a company-internal tools server, or anything else that speaks the [Model Context Protocol](https://modelcontextprotocol.io) — and newly initialized sessions pick them up automatically, on both the Claude and Codex harnesses.
 
@@ -15,13 +15,13 @@ Those external servers are stored in **this plugin's own `data.json`**, not in a
 
 ## Opening the tab
 
-Open **Settings → Claude Threads** and select the **MCP** tab. On mobile, the settings screen is reduced to pairing and reload controls — MCP servers are managed from desktop only.
+Open **Settings → Agent Threads** and select the **MCP** tab. On mobile, the settings screen is reduced to pairing and reload controls — MCP servers are managed from desktop only.
 
 ## This is per-vault plugin data, not a Claude Code config file
 
 **The MCP tab edits this plugin's own `data.json`** for the current vault — not `~/.claude/settings.json`, and not any other Claude Code config. That means:
 
-- Servers you add here are **scoped to this vault**; they don't show up in other vaults running Claude Threads, and they aren't shared with the `claude` CLI run outside the plugin.
+- Servers you add here are **scoped to this vault**; they don't show up in other vaults running Agent Threads, and they aren't shared with the `claude` CLI run outside the plugin.
 - The `claude` CLI's own `~/.claude/settings.json` is never read or written by this tab — a server added there doesn't appear here, and vice versa.
 - Each configured server is injected into a session's tool set **at runtime**, when a session is initialized, on whichever harness (Claude or Codex) that thread uses.
 
@@ -29,7 +29,7 @@ Changes take effect for **newly initialized sessions**. A registration does not 
 
 ## Google Workspace
 
-Available in **Claude Threads v0.35.0** as an opt-in beta, with **Google Docs Sync
+Available in **Agent Threads v0.35.0** as an opt-in beta, with **Google Docs Sync
 v0.7.1 or later**. Live four-service validation across both harnesses remains
 pending; test with non-sensitive content before using it for important work.
 
@@ -53,7 +53,7 @@ not need to enter server URLs, copy access tokens, or maintain Google tool schem
    **Auth proxy URL** setting. Disconnect the old account before changing hosts,
    then reconnect. Use current versions of the plugin and auth service with
    Geode-aware callbacks and the scopes below.
-3. Enable the desired services under **Settings → Claude Threads → MCP →
+3. Enable the desired services under **Settings → Agent Threads → MCP →
    Google Workspace**, then start a new thread.
 
 Google credentials are refreshed through the existing connection as requests are
@@ -94,7 +94,7 @@ is authorized; test a read against a non-sensitive file in each selected service
 
 ## OAuth-gated servers
 
-Available in **Claude Threads v0.36.0** or later. A remote MCP server that requires
+Available in **Agent Threads v0.36.0** or later. A remote MCP server that requires
 its own OAuth 2.1 + PKCE sign-in — Vercel's, for example — registers with
 `type: "oauth"` instead of `"http"`. The plugin brokers the entire flow itself:
 discovery, Dynamic Client Registration, consent, token custody, refresh, and
@@ -105,7 +105,7 @@ per-server proxy that injects the current access token on every request.
 You can connect one two ways, and both run the same flow with the same
 validation:
 
-- **Settings → Claude Threads → MCP → Add MCP server → OAuth.** Enter a name
+- **Settings → Agent Threads → MCP → Add MCP server → OAuth.** Enter a name
   and the server's URL; everything else is optional.
 - **Ask an agent** to call `mcp_register_server` with `type: "oauth"`.
 
@@ -159,7 +159,7 @@ unreachable endpoint would.
 
 ### Managing a connected OAuth server
 
-**Settings → Claude Threads → MCP → OAuth MCP servers** lists every connected
+**Settings → Agent Threads → MCP → OAuth MCP servers** lists every connected
 server with a live status — connected with an expiry countdown, expiring soon,
 needs re-authorization, or not configured — and a **Disconnect** button, which
 revokes the tokens with the authorization server, clears the keychain, and stops

@@ -10,9 +10,9 @@ const categories = CATEGORY_ORDER.map((category) => {
   return { category, label: CATEGORY_LABELS[category] ?? category, items, first: items[0] };
 }).filter((c) => c.items.length > 0);
 
-const title = 'Documentation — Claude Threads for Obsidian';
+const title = 'Documentation — Agent Threads for Obsidian';
 const description =
-  'Full user documentation for Claude Threads: getting started, core workflow, views, automation, permissions, integrations, and reference pages for settings, commands, and agent tools.';
+  'Full user documentation for Agent Threads: getting started, core workflow, views, automation, permissions, integrations, and reference pages for settings, commands, and agent tools.';
 ---
 
 <Layout title={title} description={description}>
@@ -20,7 +20,7 @@ const description =
     <div class="mx-auto max-w-2xl text-center">
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Documentation</h1>
       <p class="mt-4 text-[rgb(var(--color-text-muted))]">
-        Everything you need to run Claude Code inside Obsidian — from your first thread to the full agent tools
+        Everything you need to run Claude Code or OpenAI Codex inside Obsidian — from your first thread to the full agent tools
         reference.
       </p>
     </div>
