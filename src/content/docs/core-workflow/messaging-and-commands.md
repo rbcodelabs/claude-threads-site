@@ -125,6 +125,20 @@ Selecting a file inserts `@[[filename]]` into your message. When you send the me
 
 Type `@this` (no search needed) to instantly reference the currently active file in Obsidian. It resolves to the same `@[[filename]]` injection at send time.
 
+### Chat about this document
+
+You don't have to start from the composer. Right-click a Markdown note in the file explorer — or right-click anywhere inside an open note — and choose **Chat about this document**. The command palette carries the same entry, `chat-about-active-document`, which only appears when the active file is a Markdown note.
+
+All three entry points do the same thing: open the [Agents List](/docs/views/agent-dashboard/) and seed its dispatch box with `@[[note name]]`, focusing the box with the caret parked *after* the mention so you can type the actual question straight away. Nothing is sent yet — the thread is created when you submit, so this always starts a **new** thread rather than appending to one you already have open. At send time the mention resolves exactly like any other `@` mention, inlining the note's full content as context.
+
+Three behaviors worth knowing:
+
+- **Markdown only** — the menu item does not appear on PDFs, images, canvas files, or folders. The mention resolver only reads Markdown files, so offering it elsewhere would produce a mention that silently resolves to nothing.
+- **It appends rather than clobbers** — a draft already in the dispatch box is preserved, and the mention is added to the end of it.
+- **Repeating it is harmless** — triggering it twice on the same note will not inline that file twice.
+
+Desktop only, like the plugin's other commands.
+
 ## Context compaction
 
 When the context window fills up, Claude compacts the conversation automatically. You can also trigger it manually with `/compact`. Either way, a divider appears in the conversation showing when compaction happened and how many tokens were in context beforehand. Compaction markers are persisted and survive plugin reloads.

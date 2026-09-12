@@ -1,6 +1,6 @@
 ---
 title: Commands Reference
-description: All 23 command palette entries, the 3 ribbon icons, and keyboard shortcuts.
+description: All 24 command palette entries, the 3 ribbon icons, and keyboard shortcuts.
 category: reference
 order: 2
 ---
@@ -28,6 +28,7 @@ Every command below is reachable via `Cmd+P` and searchable by name.
 | `open-kanban-board` | Open Kanban Board | Opens the [Kanban board](/docs/views/kanban-board/) |
 | `open-skills-manager` | Open Skills Manager | Opens the [Skills Manager](/docs/automation/skills-manager/) |
 | `new-claude-thread` | New Claude Thread | Opens the Agents List and focuses its dispatch input, ready to type a new task |
+| `chat-about-active-document` | Chat about this document | Opens the Agents List and seeds its dispatch input with an `@[[note]]` mention of the active Markdown note, ready for your question — see [Chat about this document](/docs/core-workflow/messaging-and-commands/#chat-about-this-document). Only listed when the active file is a Markdown note; the same action is on the file-explorer and editor right-click menus |
 | `next-claude-thread` | Next Claude Thread | Switches to the next tab in Chat |
 | `prev-claude-thread` | Previous Claude Thread | Switches to the previous tab in Chat |
 | `claude-thread-1` … `claude-thread-9` | Switch to Claude Thread 1–9 | Jumps directly to the Nth tab (9 separate commands, one per index) |
@@ -39,7 +40,7 @@ Every command below is reachable via `Cmd+P` and searchable by name.
 | `reload-plugin-safely` | Reload plugin (safe) | Reloads the plugin; if threads are running, prompts with Cancel / Interrupt & Reload / Force Reload — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
 | `generate-diagnostics-report` | Generate diagnostics report | Assembles a redacted, **local-only** diagnostics bundle (performance counters, renderer CPU/memory samples, longtask summary, recent log tail), copies the Markdown to your clipboard, and saves `.md` + `.json` files into a `claude-threads-diagnostics/` folder in the vault root. No message/file contents, absolute home paths, or env values are included. Desktop only — on mobile it shows a "desktop only" notice. Requires the [Diagnostics setting](/docs/reference/settings/) to be enabled for the counters/samples to be populated. |
 
-That's 4 view-opening commands + 1 dispatch shortcut + 2 tab-navigation commands + 9 thread-index commands + 7 thread-management/diagnostics commands = 23 total.
+That's 4 view-opening commands + 2 dispatch shortcuts + 2 tab-navigation commands + 9 thread-index commands + 7 thread-management/diagnostics commands = 24 total.
 
 ## Keyboard shortcuts
 
