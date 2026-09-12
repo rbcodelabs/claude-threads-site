@@ -13,7 +13,7 @@ Claude Threads is built around three panels that work together:
 
 | Panel | Location | What it does |
 |---|---|---|
-| **Chat** | Sidebar by default; main area in Conversation first | Full conversation history, with a rich switcher for moving between threads |
+| **Chat** | Main area by default (Conversation first); sidebar in Classic | Full conversation history, with a rich switcher for moving between threads |
 | **Agents List** | Sidebar (usually right) | Dispatch new tasks and scan running agents in a responsive two-line list |
 | **Kanban Board** | Its own tab | A board view of every thread bucketed by status — the more visual alternative to the Agents List |
 
@@ -21,9 +21,9 @@ You don't have to use all three at once. Many people run Chat and the Agents Lis
 
 ### Conversation-first workspace
 
-On desktop, **Settings → General → Conversation placement** offers an opt-in **Conversation first** prototype. It keeps exactly one Chat view in the main area and opens wikilinks, edited or bridged files, web pages, artifacts, and agent-triggered navigation in one reusable native companion beside it. In the main area, Chat uses the host's native document title and header actions; **Classic sidebar** keeps the compact custom thread controls. Dragging Chat between the main area and a sidebar adapts the header automatically. Closing the companion returns that space to the conversation, and focusing edited files does not detach unrelated leaves.
+On desktop, **Conversation first** is the default placement: it keeps exactly one Chat view in the main area and opens wikilinks, edited or bridged files, web pages, artifacts, and agent-triggered navigation in one reusable native companion beside it. In the main area, Chat uses the host's native document title and header actions. Dragging Chat between the main area and a sidebar adapts the header automatically. Closing the companion returns that space to the conversation, and focusing edited files does not detach unrelated leaves.
 
-**Classic sidebar** remains the default. Conversation-first placement is desktop only; mobile behavior is unchanged.
+Prefer the original layout? Switch to **Classic sidebar** any time under **Settings → General → Conversation placement** — it keeps the compact custom thread controls in the sidebar instead. Installs that were already running before this default changed keep whichever placement they were already using. Conversation-first placement is desktop only; mobile behavior is unchanged.
 
 ## Prerequisites
 

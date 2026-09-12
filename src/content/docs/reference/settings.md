@@ -11,7 +11,7 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 
 | Setting | Description |
 |---|---|
-| Conversation placement | `Classic sidebar` (default), or the opt-in `Conversation first` prototype. On desktop, Conversation first keeps one Chat view in the main area and reuses an adjacent native companion for contextual content without detaching unrelated leaves. Mobile is unchanged. |
+| Conversation placement | `Conversation first` (default on new installs), or `Classic sidebar` for the original layout. On desktop, Conversation first keeps one Chat view in the main area and reuses an adjacent native companion for contextual content without detaching unrelated leaves; the Agents List and Skills Manager open in the right sidebar to match. Existing installs keep whichever placement they were already using. Mobile is unchanged. |
 | Layout density | `Compact`, `Comfortable` (default), or `Spacious` — controls message spacing and padding in the conversation view |
 | Context footer command | Shell command that produces the [status-line pills](/docs/reference/status-line/) (JSON tags or plaintext). Runs per-thread, in the background, against that thread's working directory. Desktop only. |
 | Keep computer awake | Prevent the Mac from sleeping while Claude is responding; shows a ☕ indicator in the status bar |

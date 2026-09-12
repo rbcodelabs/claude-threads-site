@@ -5,7 +5,7 @@ category: automation
 order: 2
 ---
 
-Open the **Skills Manager** panel from the ribbon (puzzle icon) or command palette to browse, install, and edit Claude Code skills. The list and detail panels are split by a **draggable divider** — drag it to resize, double-click to reset to the default width; your chosen width is remembered next time you open the panel.
+Open the **Skills Manager** panel from the ribbon (puzzle icon) or command palette to browse, install, and edit Claude Code skills. It opens in the right sidebar under Conversation first placement (creating the sidebar if it isn't open yet), or a main document tab under Classic placement — matching where the [Agents List](/docs/views/agent-dashboard/) opens. The list and detail panels are split by a **draggable divider** — drag it to resize, double-click to reset to the default width; your chosen width is remembered next time you open the panel.
 
 ![Skills Manager: source tree on the left with skill/agent detail and editor on the right](../../../assets/screenshots/screenshot-skills-manager.png)
 
