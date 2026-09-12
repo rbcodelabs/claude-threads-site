@@ -18,6 +18,8 @@ Settings are organized into nine tabs. On desktop, all nine are shown; on mobile
 | Debug logging | Verbose console logs for stream events, session lifecycle, and relay connections. Turn on only when diagnosing issues. |
 | Diagnostics | Enable the always-on, **local-only** telemetry layer (performance counters plus renderer CPU/memory samples) that powers the [Generate diagnostics report](/docs/reference/commands/) command. Nothing ever leaves your machine — no network calls. On by default; turning it off stops the sampler and freezes the counters. A **Copy diagnostics** button next to the toggle runs the report command directly. Desktop only. |
 
+With **Conversation first**, Geode hosts that support durable companions reuse the same companion split after reloads, workspace restoration, and placement changes. Closing only its destination tab preserves sibling tabs and allows the next contextual item to open in that split. Older Geode versions and Obsidian keep their existing reload behavior. See [Conversation-first workspace](/docs/getting-started/introduction/#conversation-first-workspace) for closure and one-time cleanup details.
+
 ## Agent
 
 | Setting | Description |
@@ -148,7 +150,13 @@ Register local skill collections — GitHub repos or local folders — to browse
 
 ## MCP
 
-Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into every new thread on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
+Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into newly initialized sessions on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. An interactive desktop agent can also propose a create-only registration with `mcp_register_server`, subject to a separate host confirmation. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including agent registration, the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
+
+The MCP tab also has a **Google Workspace** section with opt-in **Google Docs**,
+**Google Drive**, **Google Sheets**, and **Google Slides** toggles. It uses the
+Google Docs Sync account connected in the same vault and exposes Google's hosted
+tools to new threads on either harness. See [Google Workspace setup](/docs/integrations/mcp-servers/#google-workspace)
+for connection, OAuth scopes, and preview-enrollment prerequisites.
 
 ## Mobile settings
 

@@ -91,6 +91,12 @@ Use `/design <brief>` from the Agents List or Kanban dispatch box to create a ne
 
 Inside Chat, `/design` without a brief reopens the existing preview. In Agents List or Kanban, a brief is required: bare `/design` shows a usage notice, preserves the draft, and creates no thread. New-thread design dispatch does not accept image or text attachments; remove them and send again. Other dispatch commands can still use attachments normally.
 
+Agents can start this experience themselves with `EnterDesignMode({ brief })`. The tool creates or reuses the calling thread's artifact, focuses the thread, opens the preview, and shows its artifact controls. It returns the source paths and design instructions to the calling agent, which continues working in the same turn. It does not start another thread or send a second message. A nonblank brief and normal write permission are required; finish Plan mode and resolve any pending plan approval first.
+
+The result distinguishes an opened preview from a source-reveal fallback or preview failure. A saved artifact remains available for retry when its preview cannot open. On older plugin versions where the tool is unavailable, submit `/design <brief>` in the composer yourself; asking an agent to send that text through a generic thread-message tool does not activate the command.
+
+There is no persistent on/off Design setting or exit command. To move on, tell the agent that the design is approved and specify the next task. The artifact remains available as a reference. `/design off` is interpreted as a design brief, not an exit command.
+
 Geode's ArtifactView provides live reload, desktop/tablet/mobile viewport controls, runtime diagnostics, and PNG capture. The preview runs in an isolated, ephemeral, Node-less guest with network, clipboard, downloads, popups, and external navigation denied. Outside Geode, Threads reveals the source instead of launching it without that sandbox.
 
 Agents List and Kanban dispatch behavior for `/model`, `/goal`, `/loop`, `/design`, and `/escalate` is summarized on [Models, Goals, and Loops](/docs/core-workflow/models-goals-loops/#dispatching-with-commands).

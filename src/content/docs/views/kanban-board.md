@@ -27,7 +27,7 @@ The accessible **Project** selector chooses the new thread's Project and initial
 
 The panel accepts the same `/model`, `/goal`, `/loop`, and `/design` prefixes as the Agents List. `/design <brief>` creates a new native design-artifact thread, opens it in Chat, and launches the ArtifactView preview. Bare `/design` shows a usage notice and creates no thread. Image and text attachments are not accepted for design dispatch; Threads preserves the draft so you can remove them and try again. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode) for details.
 
-When a thread owns Claude or Codex child agents, its card also shows a compact native-agent count. Open the thread or [Agents List](/docs/views/agent-dashboard/) to inspect the nested team; see [Native Agent Workspace](/docs/views/native-agent-workspace/) for details.
+When a thread owns Claude or Codex child agents, its card also shows a compact native-agent count. Like the Agents List, it is green while any child is starting, working, or waiting, and faint once every run is terminal or unavailable. Open the thread or [Agents List](/docs/views/agent-dashboard/) to inspect the nested team; see [Native Agent Workspace](/docs/views/native-agent-workspace/) for details.
 
 ![Kanban board grouped by status — Working, Awaiting, Waiting, New, Done, Failed, and Ready columns, each holding thread cards](../../../assets/screenshots/screenshot-kanban-status.png)
 

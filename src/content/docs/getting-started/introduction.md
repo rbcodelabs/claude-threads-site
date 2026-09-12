@@ -25,6 +25,10 @@ On desktop, **Conversation first** is the default placement: it keeps exactly on
 
 Prefer the original layout? Switch to **Classic sidebar** any time under **Settings → General → Conversation placement** — it keeps the compact custom thread controls in the sidebar instead. Installs that were already running before this default changed keep whichever placement they were already using. Conversation-first placement is desktop only; mobile behavior is unchanged.
 
+On Geode hosts with durable companion support, the companion survives plugin reloads, workspace restoration, and placement changes. If you close its destination tab while other tabs remain in the split, the next contextual item opens in a replacement tab in that same split. Close the whole split to retire it.
+
+Older Geode versions and Obsidian retain the existing reload behavior. Previously created panes without ownership metadata remain untouched; duplicate panes from before this support may need one-time manual cleanup.
+
 ## Prerequisites
 
 - [Obsidian](https://obsidian.md) v1.0.0 or later (desktop only)

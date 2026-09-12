@@ -7,11 +7,13 @@ order: 1
 
 Open the **Agents List** from the ribbon or command palette to see all threads at a glance. Threads are grouped by Project and status. Each adaptive row uses two lines: status, title, and recency on the primary line; live activity, repository/path, and child-agent count on the secondary line. Lower-priority metadata truncates before the row can overflow a narrow sidebar.
 
+The selected thread has an accent-tinted background and a trailing accent bar, making it visible in both light and dark themes without obscuring its status indicator.
+
 ## Dispatch box
 
 A floating dispatch box sits at the bottom of the Agents List. Type a task and press Enter to spin up a new thread and start it working immediately — this is the fastest way to launch a task without first opening Chat. The dispatch box also accepts the `/model`, `/goal`, `/loop`, and `/design` prefixes described in [Dispatching with commands](/docs/core-workflow/models-goals-loops/#dispatching-with-commands), and supports attaching images or files via the paperclip button or drag-and-drop.
 
-Use the accessible **Project** selector to choose the new thread's Project and initial working directory. **Unassigned** uses the global default cwd. Your Project choice remains selected while you add or change harness, model, goal, loop, attachment, or image options. See [Projects](/docs/integrations/git-and-vault/#projects) for cwd resolution and the distinction between context focus and access control.
+Use the themed **Project** menu to choose the new thread's Project and initial working directory. The pill shows your current choice, and a checkmark marks it in the menu. **No Project** uses the global default cwd. Your Project choice remains selected while you add or change harness, model, goal, loop, attachment, or image options. See [Projects](/docs/integrations/git-and-vault/#projects) for cwd resolution and the distinction between context focus and access control.
 
 Use `/design <brief>` here to create a new native design-artifact thread, open it in Chat, and launch Geode's ArtifactView preview. Bare `/design` shows a usage notice and creates no thread. Design dispatch does not accept image or text attachments; if any are present, Threads keeps the draft and asks you to remove them. See [Design artifacts in Geode](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode) for the artifact workflow and in-Chat revision behavior.
 
@@ -35,7 +37,7 @@ When a thread runs the `Workflow` tool for multi-agent orchestration, this live 
 
 ## Native agent teams
 
-When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
+When a Claude or Codex thread launches native child agents, the Agents List shows a compact agent-count control beneath the owning thread. The count is green only while at least one child is starting, working, or waiting; once every run is terminal or unavailable, it uses the same faint secondary treatment as recency. Search still includes agent role, task, and current activity, and clicking the count opens the parent conversation’s team picker, where a compact composer pill and popover give you the same tree. See [Native Agent Workspace](/docs/views/native-agent-workspace/) for persistence, reload behavior, and currently supported controls.
 
 ## Completed-response previews (idle threads)
 
