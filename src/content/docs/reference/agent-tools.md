@@ -53,6 +53,8 @@ Control the current thread's session state.
 
 Discover, read, and message other running threads. These tools enable agent-to-agent delegation — one thread can assign work to another, wait for it to finish, and read the result.
 
+Project threads coordinate only within their Project, and threads with no Project coordinate with each other. One narrow exception applies to `threads_set_project`: a thread with no Project may place **itself** into any Project. Nothing else can — so without it, a thread that creates a Project could never join it. This is an escape hatch out of statelessness, not a scope hop: it does not let a thread move anyone else, and it does not let a Project thread hop to a different Project.
+
 | Tool | Parameters | Description |
 |---|---|---|
 | `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
@@ -61,7 +63,7 @@ Discover, read, and message other running threads. These tools enable agent-to-a
 | `threads_list_projects` | — | Returns configured Projects, including each `vaultFolder`, optional `cwdOverride`, and resolved `effectiveCwd`. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
 | `threads_update_project` | `projectId`, `name?`, `description?`, `cwdOverride?`, `elevatedProjectId?` | Durably updates the caller's Project name, context description, or cwd override and returns the complete updated Project snapshot, including its resolved `effectiveCwd`. |
-| `threads_set_project` | `threadId`, `projectId`, `alignCwd?` | Assigns a thread to a Project, or detaches it with `null`. Association-only by default; `alignCwd: true` switches to a non-null Project's cwd on the next safe turn. Detaching never relocates the thread. |
+| `threads_set_project` | `threadId`, `projectId`, `alignCwd?` | Assigns a thread to a Project, or detaches it with `null`. Association-only by default; `alignCwd: true` switches to a non-null Project's cwd on the next safe turn. Detaching never relocates the thread. A thread with no Project may target **itself** with any Project id; every other caller is held to normal coordination scope. |
 | `threads_get_messages` | `threadId`, `limit?` | Returns recent user and assistant messages. |
 | `threads_open` | `threadId`, `elevatedProjectId?` | Opens and focuses the exact thread UUID. A successful open marks it reviewed and persists the active selection. |
 | `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
