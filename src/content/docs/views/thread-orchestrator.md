@@ -21,7 +21,7 @@ Before proposing a reply, the orchestrator requires new evidence, a clear connec
 
 ## Identifying the orchestrator thread
 
-Portfolio and Project orchestrators carry distinct bot-badge classes and tooltips in Agents List rows, Kanban cards, and the thread switcher. Closing, archiving, reassigning, or automatically archiving a referenced orchestrator is protected; explicit archive still requires confirmation. That includes the right-click [**Archive thread**](/docs/views/agent-dashboard/#archive-from-the-list-right-click) action in the Agents List and on Kanban cards — archiving an orchestrator there asks first, and it still asks only once when the orchestrator is swept up in a bulk archive.
+Portfolio and Project orchestrators carry distinct bot-badge classes and tooltips in Agents List rows, Agent Board cards, and the thread switcher. Closing, archiving, reassigning, or automatically archiving a referenced orchestrator is protected; explicit archive still requires confirmation. That includes the right-click [**Archive thread**](/docs/views/agent-dashboard/#archive-from-the-list-right-click) action in the Agents List and on Agent Board cards — archiving an orchestrator there asks first, and it still asks only once when the orchestrator is swept up in a bulk archive.
 
 ## Disabling and re-enabling a Project Orchestrator
 
