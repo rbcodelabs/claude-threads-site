@@ -97,3 +97,9 @@ The self-archive call returns success with `deferred: true` rather than removing
 For runs that have already piled up, you don't have to open each one. On desktop, right-click the job's rollup row in the [Agents List](/docs/views/agent-dashboard/#archive-from-the-list-right-click) — or a stack card's header row on the [Agent Board](/docs/views/kanban-board/#archive-from-a-card-right-click) — and choose **Archive these N runs**. When that job also has runs sitting in other status groups or Projects, an **Archive all M runs of this job** item appears alongside it. Bulk archiving always asks for confirmation first, and cancels any pending `ScheduleWakeup` on the runs it archives.
 
 `CronList` also surfaces any pending [`ScheduleWakeup`](/docs/reference/agent-tools/#session-tools) timers as `"Wakeup: <reason>"` entries. A wakeup is implemented as the same kind of durable, disk-persisted scheduled item as a Cron task — it survives an Obsidian restart, plugin reload, or the machine sleeping, and self-deletes once it fires (rather than repeating like a recurring Cron task).
+
+## Watched documents
+
+A **Watched documents** section on this same tab lists every active [document watch](/docs/core-workflow/messaging-and-commands/#watch-a-document) — a per-thread subscription to a vault note's content changes, created either from the note's context menu or via the `watch_document` MCP tool (see [Agent Tools Reference → Session tools](/docs/reference/agent-tools/#session-tools)). Each row shows the watched path, the owning thread, and when it was last alerted, with a control to unwatch it directly from Settings without opening the file.
+
+Unlike a Cron task or a `/loop`, a watch has no schedule at all — it fires only when the note's content actually changes, and only the thread that created it is notified.
