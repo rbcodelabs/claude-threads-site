@@ -139,6 +139,14 @@ Three behaviors worth knowing:
 
 Desktop only, like the plugin's other commands.
 
+## Watch a document
+
+Right-click a note (in the file explorer or inside the editor), or run **Watch this document** from the command palette, to have the currently active thread watch that note for content changes. The label flips to **Stop watching this document** once a watch is already active for that file and thread. If no thread is open, a notice asks you to open or start one first.
+
+The watch belongs to whichever thread was active when you created it — only that thread gets alerted, and it keeps getting alerted even after you switch to a different note or thread. When the note's content changes — from you, from another thread editing it, from an external sync, from anyone — the owning thread receives an injected message referencing the file with the same `@[[filename]]` mention syntax [@ file mentions](#-file-mentions) use above, so the full current content is right there in the alert. A no-op resave (saving with no actual content change) does not trigger an alert, and if several watched files change in the same burst, the owning thread gets one batched message instead of one per file. Renaming a watched file keeps the watch attached; deleting it sends one final alert and removes the watch.
+
+Agents can do the same thing without the menu via the `watch_document`, `unwatch_document`, and `list_watched_documents` MCP tools — see the [Agent Tools Reference](/docs/reference/agent-tools/#session-tools). Manage every active watch — see who owns each one and unwatch from outside the file itself — under **Settings → Scheduled → Watched documents** (see [Scheduled Tasks](/docs/automation/scheduled-tasks/#watched-documents)).
+
 ## Context compaction
 
 When the context window fills up, Claude compacts the conversation automatically. You can also trigger it manually with `/compact`. Either way, a divider appears in the conversation showing when compaction happened and how many tokens were in context beforehand. Compaction markers are persisted and survive plugin reloads.

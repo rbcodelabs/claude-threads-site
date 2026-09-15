@@ -133,6 +133,7 @@ The Scheduled tab is a dashboard for managing and inspecting [scheduled work](/d
 | Open last run | Opens the most recent thread created by the job, when one is available. |
 | Delete | Permanently removes the scheduled item. |
 | Create with Claude | Opens a thread with a scheduling prompt so you can describe the work and cadence in natural language. |
+| Watched documents | Lists every active [document watch](/docs/core-workflow/messaging-and-commands/#watch-a-document) with its path, owning thread, and last-alerted time, plus an unwatch control — the same list whether the watch was created from a note's context menu or the `watch_document` MCP tool. |
 
 Manual create/edit forms and a **Run now** control are not available in this release. Ask Claude to create or update a schedule instead.
 
