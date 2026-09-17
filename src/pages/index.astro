@@ -1,22 +1,23 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import LandingHeader from '../components/LandingHeader.astro';
 import Hero from '../components/Hero.astro';
-import ScreenshotShowcase from '../components/ScreenshotShowcase.astro';
-import FeatureGrid from '../components/FeatureGrid.astro';
-import Prerequisites from '../components/Prerequisites.astro';
-import InstallSteps from '../components/InstallSteps.astro';
-import RoadmapCTA from '../components/RoadmapCTA.astro';
+import WorkflowSteps from '../components/WorkflowSteps.astro';
+import VaultContext from '../components/VaultContext.astro';
+import LandingCTA from '../components/LandingCTA.astro';
+import LandingFooter from '../components/LandingFooter.astro';
+import '../styles/landing.css';
 
 const title = 'Agent Threads for Geode and Obsidian — Run AI agents in your sidebar';
 const description =
   'Agent Threads embeds Claude Code and OpenAI Codex directly in your Geode or Obsidian sidebar. Run multiple sessions in parallel with streaming responses, the Agents List, a kanban board, slash commands, and inline permission dialogs.';
 ---
 
-<Layout title={title} description={description}>
+<Layout title={title} description={description} landing>
+  <LandingHeader slot="header" />
   <Hero />
-  <ScreenshotShowcase />
-  <FeatureGrid />
-  <Prerequisites />
-  <InstallSteps />
-  <RoadmapCTA />
+  <WorkflowSteps />
+  <VaultContext />
+  <LandingCTA />
+  <LandingFooter slot="footer" />
 </Layout>

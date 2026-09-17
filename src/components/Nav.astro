@@ -1,5 +1,6 @@
 ---
 const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
+const ROADMAP_URL = 'https://compass.rbcodelabs.com/portal/rbcodelabs/claude-threads/roadmap';
 const isDocsRoute = Astro.url.pathname.startsWith('/docs');
 ---
 
@@ -25,10 +26,9 @@ const isDocsRoute = Astro.url.pathname.startsWith('/docs');
           </>
         ) : (
           <>
-            <a href="#features" class="transition-colors hover:text-[rgb(var(--color-text))]">Features</a>
-            <a href="#screenshots" class="transition-colors hover:text-[rgb(var(--color-text))]">Screenshots</a>
-            <a href="#install" class="transition-colors hover:text-[rgb(var(--color-text))]">Install</a>
-            <a href="#roadmap" class="transition-colors hover:text-[rgb(var(--color-text))]">Roadmap</a>
+            <a href="/#workflow" class="transition-colors hover:text-[rgb(var(--color-text))]">How it works</a>
+            <a href="/docs/getting-started/introduction/" class="transition-colors hover:text-[rgb(var(--color-text))]">Install</a>
+            <a href={ROADMAP_URL} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[rgb(var(--color-text))]">Roadmap</a>
             <a href="/docs/" class="transition-colors hover:text-[rgb(var(--color-text))]">Docs</a>
             <a href="/changelog/" class="transition-colors hover:text-[rgb(var(--color-text))]">Changelog</a>
           </>
@@ -50,7 +50,7 @@ const isDocsRoute = Astro.url.pathname.startsWith('/docs');
           ></path>
         </svg>
       </a>
-      <a href="#install" class="btn btn-primary hidden sm:inline-flex">Installation options</a>
+      <a href="/docs/getting-started/introduction/" class="btn btn-primary hidden sm:inline-flex">Installation options</a>
     </div>
   </nav>
 </header>
