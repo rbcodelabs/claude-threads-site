@@ -23,15 +23,18 @@ Whenever any UI is touched, manually verify at these viewports before opening
 the PR:
 
 - Desktop: 1280x800
+- Tablet: 800x900
 - Mobile: 390x844 (iPhone 14)
 
 For each viewport, confirm:
 - Layout is not broken (no overflow, no collapsed sections)
-- Interactive elements are reachable and usable (nav anchors scroll to the
-  right section, copy-to-clipboard button works)
+- Interactive elements are reachable and usable (navigation links, section
+  anchors, and installation CTA point to the intended destinations)
 - No visual regressions from the diff
-- All 6 screenshots load and are legible (they are lazy-loaded - scroll
-  through the full page, not just a single above-the-fold screenshot)
+- The composed HTML/CSS workspace, workflow cards, and document mockup remain
+  legible and clearly illustrative at all three viewports
+- The docs index, at least one prose page with code and a wide table, and the
+  changelog remain readable; mobile docs navigation stays compact until opened
 - Custom component classes in global.css live inside @layer components -
   plain/unlayered CSS silently wins over Tailwind utilities like `hidden`
   regardless of source order, which caused a real bug during initial build
@@ -45,11 +48,10 @@ fabricate features or copy that isn't backed by the plugin README.
 
 ## Screenshot Regeneration
 
-Not applicable. The 6 screenshots under src/assets/screenshots/ and
-public/screenshots/screenshot-main.png (used for the static OG image URL)
-are copied verbatim from the plugin repo's docs/ folder. If the plugin
-repo's screenshots change, re-copy them manually - there is no automated
-sync.
+The landing page uses composed HTML/CSS product illustrations, so it has no
+screenshot-regeneration step. The files under `src/assets/screenshots/` remain
+documentation screenshot assets, and `public/screenshots/screenshot-main.png`
+remains the static OG image until a dedicated social card is designed.
 
 ## Project-Specific Gates
 

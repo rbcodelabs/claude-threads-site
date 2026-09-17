@@ -5,7 +5,7 @@ category: getting-started
 order: 1
 ---
 
-Agent Threads embeds Claude Code and OpenAI Codex directly in Obsidian. Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
+Agent Threads embeds Claude Code and OpenAI Codex directly in [Geode](https://geode.rbcodelabs.com) and [Obsidian](https://obsidian.md). Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
 
 ## The three-panel model
 
@@ -31,7 +31,7 @@ Older Geode versions and Obsidian retain the existing reload behavior. Previousl
 
 ## Prerequisites
 
-- [Obsidian](https://obsidian.md) v1.0.0 or later (desktop only)
+- A compatible [Geode](https://geode.rbcodelabs.com) desktop host or [Obsidian](https://obsidian.md) v1.0.0 or later (desktop only)
 - At least one authenticated agent CLI:
   - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code). The plugin auto-detects `claude` at `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. AWS Bedrock / SSO users can set `AWS_PROFILE` and `AWS_REGION` under Extra environment variables.
   - [OpenAI Codex CLI](https://developers.openai.com/codex/cli/). Select **OpenAI Codex** under **Settings → Agent → Agent harness**.
@@ -39,7 +39,11 @@ Older Geode versions and Obsidian retain the existing reload behavior. Previousl
 
 ## Installation
 
-### Via BRAT (recommended for early access)
+### Geode
+
+Download the latest build from [GitHub Releases](https://github.com/rbcodelabs/obsidian-claude-threads/releases), then install it through Geode's local plugin flow.
+
+### Obsidian via BRAT (recommended for early access)
 
 1. Install the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat) from Obsidian's Community Plugins
 2. Open BRAT settings → **Add Beta Plugin**
@@ -48,7 +52,7 @@ Older Geode versions and Obsidian retain the existing reload behavior. Previousl
 
 BRAT tracks the GitHub repo directly, so you'll get new releases as soon as they ship — useful while the plugin is moving quickly.
 
-### Manual install
+### Obsidian manual install
 
 1. Download the latest release from [GitHub Releases](https://github.com/rbcodelabs/obsidian-claude-threads/releases)
 2. Extract into your vault's plugin folder: `<vault>/.obsidian/plugins/claude-threads/`
