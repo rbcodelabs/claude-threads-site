@@ -33,6 +33,8 @@ For each viewport, confirm:
 - No visual regressions from the diff
 - The composed HTML/CSS workspace, workflow cards, and document mockup remain
   legible and clearly illustrative at all three viewports
+- The docs index, at least one prose page with code and a wide table, and the
+  changelog remain readable; mobile docs navigation stays compact until opened
 - Custom component classes in global.css live inside @layer components -
   plain/unlayered CSS silently wins over Tailwind utilities like `hidden`
   regardless of source order, which caused a real bug during initial build

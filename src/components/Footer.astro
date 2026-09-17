@@ -6,32 +6,24 @@ const ROADMAP_URL = 'https://compass.rbcodelabs.com/portal/rbcodelabs/claude-thr
 const currentYear = new Date().getFullYear();
 ---
 
-<footer class="border-t border-[rgb(var(--color-border))]">
-  <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-[rgb(var(--color-text-muted))] sm:flex-row sm:px-6">
-    <div class="text-center sm:text-left">
-      <p class="font-semibold text-[rgb(var(--color-text))]">Agent Threads</p>
-      <p class="mt-1">
-        Multi-threaded Claude Code and OpenAI Codex sessions in
-        <a href={GEODE_URL} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-[rgb(var(--color-text))]">Geode</a>
+<footer class="site-footer">
+  <div class="site-footer-inner">
+    <div>
+      <a class="site-footer-brand" href="/"><span aria-hidden="true">↗</span> Agent Threads</a>
+      <p>
+        Claude Code and OpenAI Codex sessions in
+        <a href={GEODE_URL} target="_blank" rel="noopener noreferrer">Geode</a>
         and
-        <a href={OBSIDIAN_URL} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-[rgb(var(--color-text))]">Obsidian</a>.
+        <a href={OBSIDIAN_URL} target="_blank" rel="noopener noreferrer">Obsidian</a>.
       </p>
     </div>
 
-    <div class="flex items-center gap-5">
-      <a href="/docs/" class="transition-colors hover:text-[rgb(var(--color-text))]">
-        Docs
-      </a>
-      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[rgb(var(--color-text))]">
-        GitHub
-      </a>
-      <a href={ROADMAP_URL} target="_blank" rel="noopener noreferrer" class="transition-colors hover:text-[rgb(var(--color-text))]">
-        Roadmap
-      </a>
-      <a href="/changelog/" class="transition-colors hover:text-[rgb(var(--color-text))]">
-        Releases
-      </a>
-    </div>
+    <nav class="site-footer-links" aria-label="Footer navigation">
+      <a href="/docs/">Documentation</a>
+      <a href="/changelog/">Changelog</a>
+      <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">GitHub</a>
+      <a href={ROADMAP_URL} target="_blank" rel="noopener noreferrer">Roadmap</a>
+    </nav>
 
     <p>&copy; {currentYear} Rick Bowman.</p>
   </div>

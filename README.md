@@ -4,13 +4,13 @@ Landing page for [Agent Threads](https://github.com/rbcodelabs/obsidian-claude-t
 
 Built with [Astro](https://astro.build) + Tailwind CSS v4, deployed on Vercel.
 
-The home page uses a page-scoped ivory and green theme with composed HTML/CSS product illustrations. Documentation and changelog routes keep the shared dark documentation theme.
+The site uses a shared ivory and green visual system. The home page adds composed HTML/CSS product illustrations, while documentation and changelog routes use the same palette for navigation, prose, tables, code, and release history.
 
 ## Landing page structure
 
 - `src/pages/index.astro` composes the landing page and loads its scoped stylesheet.
 - `src/components/Landing*.astro`, `WorkspacePreview.astro`, `WorkflowSteps.astro`, and `VaultContext.astro` contain the landing sections and product illustrations.
-- `src/styles/landing.css` owns landing-only presentation; shared documentation styles remain in `src/styles/global.css`.
+- `src/styles/landing.css` owns landing-only presentation; shared navigation, documentation, changelog, and Markdown styles live in `src/styles/global.css`.
 
 ## Development
 
