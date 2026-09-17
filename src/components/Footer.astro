@@ -1,5 +1,7 @@
 ---
 const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
+const GEODE_URL = 'https://geode.rbcodelabs.com';
+const OBSIDIAN_URL = 'https://obsidian.md';
 const ROADMAP_URL = 'https://compass.rbcodelabs.com/portal/rbcodelabs/claude-threads/roadmap';
 const currentYear = new Date().getFullYear();
 ---
@@ -8,7 +10,12 @@ const currentYear = new Date().getFullYear();
   <div class="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 px-4 py-8 text-sm text-[rgb(var(--color-text-muted))] sm:flex-row sm:px-6">
     <div class="text-center sm:text-left">
       <p class="font-semibold text-[rgb(var(--color-text))]">Agent Threads</p>
-      <p class="mt-1">Multi-threaded Claude Code and OpenAI Codex sessions in Obsidian.</p>
+      <p class="mt-1">
+        Multi-threaded Claude Code and OpenAI Codex sessions in
+        <a href={GEODE_URL} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-[rgb(var(--color-text))]">Geode</a>
+        and
+        <a href={OBSIDIAN_URL} target="_blank" rel="noopener noreferrer" class="underline underline-offset-2 hover:text-[rgb(var(--color-text))]">Obsidian</a>.
+      </p>
     </div>
 
     <div class="flex items-center gap-5">

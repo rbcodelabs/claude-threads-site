@@ -3,6 +3,8 @@ import { Image } from 'astro:assets';
 import screenshotMobileConnected from '../assets/screenshots/screenshot-mobile-connected.png';
 
 const GITHUB_URL = 'https://github.com/rbcodelabs/obsidian-claude-threads';
+const GEODE_URL = 'https://geode.rbcodelabs.com';
+const OBSIDIAN_URL = 'https://obsidian.md';
 const VERSION = '0.19.12';
 ---
 
@@ -15,25 +17,28 @@ const VERSION = '0.19.12';
   <div class="mx-auto max-w-6xl px-4 pb-16 pt-16 sm:px-6 sm:pb-24 sm:pt-24">
     <div class="mx-auto max-w-3xl text-center">
       <div class="mb-6 flex flex-wrap items-center justify-center gap-2">
-        <span class="rounded-full border border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface))] px-3 py-1 text-xs font-semibold text-[rgb(var(--color-text-muted))]">
-          Obsidian Plugin
-        </span>
+        <a href={GEODE_URL} target="_blank" rel="noopener noreferrer" class="rounded-full border border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface))] px-3 py-1 text-xs font-semibold text-[rgb(var(--color-text-muted))] transition-colors hover:text-[rgb(var(--color-text))]">
+          Geode compatible
+        </a>
+        <a href={OBSIDIAN_URL} target="_blank" rel="noopener noreferrer" class="rounded-full border border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface))] px-3 py-1 text-xs font-semibold text-[rgb(var(--color-text-muted))] transition-colors hover:text-[rgb(var(--color-text))]">
+          Obsidian plugin
+        </a>
         <span class="rounded-full border border-[rgb(var(--color-border))] bg-[rgb(var(--color-surface))] px-3 py-1 text-xs font-semibold text-[rgb(var(--color-text-muted))]">
           v{VERSION}
         </span>
       </div>
 
       <h1 class="text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl md:text-6xl">
-        Run multiple <span class="text-gradient">AI agent</span> sessions, right inside Obsidian
+        Run multiple <span class="text-gradient">AI agent</span> sessions, right inside your vault
       </h1>
 
       <p class="mx-auto mt-6 max-w-2xl text-lg text-[rgb(var(--color-text-muted))] sm:text-xl">
-        A native Obsidian sidebar plugin for running Claude Code and OpenAI Codex sessions in parallel — with
+        A native sidebar plugin for running Claude Code and OpenAI Codex sessions in parallel — with
         streaming markdown responses, tab management, and deep vault integration.
       </p>
 
       <div class="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-        <a href="#install" class="btn btn-primary w-full sm:w-auto">Install via BRAT</a>
+        <a href="#install" class="btn btn-primary w-full sm:w-auto">Installation options</a>
         <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer" class="btn btn-secondary w-full sm:w-auto">
           View on GitHub
         </a>

@@ -1,6 +1,6 @@
 # Agent Threads — Marketing Site
 
-Landing page for the [Agent Threads](https://github.com/rbcodelabs/obsidian-claude-threads) Obsidian plugin.
+Landing page for [Agent Threads](https://github.com/rbcodelabs/obsidian-claude-threads), a plugin compatible with [Geode](https://geode.rbcodelabs.com) and [Obsidian](https://obsidian.md).
 
 Built with [Astro](https://astro.build) + Tailwind CSS v4, deployed on Vercel.
 

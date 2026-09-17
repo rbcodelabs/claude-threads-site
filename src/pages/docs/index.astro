@@ -10,7 +10,7 @@ const categories = CATEGORY_ORDER.map((category) => {
   return { category, label: CATEGORY_LABELS[category] ?? category, items, first: items[0] };
 }).filter((c) => c.items.length > 0);
 
-const title = 'Documentation — Agent Threads for Obsidian';
+const title = 'Documentation — Agent Threads for Geode and Obsidian';
 const description =
   'Full user documentation for Agent Threads: getting started, core workflow, views, automation, permissions, integrations, and reference pages for settings, commands, and agent tools.';
 ---
@@ -20,8 +20,11 @@ const description =
     <div class="mx-auto max-w-2xl text-center">
       <h1 class="text-3xl font-extrabold tracking-tight sm:text-4xl">Documentation</h1>
       <p class="mt-4 text-[rgb(var(--color-text-muted))]">
-        Everything you need to run Claude Code or OpenAI Codex inside Obsidian — from your first thread to the full agent tools
-        reference.
+        Everything you need to run Claude Code or OpenAI Codex inside
+        <a href="https://geode.rbcodelabs.com" target="_blank" rel="noopener noreferrer" class="text-[rgb(var(--color-secondary))] underline underline-offset-2 hover:text-[rgb(var(--color-primary))]">Geode</a>
+        or
+        <a href="https://obsidian.md" target="_blank" rel="noopener noreferrer" class="text-[rgb(var(--color-secondary))] underline underline-offset-2 hover:text-[rgb(var(--color-primary))]">Obsidian</a>
+        — from your first thread to the full agent tools reference.
       </p>
     </div>
 
