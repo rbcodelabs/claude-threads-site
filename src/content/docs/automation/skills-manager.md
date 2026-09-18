@@ -7,6 +7,12 @@ order: 2
 
 Open the **Skills Manager** from the ribbon (puzzle icon) or command palette to browse, install, and edit Claude Code skills. New views open in the right sidebar under Conversation first placement (creating the sidebar if it isn't open yet), or in a main document tab under Classic placement — matching where the [Agents List](/docs/views/agent-dashboard/) opens. If Skills Manager is already open, it is focused without moving it or discarding edits. The list and detail panels are split by a **draggable divider** — drag it to resize, double-click to reset to the default width; your chosen width is remembered next time you open the view.
 
+## Narrow panes
+
+In a narrow pane — a sidebar, a split view, or on mobile — there isn't room for both panels side by side, so the Skills Manager shows **one at a time**. You see the list until you pick something, then that item's detail panel with a **← back** button to return to the list. The draggable divider is hidden in this mode.
+
+The layout responds to the panel's own width rather than the window's, so widening the sidebar past roughly 480px restores the two-panel view on the spot — no reopening required. If you have unsaved edits to a `SKILL.md`, going back asks before discarding them.
+
 ![Skills Manager: source tree on the left with skill/agent detail and editor on the right](../../../assets/screenshots/screenshot-skills-manager.png)
 
 ## Installed tab
