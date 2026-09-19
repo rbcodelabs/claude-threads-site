@@ -1,0 +1,45 @@
+---
+// Cross-product switcher shown in the header, letting visitors jump between
+// the three sibling rbcodelabs.com products. Each repo implements this
+// natively (no shared package) but follows the same visual/interaction spec.
+---
+
+<nav aria-label="Product family" class="product-switcher hidden items-center md:flex">
+  <a href="https://compass.rbcodelabs.com" class="product-switcher__segment">
+    <svg
+      viewBox="0 0 24 24"
+      width="16"
+      height="16"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      aria-hidden="true"
+    >
+      <circle cx="12" cy="12" r="10"></circle>
+      <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon>
+    </svg>
+    Compass
+  </a>
+
+  <a href="https://geode.rbcodelabs.com" class="product-switcher__segment">
+    <svg viewBox="0 0 32 32" width="16" height="16" fill="none" aria-hidden="true">
+      <path d="M16 6L24 12L21 26H11L8 12L16 6Z" fill="currentColor"></path>
+    </svg>
+    Geode
+  </a>
+
+  <span aria-current="page" class="product-switcher__segment product-switcher__segment--active">
+    <svg viewBox="0 0 32 32" width="16" height="16" fill="none" aria-hidden="true">
+      <path
+        d="M9 12.5C9 10.567 10.567 9 12.5 9H19.5C21.433 9 23 10.567 23 12.5V17.5C23 19.433 21.433 21 19.5 21H14L10 24.5V21H12.5C10.567 21 9 19.433 9 17.5V12.5Z"
+        fill="white"
+      ></path>
+      <circle cx="13" cy="15" r="1.2" fill="rgb(var(--color-primary))"></circle>
+      <circle cx="16" cy="15" r="1.2" fill="rgb(var(--color-primary))"></circle>
+      <circle cx="19" cy="15" r="1.2" fill="rgb(var(--color-primary))"></circle>
+    </svg>
+    Threads
+  </span>
+</nav>
