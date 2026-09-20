@@ -80,7 +80,7 @@ A list of tools granted automatically without prompting. Tools land here when yo
 
 ### Log retention
 
-Codex logs retain completed command and plan records, messages, errors and usage events. Repeated diff snapshots are coalesced to the latest snapshot per turn; snapshots larger than 512 KiB retain a bounded tail. Streamed command and plan output keeps up to 64 KiB of diagnostic text per item when the completed record does not contain that tail, or the item never completes. These `codex/log/compacted` records identify their source and omitted bytes so a partial record is not mistaken for a complete output transcript.
+Codex logs retain completed command and plan records, messages, errors and usage events. Repeated diff snapshots are coalesced to the latest snapshot per turn; snapshots larger than 512 KiB retain a bounded tail. Streamed command and plan output keeps up to 64 KiB of diagnostic text per item when the completed record cannot account for the streamed output, or the item never completes. These `codex/log/compacted` records identify their source and omitted bytes so a partial record is not mistaken for a complete output transcript.
 
 Pending payloads are limited to 4 MiB and 128 entries per session. Reaching either limit flushes older entries early. Normal turn completion, interruption and session shutdown also flush pending diagnostics.
 
