@@ -69,7 +69,7 @@ Project threads coordinate only within their Project, and threads with no Projec
 | `threads_set_project` | `threadId`, `projectId`, `alignCwd?` | Assigns a thread to a Project, or detaches it with `null`. Association-only by default; `alignCwd: true` switches to a non-null Project's cwd on the next safe turn. Detaching never relocates the thread. A thread with no Project may target **itself** with any Project id; every other caller is held to normal coordination scope. |
 | `threads_get_messages` | `threadId`, `limit?` | Returns recent user and assistant messages. |
 | `threads_open` | `threadId`, `elevatedProjectId?` | Opens and focuses the exact thread UUID. A successful open marks it reviewed and persists the active selection. |
-| `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed raw JSONL event-log entries. |
+| `threads_get_log` | `threadId?`, `limit?`, `type?` | Returns parsed JSONL event-log entries. Codex logs compact redundant streaming events and retain completed records plus bounded diagnostics; see [Log retention](/docs/reference/settings/#log-retention). |
 | `threads_wait` | `threadId`, `timeoutSeconds?` | Waits until a target thread becomes idle. |
 | `threads_send_message` | `threadId`, `message` | Queues a message on another thread and triggers it. |
 | `threads_archive` | `threadId`, `confirm?`, `elevatedProjectId?` | Saves and removes a completed thread. A scheduled thread may target itself; the tool acknowledges with `deferred: true`. Archiving any referenced orchestrator requires `confirm: true`. |
