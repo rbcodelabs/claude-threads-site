@@ -89,11 +89,15 @@ Type `/` in the input box to see built-in context commands and your installed Cl
 
 Use `/design <brief>` from the Agents List or Agent Board dispatch box to create a new native design-artifact thread, or use it in Chat to create or revise the current thread's artifact. Threads creates a zero-install static UI artifact under `.geode/artifacts/` in your vault, and the agent edits ordinary `index.html`, `styles.css`, `app.js`, and local asset files. The persisted artifact card keeps **Open preview**, **Capture**, and **Reveal source** available after the turn and after reopening the thread.
 
+This workflow is supplied by the separate desktop-only **Design for Agent Threads** plugin. Install and enable it alongside Agent Threads to register `/design`, `EnterDesignMode`, and the artifact controls. If it is disabled or removed, Agent Threads does not show the command or tool; existing legacy design cards remain visible with a read-only **Reveal source** action, so prior work is not orphaned.
+
 Inside Chat, `/design` without a brief reopens the existing preview. In Agents List or Agent Board, a brief is required: bare `/design` shows a usage notice, preserves the draft, and creates no thread. New-thread design dispatch does not accept image or text attachments; remove them and send again. Other dispatch commands can still use attachments normally.
 
 Agents can start this experience themselves with `EnterDesignMode({ brief })`. The tool creates or reuses the calling thread's artifact, focuses the thread, opens the preview, and shows its artifact controls. It returns the source paths and design instructions to the calling agent, which continues working in the same turn. It does not start another thread or send a second message. A nonblank brief and normal write permission are required; finish Plan mode and resolve any pending plan approval first.
 
 The result distinguishes an opened preview from a source-reveal fallback or preview failure. A saved artifact remains available for retry when its preview cannot open. On older plugin versions where the tool is unavailable, submit `/design <brief>` in the composer yourself; asking an agent to send that text through a generic thread-message tool does not activate the command.
+
+New-thread setup is transactional: failure before the preview is ready removes the provisional thread and its newly allocated artifact storage. Once setup commits, a later failure to start the agent turn keeps the thread and artifact available and reports the error for retry.
 
 There is no persistent on/off Design setting or exit command. To move on, tell the agent that the design is approved and specify the next task. The artifact remains available as a reference. `/design off` is interpreted as a design brief, not an exit command.
 
