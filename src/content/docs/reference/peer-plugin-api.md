@@ -91,6 +91,35 @@ Each run uses a fresh empty working directory and isolated home/config directory
 
 Inputs, budget, timeout, output (100,000 characters), and total persisted public API state (1 MiB) are bounded. Unsupported constraints fail with `CONSTRAINT_UNSUPPORTED`.
 
+## Contributed slash commands
+
+When `capabilities` includes `extensions.registerSlashCommand`, enabled peers can add commands to the thread composer and/or the Agents List and Agent Board dispatch inputs. Built-in `/design` uses the same registration path without changing its behavior.
+
+```ts
+const command = api.extensions.registerSlashCommand({ pluginId: 'example.boards' }, {
+  name: 'board',
+  thread: {
+    description: 'Open the board for this thread',
+    async invoke(context, host) {
+      if (host.signal.aborted) return { status: 'error', message: 'Cancelled' };
+      await openBoard(context.threadId, context.args);
+      host.report('Board opened');
+      return { status: 'ok' };
+    },
+  },
+});
+// On peer unload:
+command.dispose();
+```
+
+Provide `thread`, `dispatch`, or both, each with a description and callback. Names are lowercase tokens without `/`, beginning with a letter and containing up to 64 letters, digits, or hyphens. Core commands, the enabled escalation keyword, and other peers' names cannot be shadowed. Results are `registered`, `invalid`, `conflict`, or `unavailable`; every result has an idempotent disposer.
+
+The host supplies immutable `surface`, original `text`, parsed multiline `args`, captured `threadId` for composer commands, `agentHarness`, `projectId` when available, and attachment-presence flags. Peers receive neither attachment contents nor DOM/view/private-manager access. Dispatch callbacks receive the selected project but decide how to use it; Design's existing dispatch behavior does not apply that selection.
+
+Return `{ status: 'ok' | 'error', message?: string }`. Use `host.report` for scoped feedback and heed `host.signal` for cooperative cancellation. Exceptions, invalid results, disposal, and a 60-second timeout become errors, never ordinary agent prompts. Failed dispatches restore the draft and attachments without discarding newer input. Registration updates dropdowns and pills immediately; disposal and host shutdown revoke callbacks and feedback. Arbitrary peer side effects cannot be rolled back by the host.
+
+Design still uses internal preparation and new-thread transaction adapters; slash-command registration alone does not make it a standalone plugin. The complete contract and implementation notes are in the plugin's `docs/public-api.md` and `api/public-api-v1.d.ts`.
+
 ## Persistence and errors
 
 Correlated operations are serialized and their state is durably saved before a resource handle is returned. Results and correlation mappings are retained and evicted together. After a plugin reload, an in-flight operation reconciles as interrupted instead of being duplicated.
