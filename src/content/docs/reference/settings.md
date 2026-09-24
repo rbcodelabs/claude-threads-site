@@ -75,9 +75,17 @@ A list of tools granted automatically without prompting. Tools land here when yo
 | Setting | Description |
 |---|---|
 | Save threads to vault | Auto-save conversations as Obsidian notes after each response |
-| Save raw JSONL logs | Append each thread's raw event stream (tool calls, results, usage) to `<vault folder>/logs/<thread id>.jsonl`, linked from the note's `raw_log` frontmatter. Lets agents retrieve and analyze the full transcript. |
+| Save raw JSONL logs | Save tool calls, completed results, usage and diagnostic events to `<vault folder>/logs/<thread id>.jsonl`, linked from the note's `raw_log` frontmatter. Codex logging compacts repeated diff snapshots and streamed output automatically; see [Log retention](#log-retention). |
 | Auto-archive idle threads after (days) | Automatically archive a waiting thread once it has been idle (no activity) for this many days. Archiving writes the thread to its markdown note, with any images embedded, and removes it from the live thread list, so finished threads stop accumulating and `data.json` does not grow without bound. Only waiting threads qualify; active threads, the orchestrator thread, and threads awaiting a plan or question are never touched. Default: `14`. Set to `0` to disable auto-archiving entirely. |
 | Vault folder | Where thread notes are saved, relative to the vault root (default: `Agent Threads`) |
+
+### Log retention
+
+Codex logs retain completed command and plan records, messages, errors and usage events. Repeated diff snapshots are coalesced to the latest snapshot per turn; snapshots larger than 512 KiB retain a bounded tail. Streamed command and plan output keeps up to 64 KiB of diagnostic text per item when the completed record cannot account for the streamed output, or the item never completes. These `codex/log/compacted` records identify their source and omitted bytes so a partial record is not mistaken for a complete output transcript.
+
+Pending payloads are limited to 4 MiB and 128 entries per session. Reaching either limit flushes older entries early. Normal turn completion, interruption and session shutdown also flush pending diagnostics.
+
+This reduces redundant event traffic in new logs. It does not rewrite existing logs or impose a maximum file size: completed results and long conversation histories still consume space. Pending compacted events are held in memory until a flush, so an abrupt host crash can lose that pending detail.
 
 ### Projects
 

@@ -15,7 +15,7 @@ Listen for `claude-threads:api-ready` and `claude-threads:api-stopping`. Reacqui
 
 ## Threads
 
-`threads.list`, `threads.get`, `threads.create`, `threads.send`, `threads.wait`, `threads.cancel`, `threads.open`, and `threads.subscribe` provide immutable snapshots and lifecycle events.
+`threads.list`, `threads.get`, `threads.create`, `threads.send`, `threads.wait`, `threads.cancel`, `threads.open`, and `threads.subscribe` provide immutable snapshots and lifecycle events. Hosts advertising `threads.beginProvisional` also support reversible peer-owned creation workflows.
 
 For durable retries, provide both `ownerPluginId` and `idempotencyKey`. A key is bound to its operation, target thread, and exact input fingerprint. Reusing it with different input fails with `IDEMPOTENCY_CONFLICT`.
 
@@ -41,6 +41,8 @@ const result = await api.threads.wait(runId, { timeoutMs: 120_000 });
 When an owner is supplied, omitted `origin` defaults to `ownerPluginId`; a conflicting explicit origin is rejected. Managed threads with an origin are excluded from trace sources, preventing self-training loops. Background threads are also hidden from Agent Board surfaces.
 
 Only one distinct active send is allowed per thread. A competing send fails with `THREAD_BUSY`. Cancellation, completion, and provider shutdown use first-terminal-wins semantics.
+
+`threads.beginProvisional(owner, input)` returns an immutable handle with `threadId`, `commit()`, and `rollback()`. The thread cannot run until commit. Rollback deletes it, restores the prior selection, and releases storage allocated through `artifacts.allocateStorage`; unresolved handles are rolled back when the API generation stops. Commit and rollback are serialized and idempotent.
 
 ## Sanitized traces
 
@@ -90,6 +92,35 @@ const result = await api.constrainedRuns.wait(runId);
 Each run uses a fresh empty working directory and isolated home/config directory, then removes it. The runner imports no host settings, hooks, plugins, skills, MCP servers, tools, filesystem context, or resumable session. Provider credentials are projected from Agent Threads' keychain-backed resolver through an exact authentication-variable allowlist; the host configuration directory is never copied.
 
 Inputs, budget, timeout, output (100,000 characters), and total persisted public API state (1 MiB) are bounded. Unsupported constraints fail with `CONSTRAINT_UNSUPPORTED`.
+
+## Contributed slash commands
+
+When `capabilities` includes `extensions.registerSlashCommand`, enabled peers can add commands to the thread composer and/or the Agents List and Agent Board dispatch inputs. The separate Design for Agent Threads plugin uses this path for `/design`.
+
+```ts
+const command = api.extensions.registerSlashCommand({ pluginId: 'example.boards' }, {
+  name: 'board',
+  thread: {
+    description: 'Open the board for this thread',
+    async invoke(context, host) {
+      if (host.signal.aborted) return { status: 'error', message: 'Cancelled' };
+      await openBoard(context.threadId, context.args);
+      host.report('Board opened');
+      return { status: 'ok' };
+    },
+  },
+});
+// On peer unload:
+command.dispose();
+```
+
+Provide `thread`, `dispatch`, or both, each with a description and callback. Names are lowercase tokens without `/`, beginning with a letter and containing up to 64 letters, digits, or hyphens. Core commands, the enabled escalation keyword, and other peers' names cannot be shadowed. Results are `registered`, `invalid`, `conflict`, or `unavailable`; every result has an idempotent disposer.
+
+The host supplies immutable `surface`, original `text`, parsed multiline `args`, captured `threadId` for composer commands, `agentHarness`, `projectId` when available, and attachment-presence flags. Peers receive neither attachment contents nor DOM/view/private-manager access. Dispatch callbacks receive the selected project but decide how to use it; Design's existing dispatch behavior does not apply that selection.
+
+Return `{ status: 'ok' | 'error', message?: string }`. Use `host.report` for scoped feedback and heed `host.signal` for cooperative cancellation. Exceptions, invalid results, disposal, and a 60-second timeout become errors, never ordinary agent prompts. Failed dispatches restore the draft and attachments without discarding newer input. Registration updates dropdowns and pills immediately; disposal and host shutdown revoke callbacks and feedback. Arbitrary peer side effects cannot be rolled back by the host.
+
+Design for Agent Threads is a standalone peer: it registers its command, agent tool, and artifact provider through public API v1 and uses `threads.beginProvisional` for new-thread transactions. Agent Threads retains only a read-only source-reveal fallback for legacy design artifacts when the peer is absent. The complete contract and implementation notes are in the plugin's `docs/public-api.md` and `api/public-api-v1.d.ts`.
 
 ## Persistence and errors
 
