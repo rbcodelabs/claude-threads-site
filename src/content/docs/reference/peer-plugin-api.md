@@ -44,6 +44,23 @@ Only one distinct active send is allowed per thread. A competing send fails with
 
 `threads.beginProvisional(owner, input)` returns an immutable handle with `threadId`, `commit()`, and `rollback()`. The thread cannot run until commit. Rollback deletes it, restores the prior selection, and releases storage allocated through `artifacts.allocateStorage`; unresolved handles are rolled back when the API generation stops. Commit and rollback are serialized and idempotent.
 
+## Archive and reviewed state
+
+Check `capabilities` for `threads.archive` and `threads.markReviewed` before using these optional v1 operations:
+
+```ts
+const archived = await api.threads.archive(threadId);
+// { status: 'archived' | 'cancelled', threadId }
+const reviewed = await api.threads.markReviewed(threadId);
+// { threadId, reviewed: true, changed: boolean }
+```
+
+Use exact IDs from thread discovery. Archive reuses the host's persistence and eviction path and awaits pending-wakeup cancellation before returning success. Running threads and Portfolio/Project orchestrators require an actual host confirmation dialog; a caller cannot bypass it by supplying a flag. The last remaining thread is protected, and targets and safeguards are revalidated after confirmation. Cancellation returns `cancelled`; storage or lifecycle failures reject. An archived conversation is saved as a vault note only when `saveThreadsToVault` is enabled; do not promise recovery when that setting is disabled.
+
+Mark reviewed is idempotent, saves the flag, and refreshes list/board state without opening the thread or changing conversation recency. Running and missing targets are rejected. Calls on stopped API generations remain invalid.
+
+These methods use the trusted peer-plugin boundary, not the internal assistant's Project-scoped authorization. Integrators should require user intent, clarify ambiguous names, and display the actual result. `agentTools.createBundle('voice-orchestration')` exposes `ct_archive_thread` and `ct_mark_reviewed` only when supported; older hosts retain their existing schemas. Recreate the bundle after reacquiring an API generation. This does not change internal assistant self-archive behavior.
+
 ## Sanitized traces
 
 `traces.listSources`, `traces.readChunk`, and `traces.subscribe` expose bounded semantic records—not raw SDK logs. Source discovery uses a stable source-ID cursor. Trace cursors bind the source, append-stable revision, byte offset, event index, and a byte-boundary fingerprint so stale or rewritten sources fail with `CURSOR_INVALID`.
