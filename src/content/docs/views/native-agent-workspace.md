@@ -13,6 +13,12 @@ Both harnesses can start native child agents when a task or instruction explicit
 
 Explicit and proactive agents use the same workspace described below. Agent Threads displays the native identities, hierarchy, activity, and lifecycle events reported by the active harness; it does not simulate a separate agent system.
 
+## Switching the thread's harness
+
+An idle desktop thread can move between Claude and Codex from **Harness** in the conversation footer's **⋯** menu. The thread and visible conversation remain in place, while the target starts a fresh provider-native session from a one-time summary and references to the saved conversation. Its previous model selection and other provider-specific session state reset.
+
+Active or recoverable child agents block the switch so their events cannot be attributed to the wrong harness. Once child agents are terminal, their history stays attached to the thread and remains available after a switch. Other unsettled work—including an active turn, queued message, permission or question, plan review, goal transition, or background task—also disables the other harness choice and appears as a reason in the menu. See [Switching between Claude and Codex](/docs/core-workflow/messaging-and-commands/#switching-between-claude-and-codex) for the full continuity and reset behavior.
+
 ## The agent pill
 
 While a thread has child agents, a compact pill appears in the composer footer. It reports how many agents are working, how many failed, or a plain count once everything has finished. The pill stays visible at rest for as long as agents exist, so you never have to hover to check on them. When a thread has no agent runs at all, the pill disappears and the footer returns to its normal hover-only behavior.
