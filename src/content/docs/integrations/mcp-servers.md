@@ -160,7 +160,7 @@ unreachable endpoint would.
 
 ### Confidential clients
 
-Available in **Agent Threads v0.44.0** or later. Most MCP authorization servers
+Available in **Agent Threads v0.45.0** or later. Most MCP authorization servers
 treat the plugin as a **public client**: PKCE proves possession of the
 authorization request, and there is no client secret at all. That is still the
 default, and nothing here changes it.

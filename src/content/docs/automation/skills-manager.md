@@ -31,6 +31,8 @@ The top-right corner of the tab bar has two icon buttons (Installed tab only):
 - **Reinstall** — delete and re-clone for broken installs
 - **Remove Source**
 
+Click a GitHub source's **chevron** to expand or collapse its skills while staying in the list. Click the rest of the source row to open its details. In narrow panes, this lets you browse the expanded skills without switching screens.
+
 Two more nodes sit at the bottom:
 
 - **Vault** — the skills this plugin installed into your vault. Click one to view and edit it, with **Save**, **Reload**, **Reveal in Finder**, and **Uninstall**.
