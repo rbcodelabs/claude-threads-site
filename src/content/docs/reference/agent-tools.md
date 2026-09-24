@@ -52,6 +52,16 @@ Control the current thread's session state.
 | `unwatch_document` | `path?`, `id?` | Removes a watch owned by the calling thread, by path or watch id (at least one required). Never affects another thread's watch on the same path. |
 | `list_watched_documents` | — | Returns the calling thread's own active watches: path, watch id, creation time, and last-alerted time. |
 
+## Sandbox VM tools
+
+On macOS 26+ with Apple silicon, agents can run coding commands in a separate Linux VM. See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup, network modes, and the writable workspace boundary. Ordinary host shell and file tools remain on the host.
+
+| Tool | Parameters | Description |
+|---|---|---|
+| `enter_vm` | `image?`, `network?`, `mountPath?` | Starts the thread's VM and mounts its working directory at `/work`. Network choices are `default` (internet enabled), `internal` (host-only), or `none`. |
+| `vm_exec` | `command`, `timeoutSeconds?` | Runs a command inside the VM, returning exit code and bounded stdout/stderr. Default timeout: 300 seconds. |
+| `exit_vm` | `force?` | Removes the thread's VM. Writes to the mounted host workspace persist. |
+
 ## Thread coordination tools
 
 Discover, read, and message other running threads. These tools enable agent-to-agent delegation — one thread can assign work to another, wait for it to finish, and read the result.

@@ -40,6 +40,15 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 | Enable 1M context window (beta) | Passes the `context-1m-2025-08-07` beta header for Sonnet 4/4.5. Requires a model that supports it. |
 | Default working directory | Starting directory for new threads. Leave empty to use the vault root. |
 
+### Sandbox VMs
+
+| Setting | Description |
+|---|---|
+| Sandbox VM image | Image used by `enter_vm`; defaults to `claude-threads-coding:1`. Build it from the plugin's `sandbox/Dockerfile`. Requires Apple's container runtime on macOS 26+ with Apple silicon. |
+| Sandbox VM network | Default for new VMs: full egress, internal (host-only, no internet), or none (no network). An explicit `enter_vm` network argument overrides this setting. Existing VMs keep their current networking. |
+
+See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup and the distinction between guest commands and host tools.
+
 ### Environment
 
 | Setting | Description |
