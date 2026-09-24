@@ -98,6 +98,17 @@ A typical delegation loop:
 
 This pattern works across any combination of threads — you can fan out to multiple peers simultaneously by sending messages to several threads before waiting on any of them.
 
+## Peer-plugin voice lifecycle tools
+
+Obsidian Orchestrator consumes the public `voice-orchestration` bundle, which is separate from the internal `threads_*` tools above. Capable hosts expose:
+
+| Tool | Parameters | Behavior |
+|------|------------|----------|
+| `ct_archive_thread` | `thread_id` | Archives the exact discovered thread ID, awaiting wakeup cancellation and persistence. Running threads and orchestrators require a host confirmation dialog; the last remaining thread is protected. Reports cancellation separately from success. |
+| `ct_mark_reviewed` | `thread_id` | Marks an idle thread reviewed and saves it without changing the active tab. Repeated calls are safe; running or missing targets fail. |
+
+Say “Archive [thread name]” or “Mark [thread name] reviewed.” Orchestrator resolves the ID and clarifies ambiguous matches. Both calls and their results appear in its transcript. Older hosts omit these tools; start a new voice session after updating or reloading Agent Threads. Archived conversations are saved as vault notes only with `saveThreadsToVault` enabled. See [Peer Plugin API v1](/docs/reference/peer-plugin-api/#archive-and-reviewed-state) for the trusted-plugin boundary and result contracts. Internal self-archive rules are unchanged.
+
 ## Vault Bridges integration
 
 If you have the [Vault Bridges](https://github.com/rbcodelabs/obsidian-vault-bridges) plugin installed, Claude agents can inspect and configure bridges directly via MCP — no config-file editing or Obsidian restarts required.
