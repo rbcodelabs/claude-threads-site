@@ -92,7 +92,7 @@ This reduces redundant event traffic in new logs. It does not rewrite existing l
 
 ## Projects
 
-Choose **Projects** in the section selector, then **New project**. Enter a name and vault folder and choose **Save changes**. Its working directory defaults to `<vault root>/<vault folder>`; set a filesystem cwd override for work outside the vault. Each Project shows its resolved effective cwd, and clearing the override returns it to the vault-derived path.
+Choose **Projects** in the section selector, then **New project**. Enter a name and vault folder and choose **Create project**. Its working directory defaults to `<vault root>/<vault folder>`; set a filesystem cwd override for work outside the vault. Each Project shows its resolved effective cwd, and clearing the override returns it to the vault-derived path.
 
 Search or select an existing [Project](/docs/integrations/git-and-vault/#projects) to edit its name, vault folder, cwd override, or context prompt. **Save changes** applies the draft; **Cancel** discards it. The detail pane also lets you create/open its orchestrator or delete the Project after confirming the impact. Intentionally archiving a Project Orchestrator disables its heartbeat, completion wakeups, and automatic recreation; the disabled state survives reloads from synced `data.json`. Deliberately choosing **Create/Open** re-enables it. Deletion detaches threads and preserves scheduled work at the former effective cwd.
 
@@ -102,7 +102,7 @@ Search or select an existing [Project](/docs/integrations/git-and-vault/#project
 
 Choose **Secrets** in the section selector to search, add, replace, or remove keychain-backed environment variables. Values are stored in OS-backed secret storage and never appear in `data.json`.
 
-Choose **Add secret**, enter its variable name and value, and set its project access. **Global** makes it available to every Project and Project-less thread. **Selected projects** limits resolution to the checked Projects. Choose **Save changes** to apply the value and access together, or **Cancel** to discard the draft.
+Choose **Add secret**, enter its variable name and value, and set its project access. **Global** makes it available to every Project and Project-less thread. **Selected projects** limits resolution to the checked Projects. Confirm with **Add secret** for a new entry or **Save changes** for an existing one to apply the value and access together. **Cancel** discards the draft.
 
 For an existing secret, leaving the replacement value blank preserves the stored value. Removing a secret requires confirmation. Project access controls secret resolution; MCP server and skill registration remain global.
 
