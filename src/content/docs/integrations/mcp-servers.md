@@ -251,7 +251,7 @@ Environment-variable values and HTTP header values support `${VAR_NAME}` placeho
 - A row in the **Settings → MCP** list shows *"Will be skipped: `${VAR_NAME}` is not registered under Settings → Secrets."*
 - The first time a thread hits this during a session, a one-time notice banner reports it (deduplicated per warning message, so it won't repeat every turn).
 
-Earlier versions of the plugin expanded an unresolved placeholder to an empty string and injected it anyway — which meant a server could silently authenticate with a blank token and fail in confusing ways. Register the missing variable or secret under **Settings → Claude → Extra environment variables / Secret environment variables** to clear the warning and have the server load normally.
+Earlier versions of the plugin expanded an unresolved placeholder to an empty string and injected it anyway — which meant a server could silently authenticate with a blank token and fail in confusing ways. Open **Settings → Agent Threads**, choose **Secrets** in the section selector, and save the missing secret to clear the warning. Nonsecret variables can be added under **Agent → Extra environment variables**.
 
 ## Related
 

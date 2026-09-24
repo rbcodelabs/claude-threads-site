@@ -1,11 +1,13 @@
 ---
 title: Settings Reference
-description: Every setting in the plugin, organized by its actual tab — General, Agent, Tools, Vault, Features, Scheduled, Remote, Skills, and MCP.
+description: Every settings section, including the Projects and Secrets managers, with desktop navigation and mobile pairing controls.
 category: reference
 order: 1
 ---
 
-Settings are organized into nine tabs. On desktop, all nine are shown; on mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings) at the bottom of this page.
+Open **Settings → Agent Threads** in Geode or Obsidian, then use the **Settings section** selector at the top. Its eleven desktop sections are grouped under Preferences, Workspace, Extensions, and Connectivity. The host keeps its own settings navigation; Agent Threads uses a compact header instead of adding another sidebar.
+
+Projects and Secrets have searchable lists and a detail editor, arranged side by side when space allows and stacked in narrow settings panes. On mobile, a reduced settings screen shows only pairing, plugin reload, and relay URL — see [Mobile settings](#mobile-settings).
 
 ## General
 
@@ -43,7 +45,8 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 | Setting | Description |
 |---|---|
 | Extra environment variables | `KEY=VALUE` pairs, one per line, merged into the Claude process environment (e.g. `AWS_PROFILE`, `AWS_REGION`) |
-| Secret environment variables | Keychain-backed env vars — add, change, or remove a named secret; values are stored in the OS keychain and never appear in `data.json` |
+
+Manage keychain-backed environment variables in the dedicated [Secrets](#secrets) section.
 
 > **macOS users:** the first time Claude accesses a folder like `~/Documents`, macOS shows a privacy dialog. Click Allow — it only appears once per folder.
 
@@ -87,15 +90,24 @@ Pending payloads are limited to 4 MiB and 128 entries per session. Reaching eith
 
 This reduces redundant event traffic in new logs. It does not rewrite existing logs or impose a maximum file size: completed results and long conversation histories still consume space. Pending compacted events are held in memory until a flush, so an abrupt host crash can lose that pending detail.
 
-### Projects
+## Projects
 
-Add a new Project with a name and vault folder. Its working directory defaults to `<vault root>/<vault folder>`; set a filesystem cwd override for work outside the vault. Each Project shows its resolved effective cwd, and clearing the override returns it to the vault-derived path.
+Choose **Projects** in the section selector, then **New project**. Enter a name and vault folder and choose **Save changes**. Its working directory defaults to `<vault root>/<vault folder>`; set a filesystem cwd override for work outside the vault. Each Project shows its resolved effective cwd, and clearing the override returns it to the vault-derived path.
 
-Edit existing [Projects](/docs/integrations/git-and-vault/#projects) inline — rename, create/open its orchestrator, delete with an impact preview, change the cwd override, or edit the context prompt. Intentionally archiving a Project Orchestrator disables its heartbeat, completion wakeups, and automatic recreation; the disabled state survives reloads from synced `data.json`. Deliberately choosing **Create/Open** re-enables it. Deletion detaches threads and preserves scheduled work at the former effective cwd.
+Search or select an existing [Project](/docs/integrations/git-and-vault/#projects) to edit its name, vault folder, cwd override, or context prompt. **Save changes** applies the draft; **Cancel** discards it. The detail pane also lets you create/open its orchestrator or delete the Project after confirming the impact. Intentionally archiving a Project Orchestrator disables its heartbeat, completion wakeups, and automatic recreation; the disabled state survives reloads from synced `data.json`. Deliberately choosing **Create/Open** re-enables it. Deletion detaches threads and preserves scheduled work at the former effective cwd.
 
 > Projects focus initial context; they do not restrict vault tools, MCP servers, skills, secrets, filesystem permissions, or thread-coordination tools.
 
+## Secrets
+
+Choose **Secrets** in the section selector to search, add, replace, or remove keychain-backed environment variables. Values are stored in OS-backed secret storage and never appear in `data.json`.
+
+Choose **Add secret**, enter its variable name and value, and set its project access. **Global** makes it available to every Project and Project-less thread. **Selected projects** limits resolution to the checked Projects. Choose **Save changes** to apply the value and access together, or **Cancel** to discard the draft.
+
+For an existing secret, leaving the replacement value blank preserves the stored value. Removing a secret requires confirmation. Project access controls secret resolution; MCP server and skill registration remain global.
+
 ## Features
+
 
 ### Summarization
 
@@ -173,7 +185,7 @@ for connection, OAuth scopes, and preview-enrollment prerequisites.
 
 ## Mobile settings
 
-Obsidian Mobile shows a reduced settings screen instead of the eight tabs above:
+Obsidian Mobile shows a reduced settings screen instead of the desktop sections above:
 
 | Setting | Description |
 |---|---|
