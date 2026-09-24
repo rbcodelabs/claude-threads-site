@@ -26,6 +26,16 @@ The default behavior can be changed globally in **Settings → Tools → Permiss
 
 > **Auto-denied tool calls.** In `auto` and `dontAsk` mode — or when a deny rule blocks a tool — a tool call can be denied without an interactive prompt. When that happens the conversation shows a distinct **"Auto-denied &lt;tool&gt;"** annotation, with the deciding reason (e.g. `rule` or `mode`), so the denial stays visible instead of only surfacing as a failed tool result.
 
+## Codex computer use
+
+**Settings → Agent → Codex computer use** controls whether Agent Threads makes Codex's bundled computer-use tools available. It is off by default, including for existing installations without a saved choice. The same setting applies to interactive and scheduled Codex sessions.
+
+When off, Agent Threads supplies a native-app deny policy and disables Codex's bundled computer-use plugins and the known computer-use MCP entry points. This also disables the shared Codex browser REPL tools. Agent Threads' own contained browser tools remain available. This setting does not disable arbitrary third-party automation or shell commands.
+
+Turning it on restores the use of your existing Codex configuration; it does not install tools or grant operating-system permissions. Your global Codex configuration is not edited.
+
+Changes take effect when a Codex session starts or restarts, including when it resumes an existing conversation. Already-running or warm sessions retain their previous configuration. Use **Reload plugin (safe)** when ready to restart them. This control is separate from the permission modes above.
+
 ## Plan Mode
 
 Set **Permission Mode → `plan`** globally in Settings, or use the **shield button** in the thread footer to set it for a single thread. Claude and Codex can then investigate without mutating files or external state until they produce a plan for your approval. Read-only commands and other non-mutating research are still available.
