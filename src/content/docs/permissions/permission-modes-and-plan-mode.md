@@ -50,7 +50,7 @@ Codex can also call its no-argument `EnterPlanMode` control when a task needs in
 4. You pick one of three actions on the card:
    - **Approve** — the thread switches back to Default mode before starting one fresh implementation turn.
    - **Edit** — the plan text becomes editable in-place; submitting it switches to Default mode and starts the implementation turn with your revised plan.
-   - **Reject** — the thread stays in or returns to Plan mode and makes no edits. Your queued or new feedback is used for the next revision; if there is no feedback, the agent is asked to revise the plan.
+   - **Reject** — opens a focused multiline field while keeping the proposed plan visible for reference. Add an optional reason, then choose **Reject plan** or press <kbd>Cmd</kbd>/<kbd>Ctrl</kbd>+<kbd>Enter</kbd>; plain <kbd>Enter</kbd> creates a new line. Choose **Cancel** or press <kbd>Escape</kbd> to return to the original card without rejecting it. Submitted feedback appears as your next visible message and is used for the next revision; an empty submission uses the existing generic revision prompt. Previously queued messages keep their order, the thread stays in Plan mode, and no edits are made.
 
 Plan Mode is useful for risky or large-scale tasks where you want to review the approach before any files are touched.
 
