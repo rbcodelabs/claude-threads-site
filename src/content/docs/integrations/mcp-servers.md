@@ -135,6 +135,7 @@ Optional fields narrow what the registration does:
 | `tools.allow` | Expose only these tool names through the proxy. Mutually exclusive with `tools.deny`. |
 | `tools.deny` | Hide these tool names from discovery and block calling them (a clean MCP-level error, not a silent failure). Mutually exclusive with `tools.allow`. |
 | `clientId` | Skip Dynamic Client Registration with a known public client ID. |
+| `clientSecret` | Only for a provider that requires a confidential client, and only as a `${NAME}` placeholder — see [Confidential clients](#confidential-clients) below. |
 | `authorizationServerUrl` | Skip protected-resource discovery by pointing directly at the authorization server. |
 
 For example, connecting Vercel's MCP server while blocking its spend-money tools:
@@ -156,6 +157,55 @@ briefly rejects it. If the authorization server later revokes access or a
 refresh attempt fails, the server's status changes to "Needs re-authorization"
 and the next thread request to it fails cleanly, the same as any other
 unreachable endpoint would.
+
+### Confidential clients
+
+Available in **Agent Threads v0.45.0** or later. Most MCP authorization servers
+treat the plugin as a **public client**: PKCE proves possession of the
+authorization request, and there is no client secret at all. That is still the
+default, and nothing here changes it.
+
+A few providers issue a `client_secret` and then require it on every token
+request. There are two places to supply one:
+
+- **Settings → Agent Threads → MCP → Add MCP server → OAuth → Advanced** has a
+  masked **Client secret** field. What you type goes straight into the OS
+  keychain.
+- **An agent** can pass `clientSecret` to `mcp_register_server`, but only as a
+  `${NAME}` placeholder naming a secret you already saved — the same convention
+  the other transports use for credentials:
+
+  ```json
+  {
+    "name": "acme",
+    "type": "oauth",
+    "url": "https://mcp.acme.example/mcp",
+    "clientId": "acme-confidential-client",
+    "clientSecret": "${ACME_CLIENT_SECRET}"
+  }
+  ```
+
+  A literal secret is rejected, and so is a placeholder whose secret isn't
+  stored — the reply names the missing variable. The reason is not
+  house style: a tool call's arguments are recorded in the thread transcript and
+  its conversation log, so a literal typed there would be written to your vault
+  in plain text. The placeholder keeps the value in the keychain.
+
+Either way the secret is stored in the OS keychain alongside the tokens, never
+in `data.json`, which records only that a secret exists. It is sent only when
+exchanging or refreshing tokens and when revoking them — never on the
+authorization request, which passes through the browser's address bar and
+history. **Disconnect** wipes it along with the tokens.
+
+If a server was registered with a secret and that keychain entry later
+disappears — a keychain reset, or a vault carried to another machine — the
+server comes back as **Needs re-authorization** with an explanation, rather than
+appearing connected and then failing at the next refresh.
+
+Providers that issue a secret during Dynamic Client Registration are handled
+without any configuration: the plugin asks to be registered as a public client,
+but if the authorization server hands back a `client_secret` anyway, that secret
+is kept and used.
 
 ### Managing a connected OAuth server
 
@@ -228,6 +278,8 @@ The tool does not launch a command or contact a remote endpoint while registerin
 Never put an API key, token, password, cookie, or other secret directly in a tool call. Put a `${VAR_NAME}` placeholder in the configuration, then call `request_secret` so the user can enter the value into the OS keychain without exposing it in the conversation.
 
 The registration tool rejects a literal value when a command argument, URL query parameter, environment-variable name, or header name looks credential-related (for example, `Authorization`, `API_TOKEN`, `password`, or `cookie`). Placeholder forms such as `${NOTES_API_TOKEN}`, `Bearer ${NOTES_API_TOKEN}`, and `Basic ${NOTES_API_TOKEN}` are accepted. This check is deliberately conservative, but it is a name-based safety check rather than a secret detector: arbitrary literals in fields that do not look credential-related are allowed and **must contain only nonsecret configuration**.
+
+One field is stricter than the heuristic: an `oauth` registration's [`clientSecret`](#confidential-clients) is placeholder-only, whatever the value happens to look like.
 
 For example, an agent can propose this remote server configuration and then request `NOTES_API_TOKEN` separately:
 
