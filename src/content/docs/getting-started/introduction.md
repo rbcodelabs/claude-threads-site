@@ -5,7 +5,7 @@ category: getting-started
 order: 1
 ---
 
-Agent Threads embeds Claude Code and OpenAI Codex directly in [Geode](https://geode.rbcodelabs.com) and [Obsidian](https://obsidian.md). Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
+Agent Threads embeds Claude Code, OpenAI Codex, and [OpenCode](/docs/integrations/opencode-harness/) directly in [Geode](https://geode.rbcodelabs.com) and [Obsidian](https://obsidian.md). Each thread is an independent agent session with its own harness, working directory, and conversation history. You can run multiple sessions in parallel — one debugging a bug, another drafting docs, another answering questions about your vault.
 
 ## The three-panel model
 
@@ -35,7 +35,8 @@ Older Geode versions and Obsidian retain the existing reload behavior. Previousl
 - At least one authenticated agent CLI:
   - [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code). The plugin auto-detects `claude` at `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. AWS Bedrock / SSO users can set `AWS_PROFILE` and `AWS_REGION` under Extra environment variables.
   - [OpenAI Codex CLI](https://developers.openai.com/codex/cli/). Select **OpenAI Codex** under **Settings → Agent → Agent harness**.
-- If either executable is installed outside your `$PATH`, set its binary path under [Settings Reference → Agent](/docs/reference/settings/#agent).
+  - [OpenCode](https://opencode.ai) (desktop only) with at least one provider configured in OpenCode, for example Amazon Bedrock, the Anthropic API, OpenAI, or a local model. Select **OpenCode** under **Settings → Agent → Agent harness**. See [OpenCode Harness](/docs/integrations/opencode-harness/).
+- If an executable is installed outside your `$PATH`, set its binary path under [Settings Reference → Agent](/docs/reference/settings/#agent).
 
 ## Installation
 
