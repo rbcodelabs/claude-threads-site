@@ -26,9 +26,10 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 
 | Setting | Description |
 |---|---|
-| Agent harness | Initial Claude or Codex default for new [Agents List and Agent Board kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
+| Agent harness | Initial Claude, Codex, or OpenCode default for new [Agents List and Agent Board kickoff selectors](/docs/views/agent-dashboard/#dispatch-box). A selection made in either mounted view stays local to that view and does not rewrite this setting. Existing threads retain their original harness. |
 | Claude binary path | Path to the `claude` executable. Leave empty to find it on `$PATH` — the plugin auto-detects `/opt/homebrew/bin/claude`, `/usr/local/bin/claude`, or `~/.local/bin/claude`. |
 | Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
+| OpenCode binary path | Path to the `opencode` executable (desktop only). Leave as `opencode` to find it on `$PATH`, Homebrew, `/usr/local/bin`, or `~/.opencode/bin`. OpenCode threads use the providers, credentials, and models configured in OpenCode. Model IDs use `provider/model` form, for example `openai/gpt-5`. See [OpenCode Harness](/docs/integrations/opencode-harness/). |
 | Codex computer use | Off by default. Blocks Codex's bundled computer-use tools, including its shared browser REPL tools, in newly started or restarted sessions. Turning it on uses your existing Codex permissions and installed tools. Existing sessions keep their current configuration until restarted; use **Reload plugin (safe)** when ready. Agent Threads' own contained browser tools remain available. See [Codex computer use](/docs/permissions/permission-modes-and-plan-mode/#codex-computer-use). |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
 | Default model | Model for new turns unless a thread overrides it with [`/model`](/docs/core-workflow/models-goals-loops/). "CLI default" defers to the Claude Code CLI configuration. Family aliases always track the latest version; pinned IDs lock to a specific release. Start a thread to populate the full model list from the CLI. |
@@ -53,7 +54,7 @@ See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup and the distinction
 
 | Setting | Description |
 |---|---|
-| Extra environment variables | `KEY=VALUE` pairs, one per line, merged into the Claude process environment (e.g. `AWS_PROFILE`, `AWS_REGION`) |
+| Extra environment variables | `KEY=VALUE` pairs, one per line, merged into the Claude and OpenCode process environments (e.g. `AWS_PROFILE`, `AWS_REGION`, `OPENAI_API_KEY`) |
 
 Manage keychain-backed environment variables in the dedicated [Secrets](#secrets) section.
 
