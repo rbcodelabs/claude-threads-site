@@ -84,4 +84,4 @@ A thread that spawns a background subagent (`Agent(..., run_in_background: true)
 What happens when it reports back depends on whether the thread is still active:
 
 - **Thread still streaming:** the result appears inline through the running turn's live task pill.
-- **Thread has gone idle:** a ✓/✗ summary is appended to the conversation as a subtle centered notice row, so it remains available when you reopen the thread or scroll back instead of disappearing as a transient toast.
+- **Thread has gone idle:** a ✓/✗ summary is appended to the conversation as a subtle notice row aligned with the tool rows above it, so it remains available when you reopen the thread or scroll back instead of disappearing as a transient toast.
