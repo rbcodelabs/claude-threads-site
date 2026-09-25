@@ -16,6 +16,16 @@ order: 1
 
 On wide conversation panes, the complete timeline and composer are centered together in a readable-width column. Narrow panes remain full width so the available space is not reduced further.
 
+## Switching between Claude and Codex
+
+To continue an existing desktop thread with the other agent harness, open the conversation footer's **⋯** menu, choose **Harness: Claude** or **Harness: Codex**, then select the other harness. An empty thread switches immediately; a thread with an existing conversation asks you to confirm first.
+
+The visible conversation stays in the same thread, along with its Project, working directory, goal, artifacts, drafts, and completed child-agent history. The selected harness starts a fresh native session rather than trying to resume the other provider's session. Its first turn receives a one-time bounded summary plus references it can use to inspect the thread messages and any available raw log or archived note. Recent messages are not replayed as a new prompt.
+
+Switching resets provider-specific state, including the thread's model selection, usage snapshot, task checklist, and native session ID. The target harness uses its own default model until you choose another compatible model.
+
+Harness choices are disabled while the thread is not settled—for example, during a running or initializing turn, queued input, an unanswered permission request or question, plan review, a goal transition, a background task, or an active child agent. The menu shows the blocking reason so you know what must finish first. This switcher is a desktop conversation control; mobile does not have a separate harness-switching surface.
+
 ## Opening note links
 
 Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[label](path.md)` Markdown links. Both formats open the target note in classic and conversation-first placement. OS-absolute paths also resolve when they point inside the vault, including heading and block anchors. An absolute path outside the vault remains inert and shows a notice instead of opening or creating anything.
