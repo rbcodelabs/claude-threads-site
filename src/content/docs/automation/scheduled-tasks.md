@@ -54,6 +54,16 @@ This replaces the older pattern of baking a business-hours check into the prompt
 - **`CronCreate`** accepts `activeHoursStart` and `activeHoursEnd` — provide both together, or neither.
 - **`CronUpdate`** accepts `activeHoursStart` / `activeHoursEnd` to set or change the window (a partial change is merged with the existing one), and `clearActiveHours: true` to remove the restriction entirely.
 
+## Overlapping runs are skipped automatically
+
+A recurring task that opens a fresh thread each cycle will never stack a second run on top of one that is still working. When a cycle comes due while the thread from that task's previous run is still mid-turn, the scheduler drops the cycle — no thread, no prompt, no LLM call — and records it in run history as **Skipped (still running)**. The task stays on its normal cadence, so the next cycle fires as usual once the run finishes.
+
+This needs no configuration, and it is not something a gate command can do for you: a gate answers *"is there work?"*, not *"am I already doing it?"* A task that checks for pending work every 15 minutes but takes an hour to work through it would previously spawn several agents into the same working directory at once, each editing the same files.
+
+The guard deliberately **fails open**. If the previous run's thread has been archived, deleted, or otherwise has no live session, the task fires normally rather than wedging forever.
+
+Existing-thread `/loop` schedules behave differently, and are unchanged. Because the point of a loop is to deliver each tick into one specific thread, a busy target makes the tick **wait briefly and retry** rather than be dropped.
+
 ## Gate commands
 
 A scheduled task can carry a deterministic **gate** — a shell command that runs *before* each cycle spawns a thread, so cycles with nothing to do are skipped without burning an agent turn. Ask Claude to add one (*"…but only run it if `~/inbox/pending.txt` is non-empty"*), or set it directly through the Cron tools with `gateCommand` (plus the optional `gateTimeoutSeconds`, default 30 and capped at 120, and `gateFailOpen`, default `true`).
