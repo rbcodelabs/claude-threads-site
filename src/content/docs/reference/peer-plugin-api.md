@@ -119,6 +119,11 @@ const command = api.extensions.registerSlashCommand({ pluginId: 'example.boards'
   name: 'board',
   thread: {
     description: 'Open the board for this thread',
+    argCompletions: [
+      { name: 'sprint', description: 'Current sprint board' },
+      { name: 'backlog', description: 'Full backlog board' },
+      { name: 'archive', description: 'Closed/archived board' },
+    ],
     async invoke(context, host) {
       if (host.signal.aborted) return { status: 'error', message: 'Cancelled' };
       await openBoard(context.threadId, context.args);
@@ -132,6 +137,8 @@ command.dispose();
 ```
 
 Provide `thread`, `dispatch`, or both, each with a description and callback. Names are lowercase tokens without `/`, beginning with a letter and containing up to 64 letters, digits, or hyphens. Core commands, the enabled escalation keyword, and other peers' names cannot be shadowed. Results are `registered`, `invalid`, `conflict`, or `unavailable`; every result has an idempotent disposer.
+
+A handler may also supply `argCompletions`: up to 20 `{ name, description }` entries (name ≤64 characters, description ≤256) offered in the composer's argument dropdown once the command name has been typed — the same dropdown the host's own built-in `/model` completions use. A malformed entry rejects the whole registration as `invalid`.
 
 The host supplies immutable `surface`, original `text`, parsed multiline `args`, captured `threadId` for composer commands, `agentHarness`, `projectId` when available, and attachment-presence flags. Peers receive neither attachment contents nor DOM/view/private-manager access. Dispatch callbacks receive the selected project but decide how to use it; Design's existing dispatch behavior does not apply that selection.
 
