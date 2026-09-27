@@ -78,6 +78,7 @@ See [Model escalation](/docs/core-workflow/models-goals-loops/#model-escalation)
 | Web Viewer tool | Lets Claude open URLs directly in the host Web Viewer panel (`host_open_url`). In Obsidian, this requires the Web Viewer core plugin to be enabled under Settings → Core plugins. |
 | Inline visualizations | Renders a wrapped `visualize{…}` content reference from Codex as a live sandboxed chart inside the message, with a pop-out to full size — see [Inline visualizations](/docs/core-workflow/messaging-and-commands/#inline-visualizations). Desktop only. On by default. |
 | Hidden built-in tools | Comma-separated Claude Code built-in tools to hide from sessions. `Cron*` tools are hidden by default — the plugin has its own [scheduler](/docs/automation/scheduled-tasks/). |
+| Agent browser | Lets Claude drive a browser inside Geode's own embedded web view instead of a separate Chrome. Off by default; reload after enabling. Disabled on hosts that can't support it. See [Agent Browser](/docs/integrations/agent-browser/). |
 
 ### Always-allowed tools
 
