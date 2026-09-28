@@ -71,3 +71,30 @@ Removing the VM resets guest-only state; it does not undo changes to the mounted
 If the runtime is unavailable, check `container system status` and start it with `container system start`. If the coding image is missing, run the build command above.
 
 A VM can survive a plugin reload. If `enter_vm` reports that the thread already has a VM, use `exit_vm` before starting a fresh one. Do not remove a VM while it is doing work you need to preserve.
+
+## Run the Claude harness itself inside the VM
+
+By default, Agent Threads still needs a `claude` CLI installed on the host to run at all. You can instead run a thread's Claude harness process **inside its sandbox container** — so a supported Mac only needs Apple's `container` runtime, not a separate host `claude` install. This is **Claude only** for now; Codex and OpenCode threads still spawn on the host regardless of this setting.
+
+Opt in by building a second, separate image:
+
+```sh
+container build --tag claude-threads-harness:1 -f sandbox/Dockerfile.harness sandbox/
+```
+
+This adds the native Claude Code CLI on top of the same coding image above, under a different tag. Building it is the entire opt-in step — installing the plugin update that ships this feature changes nothing for you until you build this image.
+
+Configure under **Settings → Tools**, next to the sandbox VM controls:
+
+| Setting | Behavior |
+|---|---|
+| Run harness inside sandbox VM: **Auto** (default) | Routes into the VM only when the platform supports it, the container runtime probes successfully, and the harness image exists. Falls back to the host silently if any of those aren't ready yet. |
+| Run harness inside sandbox VM: **Always** | Forces VM routing; shows a clear error instead of a silent host fallback if a prerequisite is missing. |
+| Run harness inside sandbox VM: **Never** | Today's host-local spawn, unchanged. |
+| Harness VM image | Which image tag to route into. Blank falls back to `claude-threads-harness:1`. |
+
+Settings shows a live readiness check next to these controls, so you can see exactly why a thread isn't using the VM if it isn't.
+
+**The harness and `enter_vm`/`vm_exec`/`exit_vm` share one container per thread.** If a VM-routed thread's agent also calls `enter_vm`, it attaches to the same container the harness is already running in rather than starting a second one. This means a `vm_exec` command now runs alongside a process holding live Anthropic credentials — those credentials are scoped narrowly to the harness's own process and don't appear in an ordinary `vm_exec` command's environment. `exit_vm` refuses to remove a container the harness is still using; it's cleaned up automatically when you delete or archive the thread, not at the end of an ordinary session (so a quick restart doesn't pay container-start time again).
+
+A settings change, or building a fresh image, takes effect the next time a thread starts a new session — never mid-conversation.
