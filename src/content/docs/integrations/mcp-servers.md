@@ -27,6 +27,21 @@ Open **Settings → Agent Threads** and select the **MCP** tab. On mobile, the s
 
 Changes take effect for **newly initialized sessions**. A registration does not hot-load a server into the session that made the request; an already-running session keeps the MCP servers it started with. New threads receive the new configuration, as does an existing thread if its session is later initialized again through the normal lifecycle.
 
+## MCP servers when Claude runs inside a sandbox VM
+
+When Claude's harness runs inside an Apple sandbox VM, the transport boundary depends on the server type:
+
+| Server | Where it connects or runs | VM implications |
+|---|---|---|
+| Agent Threads OAuth proxy | Host, reached through the Agent SDK connection | Tokens and the proxy listener stay on the host; no host port or credential is exposed to the guest. |
+| Google Workspace | Host, reached through the Agent SDK connection | The connected Google account and refresh flow stay on the host. |
+| Direct HTTP or SSE | Guest | The endpoint must be reachable under the VM's `default`, `internal`, or `none` network mode. |
+| stdio | Guest | The command and its dependencies must run on Linux and use guest-visible paths, such as the mounted workspace at `/work`. |
+
+The SDK bridge carries only Agent Threads' host-resident OAuth and Google Workspace brokers. It does not provide general host-network access and does not move direct remote or stdio servers onto the host. With VM networking set to `none`, direct remote MCP servers cannot connect, while the host-brokered services above remain available through the existing SDK connection.
+
+See [Sandbox VMs](/docs/integrations/sandbox-vms/) for the wider filesystem and network boundary.
+
 ## Google Workspace
 
 Available in **Agent Threads v0.35.0** as an opt-in beta, with **Google Docs Sync
