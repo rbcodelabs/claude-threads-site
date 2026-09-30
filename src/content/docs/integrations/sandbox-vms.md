@@ -66,6 +66,17 @@ The guest has its own Linux kernel and filesystem. The chosen mount is writable:
 
 Removing the VM resets guest-only state; it does not undo changes to the mounted workspace. Keep work you want to review in that workspace before calling `exit_vm`.
 
+## MCP access from a VM-hosted Claude harness
+
+When Claude's harness itself runs inside the sandbox VM, Agent Threads keeps its host-resident OAuth and Google Workspace MCP brokers available through the Agent SDK connection. Requests cross that existing SDK bridge to the host brokers, so Agent Threads does not expose a host listener to the guest or copy OAuth credentials into the VM.
+
+That bridge is intentionally limited to MCP services Agent Threads already brokers on the host. Other external MCP transports keep their normal execution boundary:
+
+- A direct HTTP or SSE server is contacted from the guest and must be reachable under the VM's selected network mode.
+- A stdio server starts inside the Linux guest. Its command, dependencies, paths, and binaries must therefore be Linux-compatible.
+
+Choosing `none` still blocks guest networking. Host-brokered OAuth and Google Workspace MCPs remain available over the SDK connection, but the setting does not create a general guest-to-host network route or bypass the network policy for direct remote servers.
+
 ## Troubleshooting
 
 If the runtime is unavailable, check `container system status` and start it with `container system start`. If the coding image is missing, run the build command above.
