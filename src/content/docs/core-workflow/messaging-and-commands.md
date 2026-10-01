@@ -26,6 +26,12 @@ Switching resets provider-specific state, including the thread's model selection
 
 Harness choices are disabled while the thread is not settled—for example, during a running or initializing turn, queued input, an unanswered permission request or question, plan review, a goal transition, a background task, or an active child agent. The menu shows the blocking reason so you know what must finish first. This switcher is a desktop conversation control; mobile does not have a separate harness-switching surface.
 
+## Dispatching from the quick switcher
+
+In Geode, the global quick switcher (**Cmd/Ctrl+O**) shows a **Dispatch new conversation: "…"** row whenever you've typed something. Choose it to start a new thread from the text you entered and open it, the same as dispatching from the Agents List or Agent Board. The thread uses the default working directory; slash prefixes such as `/model` are not parsed.
+
+This row needs Geode's quick switcher plugin API. It does not appear in Obsidian, where the plugin simply skips it.
+
 ## Opening note links
 
 Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[label](path.md)` Markdown links. Both formats open the target note in classic and conversation-first placement. OS-absolute paths also resolve when they point inside the vault, including heading and block anchors. An absolute path outside the vault remains inert and shows a notice instead of opening or creating anything.
