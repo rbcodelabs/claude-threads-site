@@ -222,6 +222,30 @@ without any configuration: the plugin asks to be registered as a public client,
 but if the authorization server hands back a `client_secret` anyway, that secret
 is kept and used.
 
+### Quick connect
+
+Available in **Agent Threads v0.58.0** or later. **Settings → Agent Threads → MCP → Quick connect** (directly above the OAuth MCP servers list) has one-click rows for popular OAuth MCP servers, so you don't have to look up URLs or scopes:
+
+| Provider | Server URL | Notes |
+|---|---|---|
+| Atlassian | `https://mcp.atlassian.com/v2/mcp` | |
+| v0 | `https://v0.app/api/mcp` | Scope `mcp`; redirect `http://localhost:33419/callback` |
+| Linear | `https://mcp.linear.app/mcp` | |
+| Notion | `https://mcp.notion.com/mcp` | |
+| Vercel | `https://mcp.vercel.com` | Vercel only allows approved MCP clients, so sign-in may be refused |
+| Sentry | `https://mcp.sentry.dev/mcp` | |
+| Asana | `https://mcp.asana.com/v2/mcp` | Needs your own Client ID and secret — see below |
+
+Each row works the same way: click **Connect**, complete consent in the browser, and the row switches to a live connected status with a **Disconnect** button. Connecting uses the same registration path, validation, and consent screen as **Add MCP server → OAuth** (the Add MCP server dialog itself no longer has presets).
+
+**Asana** does not support Dynamic Client Registration, so **Connect** first asks for your own **Client ID** and **Client secret** (the secret goes to the OS keychain). Register `http://localhost:3118/callback` as the redirect URL in your Asana app first; the dialog prefills it.
+
+**Slack** has no Quick connect row yet, because it needs a Geode-owned Slack app. Slack still works through **Add MCP server → OAuth** with your own client ID and the redirect `http://localhost:3118/callback`.
+
+**Not yet confirmed live.** The presets follow each provider's published documentation, but Dynamic Client Registration for Atlassian, Sentry, Notion, and Vercel has not yet been confirmed by a live connect. If one of those fails to register, fall back to **Add MCP server → OAuth** with your own client ID.
+
+Other plugins can list and register these same presets; see [Peer Plugin API v1](/docs/reference/peer-plugin-api/#mcp-presets).
+
 ### Managing a connected OAuth server
 
 **Settings → Agent Threads → MCP → OAuth MCP servers** lists every connected
