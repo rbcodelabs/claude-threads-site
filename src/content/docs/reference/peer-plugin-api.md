@@ -146,6 +146,31 @@ Return `{ status: 'ok' | 'error', message?: string }`. Use `host.report` for sco
 
 Design for Agent Threads is a standalone peer: it registers its command, agent tool, and artifact provider through public API v1 and uses `threads.beginProvisional` for new-thread transactions. Agent Threads retains only a read-only source-reveal fallback for legacy design artifacts when the peer is absent. The complete contract and implementation notes are in the plugin's `docs/public-api.md` and `api/public-api-v1.d.ts`.
 
+## MCP presets
+
+Available in Agent Threads v0.58.0 or later. Peer plugins can read the same OAuth MCP presets behind [Settings → MCP → Quick connect](/docs/integrations/mcp-servers/#quick-connect) instead of hardcoding provider URLs.
+
+- `api.mcp.listPresets()` returns the built-in presets as a frozen array of `{ id, label, name, url, scopes?, redirectUri?, requiresClientId, requiresClientSecret, notes?, setupUrl?, source }`. Each call returns fresh frozen copies, so a peer can read but never alter the host's list.
+- `api.mcp.registerPreset(id, overrides?)` merges a preset with your overrides and registers it through the same path as `mcp.register`, so validation, the consent dialog, and the `registered` / `unchanged` / `unavailable` results are identical.
+
+Allowed overrides are `name`, `scopes`, `tools`, `clientId`, `clientSecret`, `authorizationServerUrl`, `redirectUri`, and `audience`; overrides win over preset values. `url`, `type`, and `grantType` belong to the preset and can never be overridden — use `mcp.register` for a custom server. `clientSecret` must be a `${NAME}` placeholder for a secret saved with `mcp.requestSecret`, never a literal.
+
+Feature-detect before calling:
+
+```ts
+if (api.capabilities.includes('mcp.registerPreset')) {
+  const preset = api.mcp.listPresets().find((p) => p.label === 'Linear');
+  if (preset) await api.mcp.registerPreset(preset.id);
+} else {
+  // Older host, or one that cannot register MCP servers
+  await api.mcp.register({ name: 'linear', type: 'oauth', url: 'https://mcp.linear.app/mcp' });
+}
+```
+
+The `mcp.listPresets` capability is always present on hosts that support presets; `mcp.registerPreset` is present only when the host can register MCP servers. On hosts without them, fall back to `mcp.register` with your own configuration.
+
+`registerPreset` throws `INVALID_ARGUMENT` for an unknown preset id, a forbidden override, or a preset that requires a client ID (such as Asana) when no `clientId` override is given.
+
 ## Persistence and errors
 
 Correlated operations are serialized and their state is durably saved before a resource handle is returned. Results and correlation mappings are retained and evicted together. After a plugin reload, an in-flight operation reconciles as interrupted instead of being duplicated.
