@@ -7,7 +7,7 @@ order: 4
 
 Sandbox VM tools let a thread run build commands, dependency installs, and tests in a separate Linux VM using Apple's `container` runtime. The workspace remains on your Mac and is mounted at `/work` inside the guest.
 
-These tools require the Agent Threads release containing the sandbox VM feature, macOS 26 or later, Apple silicon, and a running Apple container service. They are unavailable on mobile. The examples below use the canonical tool names shared by Claude and Codex.
+These tools require the Agent Threads release containing the sandbox VM feature, macOS 26 or later, Apple silicon, and a running Apple container service. They are unavailable on mobile. Where a tool supports both harnesses, the examples below use the canonical names shared by Claude and Codex.
 
 ## Set up the coding image
 
@@ -76,6 +76,16 @@ That bridge is intentionally limited to MCP services Agent Threads already broke
 - A stdio server starts inside the Linux guest. Its command, dependencies, paths, and binaries must therefore be Linux-compatible.
 
 Choosing `none` still blocks guest networking. Host-brokered OAuth and Google Workspace MCPs remain available over the SDK connection, but the setting does not create a general guest-to-host network route or bypass the network policy for direct remote servers.
+
+## Host commands from a VM-routed Claude thread
+
+After an interactive Claude thread has successfully routed its harness into the VM, it can use `host_exec({ command, cwd?, reason, timeoutSeconds? })` when a task genuinely requires one command on the Mac host. Prefer `vm_exec` for work that can stay inside the guest.
+
+Every call opens a host-owned approval dialog showing the exact command, working directory, and agent-supplied reason. You must choose **Allow once** or **Deny**; dismissing the dialog denies the call. Permission modes and auto-approval cannot bypass this prompt, and there is no permanent allow option. Scheduled and otherwise non-interactive calls are denied without running anything.
+
+Approved commands run through `/bin/sh -c` with your account's permissions. The working directory must be an existing absolute host path and defaults to the thread's current directory. The process receives only a small allowlist of ordinary environment variables, not harness credentials or API tokens. Each stdout and stderr stream is capped at 64 KiB with a truncation marker, GitHub-token-shaped strings are redacted from returned output, and the command times out after 300 seconds by default (up to 3,600 seconds), with termination followed by forced kill if needed. Non-zero exit codes are returned as results.
+
+`host_exec` is exposed only after VM routing succeeds on an interactive desktop Claude thread. It is unavailable when Claude falls back to the host, on mobile, in Codex or OpenCode threads, and through the deprecated `obsidian` MCP alias.
 
 ## Troubleshooting
 
