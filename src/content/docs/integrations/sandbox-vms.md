@@ -89,6 +89,10 @@ Approved commands run through `/bin/sh -c` with your account's permissions. The 
 
 ## Troubleshooting
 
+When the Claude harness runs in a container, its native conversation history lives in the guest filesystem. Agent Threads preserves that container across plugin reloads, including when configured skill mounts change, so saved sessions remain available. Existing containers retain their original mount set; new mount paths become available in new thread containers. Plugins whose paths are absent from an existing container are omitted from that session.
+
+If a container was already removed, or Claude otherwise cannot find a saved conversation, Agent Threads can continue in the same visible thread with a fresh native session and recent saved conversation history. This recovery happens once before assistant or tool work begins. It does not restore every detail of the original native session.
+
 If the runtime is unavailable, check `container system status` and start it with `container system start`. If the coding image is missing, run the build command above.
 
 A VM can survive a plugin reload. If `enter_vm` reports that the thread already has a VM, use `exit_vm` before starting a fresh one. Do not remove a VM while it is doing work you need to preserve.

@@ -69,10 +69,11 @@ Both refinements are available on desktop; mobile gets the smoothing pass only.
 
 ## Errors and auto-retry
 
-Two failure modes are recovered automatically, shown as a transient amber "reconnecting" notice in the conversation rather than a hard error:
+Recoverable failures show a transient amber "reconnecting" notice in the conversation:
 
 - **Transport hiccup** — the underlying `claude` CLI transport is spuriously force-closed mid-tool-call. The plugin auto-fires one follow-up turn so Claude can verify whether the interrupted action actually succeeded before treating it as a failure.
 - **Rate-limited turn** — the API rejects a turn outright with a rate-limit or overload error before processing it at all. The plugin silently retries the *exact same* turn after a backoff delay (up to 5 attempts, growing from ~3s to ~90s) — no duplicate message is added to the conversation, since Claude never saw the original prompt.
+- **Missing saved Claude session** — if Claude cannot find the conversation when reopening a thread, the plugin starts a fresh native session once, supplies recent saved conversation history, and retries the pending message. Your visible thread stays in place. Recovery is limited to failures before assistant or tool work begins, so an action already underway is not replayed. The restored history is bounded and does not recreate Claude's full original native session.
 
 If a rate-limited turn exhausts all of its retries, or any other error occurs, it surfaces as a normal error card — but instead of a wall of raw stack-trace text, you get a short one-line summary with a **Show technical details** disclosure you can expand for the full trace.
 
