@@ -5,7 +5,7 @@ category: reference
 order: 3
 ---
 
-Every thread runs with built-in tools for vault access, session control, and — for multi-agent workflows — live coordination with other threads. Claude receives them through the host-neutral `claude_threads` MCP server; Codex receives the same canonical definitions through its dynamic-tool protocol. No configuration is required.
+Every thread runs with built-in tools for vault access, session control, and — for multi-agent workflows — live coordination with other threads. Claude receives them through the host-neutral `claude_threads` MCP server; Codex receives the supported canonical definitions through its dynamic-tool protocol. No configuration is required.
 
 The former `obsidian` server and `obsidian_*` names remain callable as deprecated compatibility aliases until the next major release. New prompts, permission rules, and automation should use the canonical names below.
 
@@ -60,6 +60,7 @@ On macOS 26+ with Apple silicon, agents can run coding commands in a separate Li
 |---|---|---|
 | `enter_vm` | `image?`, `network?`, `mountPath?` | Starts the thread's VM and mounts its working directory at `/work`. Network choices are `default` (internet enabled), `internal` (host-only), or `none`. |
 | `vm_exec` | `command`, `timeoutSeconds?` | Runs a command inside the VM, returning exit code and bounded stdout/stderr. Default timeout: 300 seconds. |
+| `host_exec` | `command`, `cwd?`, `reason`, `timeoutSeconds?` | Runs one command on the Mac host from an interactive, VM-routed Claude thread after a required **Allow once** approval; scheduled and other non-interactive calls are denied. It is not exposed on host fallback, mobile, Codex, OpenCode, or the deprecated `obsidian` alias. See [Host commands from a VM-routed Claude thread](/docs/integrations/sandbox-vms/#host-commands-from-a-vm-routed-claude-thread). |
 | `exit_vm` | `force?` | Removes the thread's VM. Writes to the mounted host workspace persist. |
 
 ## Thread coordination tools
