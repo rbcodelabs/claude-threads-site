@@ -87,6 +87,12 @@ Approved commands run through `/bin/sh -c` with your account's permissions. The 
 
 `host_exec` is exposed only after VM routing succeeds on an interactive desktop Claude thread. It is unavailable when Claude falls back to the host, on mobile, in Codex or OpenCode threads, and through the deprecated `obsidian` MCP alias.
 
+## Idle-stop development build
+
+The idle-stop development build (not the v0.58.2 release) stops an agent-owned VM after 10 minutes without `vm_exec`, and restarts it on the next `vm_exec`. A harness-owned VM is stopped after 15 minutes of inactivity only when no turn, permission, question, plan, or background task is pending. Its idle session is closed first; the next message restarts the container and resumes the conversation.
+
+Idle-stop does not remove the container: guest files, mounts, and native conversation history remain. Restarting adds container-start latency. Processes inside the guest, including detached development servers, end when the VM stops; restart those processes when needed.
+
 ## Troubleshooting
 
 When the Claude harness runs in a container, its native conversation history lives in the guest filesystem. Agent Threads preserves that container across plugin reloads, including when configured skill mounts change, so saved sessions remain available. Existing containers retain their original mount set; new mount paths become available in new thread containers. Plugins whose paths are absent from an existing container are omitted from that session.
