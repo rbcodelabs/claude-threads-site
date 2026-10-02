@@ -56,6 +56,8 @@ Control the current thread's session state.
 
 On macOS 26+ with Apple silicon, agents can run coding commands in a separate Linux VM. See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup, network modes, and the writable workspace boundary. Ordinary host shell and file tools remain on the host.
 
+For Claude sessions whose harness actually routes into the VM, ordinary shell and file tools run in the guest, `enter_vm` and `exit_vm` are hidden, and `vm_exec` works without an enter step. The host owns container cleanup. Host sessions, including `auto` fallback, retain the lifecycle tools.
+
 | Tool | Parameters | Description |
 |---|---|---|
 | `enter_vm` | `image?`, `network?`, `mountPath?` | Starts the thread's VM and mounts its working directory at `/work`. Network choices are `default` (internet enabled), `internal` (host-only), or `none`. |

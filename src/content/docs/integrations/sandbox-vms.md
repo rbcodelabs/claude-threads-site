@@ -28,7 +28,7 @@ The image includes Node 22, npm, Git, ripgrep, jq, curl, wget, Python, and nativ
 
 ## Run a coding task
 
-Ask the agent to create a Git worktree, enter a VM using that worktree as its mount, and use `vm_exec` for commands:
+For a harness running on the host, ask the agent to create a Git worktree, enter a VM using that worktree as its mount, and use `vm_exec` for commands:
 
 > Create an isolated worktree for this task. Mount only that worktree in a sandbox VM, run dependency installation and tests through vm_exec, and exit the VM when finished. Keep the worktree for review.
 
@@ -46,11 +46,13 @@ For example, after entering the VM:
 
 `enter_vm` does not switch the agent's ordinary shell or file tools into the VM. Only `vm_exec` runs commands there. Host tools retain their existing permissions. Ask explicitly for VM execution when you want dependency scripts or tests to run inside the guest.
 
+When Claude's harness already runs inside the thread's VM, its ordinary shell and file tools operate in the guest. Agent Threads hides `enter_vm` and `exit_vm` for that session: the container is already available, and its lifecycle belongs to the host. `vm_exec` remains available without an enter step, with bounded output and command timeouts. The host removes the harness container when the thread is deleted or archived. Host sessions, including an `auto` routing fallback, retain all three VM tools.
+
 Install dependencies inside the guest: existing macOS `node_modules` may contain binaries that cannot run on Linux. A Git worktree's `.git` file can also point to host metadata outside the mount; use host Git tools for commits and PRs when that metadata is unavailable inside the guest.
 
 ## Choose a network mode
 
-Network mode is chosen when entering the VM and applies for its lifetime. Exit and enter again to change it.
+For agent-created VMs, network mode is chosen when entering the VM and applies for its lifetime. Exit and enter again to change it. A VM-hosted harness uses the existing harness container's networking; `vm_exec` does not change it.
 
 | Mode | Internet | Host network |
 |---|---|---|
@@ -91,4 +93,4 @@ Approved commands run through `/bin/sh -c` with your account's permissions. The 
 
 If the runtime is unavailable, check `container system status` and start it with `container system start`. If the coding image is missing, run the build command above.
 
-A VM can survive a plugin reload. If `enter_vm` reports that the thread already has a VM, use `exit_vm` before starting a fresh one. Do not remove a VM while it is doing work you need to preserve.
+A VM can survive a plugin reload. In a host session, if `enter_vm` reports that the thread already has an agent-created VM, use `exit_vm` before starting a fresh one. A VM-hosted harness reconnects to its host-managed container and has no agent-facing enter or exit step. Do not remove a VM while it is doing work you need to preserve.
