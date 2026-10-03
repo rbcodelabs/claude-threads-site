@@ -66,6 +66,22 @@ The guest has its own Linux kernel and filesystem. The chosen mount is writable:
 
 Removing the VM resets guest-only state; it does not undo changes to the mounted workspace. Keep work you want to review in that workspace before calling `exit_vm`.
 
+## Choose container or host per thread
+
+Claude threads can run their harness in the sandbox container or directly on the host. Open the thread's harness menu and use the **Run in** section:
+
+| Choice | Behavior |
+|---|---|
+| **Container** | Always run this thread's harness in the container. |
+| **Host (no container)** | Always run this thread's harness on the host. |
+| **Default (follows settings)** | Clear the override and follow the global container setting. |
+
+The header shows the mode, for example "Harness: Claude · Container" or "Harness: Claude · Host (no container)". Codex threads do not show the section because they are not routed through the container.
+
+A change takes effect the next time the thread's session starts. The menu items are disabled while a turn or other pending work is in progress.
+
+Switching between **Host** and **Container** asks for confirmation. The container has its own `~/.claude`, so a native Claude session cannot be resumed across the boundary. If you confirm, the thread resets its session and continues from a summary and transcript references, as it does when you switch harnesses. Switching between **Default** and **Container** keeps the session, because both use the container when it is available.
+
 ## MCP access from a VM-hosted Claude harness
 
 When Claude's harness itself runs inside the sandbox VM, Agent Threads keeps its host-resident OAuth and Google Workspace MCP brokers available through the Agent SDK connection. Requests cross that existing SDK bridge to the host brokers, so Agent Threads does not expose a host listener to the guest or copy OAuth credentials into the VM.
