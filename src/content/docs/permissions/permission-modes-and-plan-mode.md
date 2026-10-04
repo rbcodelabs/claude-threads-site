@@ -26,6 +26,14 @@ The default behavior can be changed globally in **Settings → Tools → Permiss
 
 > **Auto-denied tool calls.** In `auto` and `dontAsk` mode — or when a deny rule blocks a tool — a tool call can be denied without an interactive prompt. When that happens the conversation shows a distinct **"Auto-denied &lt;tool&gt;"** annotation, with the deciding reason (e.g. `rule` or `mode`), so the denial stays visible instead of only surfacing as a failed tool result.
 
+## Cross-project spawn approval
+
+When an agent uses `threads_create` to start a thread in a different project or working directory than its own, Agent Threads shows a permission card titled **Spawn thread in another project**. It lists the target project, the working directory, and the first line of the prompt.
+
+![Permission card for a cross-project thread spawn](../../../assets/screenshots/screenshot-cross-project-spawn.png)
+
+**Allow** creates the thread. **Deny** creates nothing and returns the error "Cross-project spawn was denied by the user." to the agent. **Always Allow** lets later cross-project spawns through without prompting; remove it from the always-allowed tools list in the plugin settings to be asked again. Spawns within the caller's own project need no approval. See [Cross-project spawns](/docs/reference/agent-tools/#cross-project-spawns) for exactly what counts as cross-project.
+
 ## Codex computer use
 
 **Settings → Agent → Codex computer use** controls whether Agent Threads makes Codex's bundled computer-use tools available. It is off by default, including for existing installations without a saved choice. The same setting applies to interactive and scheduled Codex sessions.
