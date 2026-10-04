@@ -66,6 +66,8 @@ The guest has its own Linux kernel and filesystem. The chosen mount is writable:
 
 Removing the VM resets guest-only state; it does not undo changes to the mounted workspace. Keep work you want to review in that workspace before calling `exit_vm`.
 
+Deleting or archiving a thread removes its container automatically, so calling `exit_vm` first is optional. About a minute after startup on desktop, a best-effort sweep also removes leftover `claude-threads-vm-*` containers whose thread no longer exists, and skips any it can't match to a thread.
+
 ## Choose container or host per thread
 
 Claude threads can run their harness in the sandbox container or directly on the host. Open the thread's harness menu and use the **Run in** section:

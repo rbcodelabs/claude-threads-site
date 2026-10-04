@@ -42,6 +42,8 @@ When an owner is supplied, omitted `origin` defaults to `ownerPluginId`; a confl
 
 Only one distinct active send is allowed per thread. A competing send fails with `THREAD_BUSY`. Cancellation, completion, and provider shutdown use first-terminal-wins semantics.
 
+`artifacts.allocateStorage` accepts `{ location: 'hidden' | 'visible', folderName, owner }`; the `artifacts.visibleStorage` capability flag reports support. Hidden storage (the default) stays under `.geode/artifacts/`. Visible storage lands in `<vault>/<root>/<pluginId>/<folderName>/`, where the root is the **Visible artifact folder** setting (default `Artifacts`, a single folder name). `owner` is required for visible storage, and an unsafe plugin id is rejected rather than cleaned. Renaming the root affects new artifacts only; existing ones keep their stored root.
+
 `threads.beginProvisional(owner, input)` returns an immutable handle with `threadId`, `commit()`, and `rollback()`. The thread cannot run until commit. Rollback deletes it, restores the prior selection, and releases storage allocated through `artifacts.allocateStorage`; unresolved handles are rolled back when the API generation stops. Commit and rollback are serialized and idempotent.
 
 ## Archive and reviewed state

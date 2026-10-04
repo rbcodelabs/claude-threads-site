@@ -7,7 +7,7 @@ order: 6
 
 Claude can drive a browser **inside Geode**, using the same embedded web view that powers Web Viewer tabs, instead of launching a separate Chrome. That removes the second browser process entirely — and with it the pile of orphaned Chrome instances that an external automation CLI leaves behind.
 
-Turn it on under **Settings → Tools → Agent browser**, then reload. The toggle is disabled on hosts that can't support it (see [Limits](#limits)).
+Turn it on under **Settings → Tools → Agent browser**, then reload. The session cap and private-network settings are always shown there, and are disabled when the host can't support the browser. The session cap and private-network settings are always shown there, and are greyed out when the host can't support the browser. The toggle is disabled on hosts that can't support it (see [Limits](#limits)).
 
 ## How Claude reads a page
 
@@ -33,7 +33,37 @@ Claude reads that, hands back a ref, and acts on it. No coordinate guessing, no 
 | `browser_screenshot` | PNG of the current page |
 | `browser_status` | How many sessions are open, and the cap |
 | `browser_close` | End this thread's session |
+| `browser_console` | Buffered console output (log, info, warn, error, debug, plus uncaught errors and unhandled rejections). `level` sets a minimum severity; `limit` and `clear` are optional. Keeps the last 500 messages and resets on navigation |
+| `browser_network` | Requests the page made, with type, method, URL, status, duration, size and whether it failed. `filter`, `limit`, `failedOnly` and `clear` are optional. Keeps the last 500 entries and resets on navigation |
+| `browser_eval` | Evaluate a JavaScript expression in the page and return size-capped JSON. **Off by default**; see [Devtools](#devtools) |
+| `browser_console` | Buffered console output (log, info, warn, error, debug, plus uncaught errors and unhandled rejections). `level` sets a minimum severity; `limit` and `clear` are optional. Keeps the last 500 messages and resets on navigation |
+| `browser_network` | Requests the page made, with type, method, URL, status, duration, size and whether it failed. `filter`, `limit`, `failedOnly` and `clear` are optional. Keeps the last 500 entries and resets on navigation |
+| `browser_eval` | Evaluate a JavaScript expression in the page and return size-capped JSON. **Off by default**; see [Devtools](#devtools) |
 | `browser_resize` | Resize the viewport (320-1920 wide, 240-1080 tall) and return a fresh snapshot |
+
+## Devtools
+
+`browser_console` and `browser_network` only report what the page already did, so they are read-only and skip the permission prompt. Their output is page-authored, so it comes back wrapped as untrusted data, like `browser_read_text`.
+
+- The console is captured by Geode itself, outside the page's JavaScript, so a page cannot rewrite `console` to hide what it logged.
+- The network log comes from a small script injected into the page, because the web view exposes no request events. Requests that fire before the page finishes parsing show up without method or error detail. Status and size are missing for cross-origin resources that don't send `Timing-Allow-Origin`. WebSocket traffic is not logged, and only the top frame is covered.
+- Request and response headers and bodies are never recorded. Credentials and sensitive-looking query values (`token`, `key`, `password`, `code`) are masked in logged URLs.
+
+`browser_eval` runs arbitrary JavaScript in the page, so it is **off by default**. Turn it on under **Settings → Tools → Agent browser → Allow JavaScript evaluation**. While it is off the tool refuses and names the setting. Each call needs the same approval as `browser_click` and `browser_type`, and the approval card shows the full expression. Results and thrown errors come back as untrusted data, capped at about 20,000 characters.
+
+Literal URLs in an expression are checked against the same blocked-address and private-network rules as `browser_navigate`. That is a tripwire, not a boundary: a URL built while the script runs cannot be checked in advance.
+
+## Devtools
+
+`browser_console` and `browser_network` only report what the page already did, so they are read-only and skip the permission prompt. Their output is page-authored, so it comes back wrapped as untrusted data, like `browser_read_text`.
+
+- The console is captured by Geode itself, outside the page's JavaScript, so a page cannot rewrite `console` to hide what it logged.
+- The network log comes from a small script injected into the page, because the web view exposes no request events. Requests that fire before the page finishes parsing show up without method or error detail. Status and size are missing for cross-origin resources that don't send `Timing-Allow-Origin`. WebSocket traffic is not logged, and only the top frame is covered.
+- Request and response headers and bodies are never recorded. Credentials and sensitive-looking query values (`token`, `key`, `password`, `code`) are masked in logged URLs.
+
+`browser_eval` runs arbitrary JavaScript in the page, so it is **off by default**. Turn it on under **Settings → Tools → Agent browser → Allow agents to evaluate JavaScript in the browser**; it applies immediately. While it is off the tool refuses and names the setting. Each call needs the same approval as `browser_click` and `browser_type`. Results and thrown errors come back as untrusted data, capped at about 20,000 characters.
+
+Literal URLs in an expression are checked against the same blocked-address and private-network rules as `browser_navigate`. That is a tripwire, not a boundary: a URL built while the script runs cannot be checked in advance.
 
 ## Large pages and raw JSON
 
