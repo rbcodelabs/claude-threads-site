@@ -44,7 +44,7 @@ If you send a message while Claude is already processing, it goes into a queue �
 
 ## Task checklist
 
-Claude's `TodoWrite` / `TaskCreate` tools and Codex's `update_plan` tool render the same live task checklist above the composer. It updates as the agent moves items between pending, in-progress, and completed states, so you can follow a multi-step task without interrupting the thread.
+Claude's `TodoWrite` / `TaskCreate` tools and Codex's `update_plan` tool show a live task checklist as a small **task pill** (for example, "3/5 tasks") in the composer footer, between the schedule and agent pills. The pill turns accent-colored while a task is in progress and green once all are done. Click it to open the full checklist in a popover; Escape, an outside click, or the close button dismisses it. Once every task is done, the pill hides after you send your next message. The checklist updates as the agent moves items between pending, in-progress, and completed states, so you can follow a multi-step task without interrupting the thread.
 
 ## Activity indicator
 
@@ -225,6 +225,10 @@ Long agentic threads — especially ones with many tool calls spread across doze
 - Toggle the menu item again (now labelled **Expand view**) to return to the normal conversation view.
 
 Summaries are cached in memory for the session. They regenerate on the next reload — which keeps storage simple while keeping the background work cheap (the in-process model is fast and inexpensive).
+
+## Current time
+
+Every turn, Agent Threads tells the agent the current local time and time zone, as a short line added after your message in the form `[Current local time: 2026-09-25T16:11-04:00 (Friday), time zone America/New_York]`. This applies to Claude, Codex, and OpenCode threads, so long-lived threads that span days still know what time it is when they write timestamps or reason about schedules. Your message text itself is not changed.
 
 ## Background tasks
 

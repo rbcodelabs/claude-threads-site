@@ -21,7 +21,7 @@ Shows everything installed as a collapsible source tree.
 
 The top-right corner of the tab bar has two icon buttons (Installed tab only):
 
-- **Import (+)** — opens a menu with **Folder…** and **File (.skill)…**, letting you install a skill directly from a local folder or a packaged `.skill`/`.zip` archive without going through GitHub.
+- **Add (+)** — opens a menu with **Folder…** and **File (.skill)…** to install a skill directly from a local folder or a packaged `.skill`/`.zip` archive, plus **GitHub repo…** and **Local folder source…** to register a [skill source](#skill-sources). Each item is enabled on its own; one that isn't available on your host shows a notice with the reason, and the button is disabled only when none work.
 - **Check for updates (↻)** — shown once you have at least one GitHub plugin source; re-fetches staleness for all GitHub plugin sources in parallel. Its icon spins while running, and a toast reports the result when it finishes, including which sources failed to check (e.g. if you're offline). An indicator dot appears on the button afterward if any plugin has updates. Hover either button for its full status/tooltip.
 
 **GitHub plugin sources** appear as top-level nodes with a badge (`•N`) when updates are available; clicking one expands it to reveal its skills and opens a detail panel with:
@@ -52,13 +52,21 @@ Authored skills are available as `/local:<identifier>` in newly started Claude a
 
 Search the [skills.sh](https://skills.sh) registry. Results show the skill name, GitHub source, and install count. Click a result to see details and an **Install** button that clones the skill from GitHub into `<vault>/.obsidian/plugins/claude-threads/skills/`. Installed skills are invoked as `/vault:<name>`.
 
-## Skill Sources settings
+## Skill sources
 
-**Settings → Skills** registers local skill collections to browse and install from within the Skills Manager, independent of the Browse tab's registry search. Each source is either:
+Skill sources are collections you browse and install from inside the Skills Manager, independent of the Browse tab's registry search. Add them from the **+** menu (**GitHub repo…** or **Local folder source…**). The new source is expanded for you: a GitHub source preloads its skills, and a local one opens in Browse. Each source is either:
 
-- **GitHub** — a repo URL that's cloned into the vault's plugin folder, with an optional display name override. Staleness (`behindCount`) is tracked per source and drives the update badges described above.
-- **Local** — a path to an existing skills folder on disk, with an optional separate git repo path if the skills folder lives inside a larger repo (so Update pulls the right repo).
+- **GitHub** — a repo URL that's cloned into the vault's plugin folder, with an optional display name override. Staleness (`behindCount`) is tracked per source and drives the update badges described above. Its detail panel has **Update**, **Reload**, **Reinstall**, and **Remove Source**.
+- **Local** — a path to an existing skills folder on disk, with an optional separate git repo path if the skills folder lives inside a larger repo (so Update pulls the right repo). Open it in Browse and use **Remove source** to drop it.
 
-Add or remove sources from Settings → Skills, or via the **Add Source** button, which opens the same add-source flow reachable from the Skills Manager itself.
+**Settings → Skills → Skill sources** now shows how many sources you have and an **Open Skills Manager** button; adding, updating, and removing happen in the Skills Manager. **Local skills folder** stays in Settings.
+
+### Auto-update
+
+**Settings → Skills → Auto-update GitHub skill sources** (on by default) fetches and fast-forwards your GitHub sources in the background on launch and every 6 hours. A notice tells you when sources changed, and updated skills apply to new threads. Sources pinned to a ref are skipped, and a clone that has diverged from its remote is left alone with a console warning. Skills are instructions your agents follow, so turn this off if you source skills from repos you don't trust.
+
+### Private repositories
+
+Skill sources use a built-in git client. Public repos are fetched anonymously. For a private repo, Agent Threads uses Geode's GitHub connection: the Geode GitHub App must be installed on that repo, and if access is refused the error includes the App install link. The token is requested only after GitHub rejects the anonymous request, and is sent only to `github.com`. SSH keys and keychain git credentials are not used, and on Obsidian, older Geode, or mobile (no GitHub connection) private repos fail with a hint to connect GitHub.
 
 Once a skill is installed, it's automatically available in the [`/` slash command dropdown](/docs/core-workflow/messaging-and-commands/#slash-commands) in every thread — there's no separate step to wire a newly installed skill into the chat input. Vault-installed skills appear as `/vault:<name>`; skills from your read-only `~/.claude/skills/` library are invoked bare as `/<name>`.

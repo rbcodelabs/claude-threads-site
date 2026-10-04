@@ -14,6 +14,7 @@ Projects and Secrets have searchable lists and a detail editor, arranged side by
 | Setting | Description |
 |---|---|
 | Conversation placement | `Conversation first` (default on new installs), or `Classic sidebar` for the original layout. On desktop, Conversation first keeps one Chat view in the main area and reuses an adjacent native companion for contextual content without detaching unrelated leaves; the Agents List and Skills Manager open in the right sidebar to match. Existing installs keep whichever placement they were already using. Mobile is unchanged. |
+| Offer Chief of Staff on first run | On by default. On a brand-new install, adds the Chief of Staff skills and starts a Chief of Staff thread. Off shows the static getting-started guide instead. [Set up Chief of Staff](/docs/getting-started/first-thread/) is available from the command palette either way. |
 | Layout density | `Compact`, `Comfortable` (default), or `Spacious` — controls message spacing and padding in the conversation view |
 | Context footer command | Shell command that produces the [status-line pills](/docs/reference/status-line/) (JSON tags or plaintext). Runs per-thread, in the background, against that thread's working directory. Desktop only. |
 | Keep computer awake | Prevent the Mac from sleeping while Claude is responding; shows a ☕ indicator in the status bar |
@@ -39,14 +40,21 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 | Codex reasoning effort | `Default`, `Low`, `Medium`, `High`, `XHigh`, or `Ultra` — how much reasoning effort Codex applies per turn. `Ultra` enables Codex's supported proactive multi-agent mode for work that divides cleanly; it can increase latency and compute use, and does not guarantee that Codex will fan work out to child agents. |
 | Agent progress summaries | When enabled, running sub-agents emit an AI-generated progress summary roughly every 30 seconds |
 | Enable 1M context window (beta) | Passes the `context-1m-2025-08-07` beta header for Sonnet 4/4.5. Requires a model that supports it. |
-| Default working directory | Starting directory for new threads. Leave empty to use the vault root. |
+| Default working directory | Starting directory for new threads. Leave empty to use the vault root. On desktop, **Browse…** next to the field opens the native folder picker. |
 
 ### Sandbox VMs
 
 | Setting | Description |
 |---|---|
-| Sandbox VM image | Image used by `enter_vm`; defaults to `claude-threads-coding:1`. Build it from the plugin's `sandbox/Dockerfile`. Requires Apple's container runtime on macOS 26+ with Apple silicon. |
+| Sandbox VM image | Image used by `enter_vm`; defaults to `claude-threads-coding:1`. **Set up sandbox** fetches it for you; or build it from the plugin's `sandbox/Dockerfile`. Requires Apple's container runtime on macOS 26+ with Apple silicon. |
+| Run harness inside sandbox VM | Where a thread's Claude CLI process runs. **Auto (default)** routes into the sandbox container only when the runtime, a probe and the harness image are all ready, and otherwise runs on your Mac and offers setup. **Always — error if unavailable** forces the container and errors instead of falling back. **Never — host-local spawn only** always runs on the host. A thread's own **Run in** choice can override this; see [Sandbox VMs](/docs/integrations/sandbox-vms/). |
+| Harness VM image | Container image the harness routes into, separate from the sandbox VM image. Leave empty for `claude-threads-harness:1`. **Set up sandbox** builds it for you. |
 | Sandbox VM network | Default for new VMs: full egress, internal (host-only, no internet), or none (no network). An explicit `enter_vm` network argument overrides this setting. Existing VMs keep their current networking. |
+| Sandbox VM memory | Memory limit per sandbox container, for example `4G` or `2048M` (default `4G`). Invalid values fall back to the default. Applies only to newly created containers. |
+| Sandbox VM CPUs | CPU count per sandbox container, a whole number from 1 to 64 (default 4). Applies only to newly created containers; remove an existing one with `container rm --force claude-threads-vm-<thread-id>` to pick up a change. |
+| Sandbox setup | One-click **Set up sandbox** (also **Finish setup** / **Update sandbox**) installs the managed container runtime, pulls the published base image, and builds the Claude layer. Shows an **Image version** line and **Update available** when the image is stale. **Reset sandbox** removes the local images and sets up again. |
+| Use Geode GitHub connection | Geode only. Lets threads use the GitHub account connected in Geode (Settings → GitHub) for `git` over HTTPS, `gh`, and the GitHub API, on the host and in the sandbox VM, with no personal access token. The token reaches every repository the Geode GitHub App is installed on. Your own `GH_TOKEN`, `gh` login, and git credential helpers take priority. On by default. |
+| GitHub commit email | Email for commits made with the Geode connection. Leave empty to use your GitHub noreply address (`ID+login@users.noreply.github.com`). Only applied where a repository has no `user.email` of its own. |
 
 See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup and the distinction between guest commands and host tools.
 
@@ -104,13 +112,15 @@ This reduces redundant event traffic in new logs. It does not rewrite existing l
 
 Choose **Projects** in the section selector, then **New project**. Enter a name and vault folder and choose **Create project**. Its working directory defaults to `<vault root>/<vault folder>`; set a filesystem cwd override for work outside the vault. Each Project shows its resolved effective cwd, and clearing the override returns it to the vault-derived path.
 
+On desktop, **Browse…** next to the filesystem working directory field opens the native folder picker. You can also reach a blank draft from the dispatch **Project** menu on the Agents List and Agent Board by choosing **New Project…**.
+
 Search or select an existing [Project](/docs/integrations/git-and-vault/#projects) to edit its name, vault folder, cwd override, or context prompt. **Save changes** applies the draft; **Cancel** discards it. The detail pane also lets you create/open its orchestrator or delete the Project after confirming the impact. Intentionally archiving a Project Orchestrator disables its heartbeat, completion wakeups, and automatic recreation; the disabled state survives reloads from synced `data.json`. Deliberately choosing **Create/Open** re-enables it. Deletion detaches threads and preserves scheduled work at the former effective cwd.
 
 > Projects focus initial context; they do not restrict vault tools, MCP servers, skills, secrets, filesystem permissions, or thread-coordination tools.
 
 ## Secrets
 
-Choose **Secrets** in the section selector to search, add, replace, or remove keychain-backed environment variables. Values are stored in OS-backed secret storage and never appear in `data.json`.
+Choose **Secrets** in the section selector to search, add, replace, or remove keychain-backed environment variables. Values are stored in OS-backed secret storage and never appear in `data.json`. Stored secret values, and common token formats such as GitHub, Anthropic/OpenAI, AWS, Slack, and Google keys, JWTs, private keys, and `Bearer` headers, are also masked in plugin logs, the diagnostics export, and raw JSONL thread logs. Thread notes and saved message history are not scrubbed, and a secret you never stored in the keychain may not be recognized.
 
 Choose **Add secret**, enter its variable name and value, and set its project access. **Global** makes it available to every Project and Project-less thread. **Selected projects** limits resolution to the checked Projects. Confirm with **Add secret** for a new entry or **Save changes** for an existing one to apply the value and access together. **Cancel** discards the draft.
 
@@ -181,14 +191,18 @@ See [Remote access (mobile)](/docs/integrations/remote-and-voice/#remote-access-
 
 ## Skills
 
-Register local skill collections — GitHub repos or local folders — to browse and install from within the [Skills Manager](/docs/automation/skills-manager/). Each source shows its type, path, and (for GitHub sources) an update badge when the clone is behind its remote, with **Update** and **Remove** actions per source, and an **Add Source** button to register a new one.
+| Setting | Description |
+|---|---|
+| Local skills folder | Vault-relative folder for authored skills. Changing it does not move files. |
+| Auto-update GitHub skill sources | On by default. Fast-forwards GitHub skill sources in the background on launch and every 6 hours; updated skills apply to new threads. Pinned and diverged sources are skipped. |
+| Skill sources | Shows how many sources you have, with an **Open Skills Manager** button. Add, update, and remove GitHub repos and local skill folders in the [Skills Manager](/docs/automation/skills-manager/#skill-sources); private GitHub repos use Geode's GitHub connection. |
 
 ## MCP
 
 Add, edit, and remove the external MCP servers (stdio, HTTP, or SSE) that get merged into newly initialized sessions on both the Claude and Codex harnesses — no hand-editing JSON required for the common case. Servers are stored in **this plugin's own `data.json`**, scoped to this vault — not in `~/.claude/settings.json` and not shared with the `claude` CLI. An interactive desktop agent can also propose a create-only registration with `mcp_register_server`, subject to a separate host confirmation. See [Managing MCP Servers](/docs/integrations/mcp-servers/) for the full walkthrough, including agent registration, the add/edit form, `${VAR_NAME}` placeholders, and what happens when a placeholder can't be resolved (the server is skipped, with a warning, rather than starting with a blank credential).
 
 The MCP tab also has a **Google Workspace** section with opt-in **Google Docs**,
-**Google Drive**, **Google Sheets**, and **Google Slides** toggles. It uses the
+**Google Drive**, **Google Sheets**, **Google Slides**, **Gmail**, and **Google Calendar** toggles (all off by default). It uses the
 Google Docs Sync account connected in the same vault and exposes Google's hosted
 tools to new threads on either harness. See [Google Workspace setup](/docs/integrations/mcp-servers/#google-workspace)
 for connection, OAuth scopes, and preview-enrollment prerequisites.

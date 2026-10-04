@@ -7,7 +7,13 @@ order: 1
 
 ## Permissions
 
-When the active Claude or Codex agent needs to write a file or run a command, a permission card appears inline in the conversation asking you to **Allow**, **Deny**, or **Always Allow**. Always Allow adds the tool to a per-vault allowlist so you're never asked again for that tool. You can also resolve permissions directly from the [Agents List](/docs/views/agent-dashboard/) without switching threads.
+When the active Claude or Codex agent needs to write a file or run a command, a permission card appears inline in the conversation asking you to **Allow**, **Deny**, or **Always Allow**. Always Allow adds the tool to a per-vault allowlist so you're never asked again for that tool. Allow applies to that one request only; it does not write a permanent rule anywhere. Always Allow is stored only in the per-vault list under **Settings → Tools → Always-allowed tools**, where you can see and remove it, and nothing is written to the vault's `.claude/settings.local.json`.
+
+The card shows a readable summary of what the agent wants to do, with its individual fields in a collapsible **Details (N)** section, instead of raw truncated JSON. The Agents List, Kanban board, and mobile views show the same summary.
+
+If an agent makes several tool calls or asks several questions at once, the prompts queue per thread: answer the first and the next appears, so none is lost and the thread never waits on a prompt you can't see.
+
+You can also resolve permissions directly from the [Agents List](/docs/views/agent-dashboard/) without switching threads.
 
 ![Inline permission dialog — Deny / Allow / Always Allow before Claude writes a file](../../../assets/screenshots/screenshot-permission.png)
 
@@ -58,7 +64,7 @@ Codex can also call its no-argument `EnterPlanMode` control when a task needs in
 4. You pick one of three actions on the card:
    - **Approve** — the thread switches back to Default mode before starting one fresh implementation turn.
    - **Edit** — the plan text becomes editable in-place; submitting it switches to Default mode and starts the implementation turn with your revised plan.
-   - **Reject** — the thread stays in or returns to Plan mode and makes no edits. Your queued or new feedback is used for the next revision; if there is no feedback, the agent is asked to revise the plan.
+   - **Reject** — the card switches to an inline **Why are you rejecting this plan?** field while the proposed plan stays visible. Type your feedback and press **Cmd/Ctrl+Enter** to submit (plain **Enter** adds a newline), or choose **Cancel** or press **Escape** to return to the original card without rejecting. The thread stays in or returns to Plan mode and makes no edits; your feedback is sent once to the thread and used for the next revision. If you submit it empty and have no queued feedback, the agent is asked to revise the plan.
 
 Plan Mode is useful for risky or large-scale tasks where you want to review the approach before any files are touched.
 
