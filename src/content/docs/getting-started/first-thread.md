@@ -7,6 +7,8 @@ order: 2
 
 The first time you install Agent Threads on a fresh vault, the plugin opens a three-panel workspace for you automatically: the Chat view in the left sidebar, a bundled "Getting Started" guide in the center editor, and the Agents List in the right sidebar — so the layout makes sense before you write a single message. A welcome notice confirms it's ready. This only happens once; the plugin sets a flag so it won't reappear on later launches, and it's skipped entirely if you already had threads before upgrading (existing users aren't dropped into onboarding).
 
+On a brand-new install, the first run also adds the [Chief of Staff](https://github.com/rbcodelabs/chief-of-staff) skill source (unless you already have it) and starts a persistent thread titled **Chief of Staff** that runs the `cos-setup` skill to set you up, opening it in Chat. If that can't start (the clone fails, the selected harness binary isn't found, or thread creation fails), you get the static Getting Started guide instead. Run **Set up Chief of Staff** from the command palette any time; it reopens your existing Chief of Staff thread rather than creating another. Turn off **Settings → General → Offer Chief of Staff on first run** to always get the static guide.
+
 ## Starting your first task
 
 1. Click the **Agents List** ribbon icon, or run **Open Agents List** from the command palette (`Cmd+P`)

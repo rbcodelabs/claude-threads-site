@@ -42,6 +42,8 @@ When an owner is supplied, omitted `origin` defaults to `ownerPluginId`; a confl
 
 Only one distinct active send is allowed per thread. A competing send fails with `THREAD_BUSY`. Cancellation, completion, and provider shutdown use first-terminal-wins semantics.
 
+`artifacts.allocateStorage` accepts `{ location: 'hidden' | 'visible', folderName, owner }`; the `artifacts.visibleStorage` capability flag reports support. Hidden storage (the default) stays under `.geode/artifacts/`. Visible storage lands in `<vault>/<root>/<pluginId>/<folderName>/`, where the root is the **Visible artifact folder** setting (default `Artifacts`, a single folder name). `owner` is required for visible storage, and an unsafe plugin id is rejected rather than cleaned. Renaming the root affects new artifacts only; existing ones keep their stored root.
+
 `threads.beginProvisional(owner, input)` returns an immutable handle with `threadId`, `commit()`, and `rollback()`. The thread cannot run until commit. Rollback deletes it, restores the prior selection, and releases storage allocated through `artifacts.allocateStorage`; unresolved handles are rolled back when the API generation stops. Commit and rollback are serialized and idempotent.
 
 ## Archive and reviewed state
@@ -144,7 +146,85 @@ The host supplies immutable `surface`, original `text`, parsed multiline `args`,
 
 Return `{ status: 'ok' | 'error', message?: string }`. Use `host.report` for scoped feedback and heed `host.signal` for cooperative cancellation. Exceptions, invalid results, disposal, and a 60-second timeout become errors, never ordinary agent prompts. Failed dispatches restore the draft and attachments without discarding newer input. Registration updates dropdowns and pills immediately; disposal and host shutdown revoke callbacks and feedback. Arbitrary peer side effects cannot be rolled back by the host.
 
-Design for Agent Threads is a standalone peer: it registers its command, agent tool, and artifact provider through public API v1 and uses `threads.beginProvisional` for new-thread transactions. Agent Threads retains only a read-only source-reveal fallback for legacy design artifacts when the peer is absent. The complete contract and implementation notes are in the plugin's `docs/public-api.md` and `api/public-api-v1.d.ts`.
+Design for Agent Threads is a standalone peer: it registers `/design`, the `EnterDesignMode` agent tool, and the `agent-threads.design` artifact provider through public API v1 and uses `threads.beginProvisional` for new-thread transactions. Agent Threads retains only a read-only source-reveal fallback for legacy design artifacts when the peer is absent. The complete contract and implementation notes are in the plugin's `docs/public-api.md` and `api/public-api-v1.d.ts`.
+
+## Artifacts
+
+Artifacts are durable, peer-owned results shown as cards on a thread. Check `capabilities` before using any of this.
+
+- `extensions.registerArtifactProvider(owner, contribution)` presents them. A provider supplies a namespaced `providerId` (`<publisher>.<capability>`), the artifact `kinds` it owns, `present(ref)` returning a title, optional subtitle and icon, and named actions, and `invoke(actionId, ref, host)` to run one action. It never receives a view, workspace leaf or DOM node; the host lends an `ArtifactActionHost` for each call with `openView()`, `revealInFolder()` and `updateArtifact()`. `ref.data` is opaque to the host, so the provider owns its schema and migrations.
+- Duplicate provider ids fail with `status: 'conflict'` and a non-namespaced id with `status: 'invalid'`. Every result has an idempotent `dispose()`, and all registrations are dropped when the host stops.
+- Callbacks are isolated and bounded. A `present()` that throws degrades only that card to a placeholder; an `invoke()` that throws or times out becomes an error result shown to the user.
+- An artifact whose provider is not registered still renders with its stored title, names the missing provider, and has no actions. Uninstalling a plugin never makes prior work vanish. Legacy `design-static` artifacts keep a read-only source-reveal fallback, which a live Design plugin overrides.
+- The `artifacts` namespace creates and opens them without a view or private manager access. `artifacts.attach(owner, threadId, ref)` persists an artifact and returns `attached` or `updated`; it is idempotent on `ref.id`. `artifacts.update` and `artifacts.detach` take the same explicit `owner`, which is checked against whoever registered `ref.providerId`, so one plugin cannot write into another's namespace (`conflict`; `unknown-provider` and `invalid` cover an unregistered provider and an undeclared kind). `owner` is self-declared, not authenticated.
+- `artifacts.invokeAction(threadId, artifactId, actionId)` runs an action on the same path a card click takes. Input a caller could plausibly get wrong returns a structured outcome; only a revoked generation throws `PLUGIN_UNAVAILABLE`.
+- `ThreadArtifactRef.storageRoot` is optional and must lie inside `<vault>/.geode/artifacts/` or a plugin's folder under the visible root. A bad root fails the whole `attach`. `data` must be a plain JSON object, capped at 256 KiB serialized. `artifacts.allocateStorage` (see [Threads](#threads)) creates the root, and re-allocating returns the existing one with `status: 'existing'`.
+
+## Agent tools
+
+`extensions.registerAgentTool(owner, contribution)` adds an in-process tool that every thread session can call.
+
+- The host injects the thread id: a peer writes `invoke(threadId, args, host)` and never chooses a thread. `AgentToolHost.allocateStorage` stamps the tool's registered owner, so storage allocated from a tool is host-attributed.
+- Names cannot be shadowed. A name that collides with a host built-in, a core agent tool such as `Read` or `Bash`, or another peer's tool is rejected with `status: 'conflict'`; the incumbent always survives.
+- Schemas are plain JSON Schema, so no shared zod instance is needed. Unrecognised schema shapes degrade to accepted-but-unvalidated, so re-check arguments inside `invoke`.
+- Approval is required by default: a tool counts as a mutation unless it sets `requiresApproval: false`.
+- A tool that throws, returns a malformed result or hangs past the host timeout becomes an ordinary tool error for that one call.
+- Registrations are dropped on `dispose()` and host stop. Running sessions are not retrofitted: a tool registered after a session's tools were built appears on the next session.
+
+`threads.permissions(threadId)` returns the effective permission mode and whether a plan approval or question is pending, so a peer writing on a thread's behalf can tell whether writing is allowed.
+
+## Inline message content
+
+`extensions.registerMessageContentProvider(owner, contribution)` lets a peer render rich content inside an assistant reply, between the surrounding paragraphs, rather than as an artifact above the composer. Check `capabilities` for `extensions.registerMessageContentProvider`, register once per API generation, and dispose on unload. The host owns every card, image, button and sandbox frame; providers never receive host DOM.
+
+```ts
+const registration = api.extensions.registerMessageContentProvider(
+  { pluginId: 'example-reports' },
+  {
+    providerId: 'example.reports',
+    present(ref, context) {
+      if (ref.schemaVersion !== 1 || typeof ref.data.reportId !== 'string') {
+        throw new Error('Unsupported report reference');
+      }
+      return {
+        kind: 'card',
+        title: ref.title,
+        body: 'Open the report to review its supporting details.',
+        actions: [{ id: 'open', label: 'Open report', variant: 'primary' }],
+      };
+    },
+    async invoke(actionId, ref, context, host) {
+      if (context.signal.aborted || actionId !== 'open') {
+        return { status: 'error', message: 'Action unavailable' };
+      }
+      await host.openView({ type: 'example-report-view', state: { reportId: ref.data.reportId } });
+      return { status: 'ok' };
+    },
+  },
+);
+
+const reference = api.messageContent.formatReference({
+  providerId: 'example.reports',
+  id: 'report-q3',
+  schemaVersion: 1,
+  title: 'Quarterly report',
+  data: { reportId: 'report-q3' },
+});
+```
+
+The marker is `agent-content` followed by the serialized JSON object; use `formatReference` instead of assembling it. Return the reference from a contributed tool and instruct the assistant to put it verbatim on its own line, outside a code block. Registering or formatting never sends a message or starts a turn, and Claude and Codex share one rendering path.
+
+| Kind | Content |
+|---|---|
+| `card` | Title, optional subtitle and icon, optional plain-text body and named actions |
+| `image` | Title, image source and alt text, optional subtitle and named actions |
+| `document` | Title and self-contained HTML, optional subtitle, bounded height and named actions |
+
+Images accept supported raster data URLs and HTTPS sources; an HTTPS image makes an ordinary browser request, so prefer inline data. Documents run in nested opaque-origin frames: scripts are allowed, but remote resources, navigation, host access, forms, popups and downloads are blocked, so keep CSS, scripts and assets inside the HTML and expose host operations as named card actions.
+
+Only assistant transcript content activates providers; user messages, code examples and plan text cannot. While a message streams, references show inert fallback cards, and provider callbacks and document scripts start once it settles. The mobile relay view shows readable fallback cards without executing desktop providers or forwarding their actions.
+
+The reference is saved as ordinary message content, so its fallback title stays visible if the provider is absent, removed or fails. It can be archived or relayed with the conversation, so use identifiers and non-secret values. Callbacks are bounded, receive `threadId`, `messageId` and an abort signal, and are cancelled on thread switch, rerender, disposal and shutdown; honor cancellation and validate reference data. Invalid or duplicate registrations return structured failures, and a callback error degrades only the affected card.
 
 ## MCP presets
 

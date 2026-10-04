@@ -50,8 +50,10 @@ pending; test with non-sensitive content before using it for important work.
 
 The **Google Workspace** section connects Google's hosted MCP servers using the
 Google account already connected in the **Google Docs Sync** plugin in the same
-vault. Enable **Google Docs**, **Google Drive**, **Google Sheets**, and
-**Google Slides** individually. All four start disabled.
+vault. Enable **Google Docs**, **Google Drive**, **Google Sheets**,
+**Google Slides**, **Gmail**, and **Google Calendar** individually. All six start disabled.
+Gmail's tools can read, send, and delete mail, and Calendar's can create, change, and
+delete events, so enable them deliberately.
 
 Each enabled service exposes Google's available tools, including read and write
 operations, to new Claude and Codex threads. The existing harness permission mode
@@ -80,6 +82,27 @@ Normal access-token refresh is automatic. If Google rotates the refresh token,
 start a new thread. Disabling a service revokes existing Google connections;
 re-enabling it requires a new thread.
 
+### Large Drive files
+
+Google's Drive tools move file contents inline, so large files don't fit. Enabling
+**Google Drive** therefore also gives each thread a local `google-drive-files` server
+with two tools that move bytes between Drive and local disk instead:
+
+- `upload_local_file` — resumable, chunked upload of a local file of any size. The file
+  is stored as-is, with no conversion to Docs, Sheets, or Slides. Because the connection
+  grants the `drive.file` scope, Google may refuse a `parentId` for a folder this app
+  did not create.
+- `download_to_local_file` — streams a Drive file to disk and refuses to replace an
+  existing file unless `overwrite` is true. Google-native files are exported: Docs and
+  Slides to PDF, Sheets to XLSX, Drawings to PNG (or pass `exportMimeType`). Google caps
+  exports at 10 MB.
+
+Paths are confined to the thread's working directory and the vault, with symlink escapes
+refused. Sensitive locations such as `.obsidian`, `.git`, `.claude`, `.ssh`, `.aws`,
+`.gnupg`, `.env` files, and `.mcp.json` are always refused. In a sandbox VM, `/work`
+refers to the working directory. The server shares the Drive toggle and revocation of the
+other Google servers.
+
 ### Google Cloud prerequisites
 
 Google's Workspace MCP servers are currently in Developer Preview. Confirm both
@@ -93,6 +116,12 @@ for each service:
 | Docs | `docs.googleapis.com`, `docsmcp.googleapis.com` | Drive scopes plus `documents.readonly`, `documents` |
 | Sheets | `sheets.googleapis.com`, `sheetsmcp.googleapis.com` | Drive scopes plus `spreadsheets.readonly`, `spreadsheets` |
 | Slides | `slides.googleapis.com`, `slidesmcp.googleapis.com` | Drive scopes plus `presentations.readonly`, `presentations` |
+
+**Gmail and Calendar** are exposed as the `google-gmail` and `google-calendar` servers
+and use the same connection. They need extra OAuth scopes that older Google Docs Sync
+grants don't include: after the auth service adds them, disconnect and reconnect your
+account in Google Docs Sync. Until you do, Gmail and Calendar calls fail with a 403 or
+insufficient-scope error, and the Google Workspace status line suggests reconnecting.
 
 Scope names in the table have the prefix `https://www.googleapis.com/auth/`.
 Include the explicit read-only scopes even when requesting their write-capable
@@ -151,6 +180,8 @@ Optional fields narrow what the registration does:
 | `tools.deny` | Hide these tool names from discovery and block calling them (a clean MCP-level error, not a silent failure). Mutually exclusive with `tools.allow`. |
 | `clientId` | Skip Dynamic Client Registration with a known public client ID. |
 | `clientSecret` | Only for a provider that requires a confidential client, and only as a `${NAME}` placeholder — see [Confidential clients](#confidential-clients) below. |
+| `grantType` | `authorization_code` (default, browser consent) or `client_credentials` — see [Client credentials](#client-credentials) below. |
+| `audience` | Only with `client_credentials`: the API the token is minted for, passed literally (not a secret). |
 | `authorizationServerUrl` | Skip protected-resource discovery by pointing directly at the authorization server. |
 
 For example, connecting Vercel's MCP server while blocking its spend-money tools:
@@ -221,6 +252,34 @@ Providers that issue a secret during Dynamic Client Registration are handled
 without any configuration: the plugin asks to be registered as a public client,
 but if the authorization server hands back a `client_secret` anyway, that secret
 is kept and used.
+
+### Client credentials
+
+Some authorization servers refuse to register a loopback callback at all, so the browser
+flow is impossible. For those, and for any MCP server that stands for a service rather
+than a signed-in user, set **Grant type → Client credentials** in the OAuth form (or
+`grantType: "client_credentials"`). The plugin authenticates as itself: no browser opens,
+and no callback or PKCE is needed.
+
+- Requires both a client ID and a client secret, and rejects `redirectUri`.
+- `audience` is optional and takes a literal value. It is Auth0's name for which API a token
+  is for; other providers use RFC 8707's `resource`, and both are sent when set.
+- No refresh token is stored. The plugin mints a new token from the keychain secret when
+  needed, so the status row reads "Connected · renews in …" and a failure reads "Needs
+  new credentials".
+
+### Refresh tokens and resource indicators
+
+When an authorization server advertises `offline_access`, the plugin requests it
+automatically so a refresh token is issued, whether you set scopes or use the defaults.
+If a token can't be renewed, the server's requests return a message asking you to
+re-authorize instead of an opaque 401. Servers connected before this was added (Vercel with
+only `openid`, for example) need one re-authorize to pick up a refresh token.
+
+When a server publishes protected-resource metadata, the plugin also sends the RFC 8707
+`resource` parameter on the authorization request, the token exchange, and refresh, so
+servers that require resource indicators (v0, for example) work. A server advertising a
+resource on an unrelated origin is rejected rather than issued a token.
 
 ### Quick connect
 

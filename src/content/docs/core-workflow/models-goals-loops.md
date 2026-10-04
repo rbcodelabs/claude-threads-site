@@ -21,6 +21,8 @@ A **Default model** dropdown in Settings → Agent picks the model for threads t
 
 You can also switch models without typing: a **model switcher button** (CPU icon) sits in the conversation footer, left of the menu button. Hover it to see the active model; click it to pick Default / Opus / Sonnet / Haiku / Fable from a dropdown. The icon turns accent-colored whenever a per-thread override is active, and it stays in sync with the `/model` command.
 
+The model menu labels each family alias with the version it currently resolves to (for example **Opus 5.5 (latest)**), plus any pinned model IDs the SDK reports. Once a thread has replied, Agent Threads records the exact model the provider reports for it: the menu's **Model** row reads, for example, **Default · Opus 5.5**, and the top of the model list shows **Running: Opus 5.5 (us.anthropic.claude-opus-5-5)**. That lets you see what **Default** or a "latest" alias actually resolved to, including Bedrock and Vertex model IDs.
+
 The active model is shown as a badge in the thread info bar.
 
 If Claude refuses a response and retries on a configured fallback model, Agent Threads shows a notice identifying the fallback model. If no fallback is available, it shows a clear refusal notice instead.
@@ -58,6 +60,8 @@ Setting or replacing a goal safely refreshes the active Claude or Codex session 
 ```
 
 Like `/goal`, starting a loop sends the prompt immediately — you don't wait for the first interval to elapse. Intervals below 30 seconds are clamped to 30s. Loops run on the plugin's built-in scheduler, so they **persist across plugin reloads and Obsidian restarts**. If a loop tick arrives before the thread's previous turn has finished, it's retried shortly after rather than piling up as a queued duplicate. A thread can only have one active loop at a time — starting a new `/loop` replaces whichever loop was already running there.
+
+If you close (archive) a thread that has a loop, the loop keeps running. The first tick after the close creates one replacement thread, and the loop adopts it; later ticks reuse that thread, so context carries over and ticks don't stack.
 
 `/loop` alone lists the thread's loop with its next run time; `/loop stop` (or `off`/`cancel`/`clear`) stops it. While a loop is active, a compact scheduled-activity pill appears in the composer footer instead of a permanent banner. The pill shows the interval for a single loop (for example, `Every 5m`); if the thread also has a pending one-time wakeup, it summarizes whichever item runs next and adds `+1`.
 

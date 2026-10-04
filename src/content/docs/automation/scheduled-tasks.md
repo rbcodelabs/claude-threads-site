@@ -41,6 +41,14 @@ New-thread jobs never dispatch with a stale or deleted Project association: crea
 
 Existing-thread `/loop` schedules and `ScheduleWakeup` timers behave differently. They resume the existing thread in its existing cwd rather than opening a new Project-derived thread, so they can continue after their Project is deleted. If such an item has a gate that still needs to resolve the deleted Project's cwd, that gate records an error instead.
 
+### Overlapping runs are skipped
+
+A recurring task that opens a new thread each cycle never stacks a second run on top of one still working. If a cycle comes due while the thread from that task's previous run is still mid-turn, the scheduler drops that cycle (no thread, no message) and records **Skipped (still running)** in run history; the next cycle fires normally once the run finishes. This needs no configuration, and a [gate command](#gate-commands) is not the tool for it. If the previous thread was archived or has no live session, the task fires normally. `/loop` schedules are different: their ticks go to one specific thread, so a busy thread makes them wait and retry rather than drop the tick.
+
+### Calendar schedules
+
+The next run of a calendar schedule (for example weekdays at 8:00) is computed from local wall-clock time, so a weekday schedule created on Friday afternoon next runs Monday morning rather than skipping ahead.
+
 ## Active-hours windows
 
 A scheduled task can be restricted to a local time-of-day window, so it only fires during — say — business hours. Ask Claude to scope it (*"…but only between 7am and 10pm"*), or set it directly through the Cron tools with `activeHoursStart` / `activeHoursEnd` (24-hour `HH:MM`).

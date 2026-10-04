@@ -58,10 +58,12 @@ On macOS 26+ with Apple silicon, agents can run coding commands in a separate Li
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `enter_vm` | `image?`, `network?`, `mountPath?` | Starts the thread's VM and mounts its working directory at `/work`. Network choices are `default` (internet enabled), `internal` (host-only), or `none`. |
+| `enter_vm` | `image?`, `network?`, `mountPath?` | Starts the thread's VM and mounts its working directory at `/work`; your vault is also mounted read-write at `/vault`, and Geode external roots read-only at `/ext/<label>`. Network choices are `default` (internet enabled), `internal` (host-only), or `none`. |
 | `vm_exec` | `command`, `timeoutSeconds?` | Runs a command inside the VM, returning exit code and bounded stdout/stderr. Default timeout: 300 seconds. |
 | `host_exec` | `command`, `cwd?`, `reason`, `timeoutSeconds?` | Runs one command on the Mac host from an interactive, VM-routed Claude thread after a required **Allow once** approval; scheduled and other non-interactive calls are denied. It is not exposed on host fallback, mobile, Codex, OpenCode, or the deprecated `obsidian` alias. See [Host commands from a VM-routed Claude thread](/docs/integrations/sandbox-vms/#host-commands-from-a-vm-routed-claude-thread). |
-| `exit_vm` | `force?` | Removes the thread's VM. Writes to the mounted host workspace persist. |
+| `exit_vm` | `force?` | Removes the thread's VM. Writes to the mounted host workspace persist. `enter_vm` and `exit_vm` are not offered in container-routed Claude sessions, where the harness already runs inside the container. |
+| `github_list_access` | — | Lists the GitHub repositories the connected Geode GitHub App can access (names only, never credentials). Requires Geode with GitHub connected. |
+| `github_check_repo` | `repo` | Checks whether the Geode GitHub App can access `owner/name`; if not, returns the install URL to grant access. |
 
 ## Thread coordination tools
 
