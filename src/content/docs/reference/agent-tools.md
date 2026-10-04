@@ -72,7 +72,7 @@ Project threads coordinate only within their Project, and threads with no Projec
 |---|---|---|
 | `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
 | `threads_list` | `projectId?` | Returns authorized thread metadata. The Portfolio Orchestrator passes a Project id for explicit one-call elevation. |
-| `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. |
+| `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. Spawning into a different project or working directory asks you first — see [Cross-project spawns](#cross-project-spawns). |
 | `threads_list_projects` | — | Returns configured Projects, including each `vaultFolder`, optional `cwdOverride`, and resolved `effectiveCwd`. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
 | `threads_update_project` | `projectId`, `name?`, `description?`, `cwdOverride?`, `elevatedProjectId?` | Durably updates the caller's Project name, context description, or cwd override and returns the complete updated Project snapshot, including its resolved `effectiveCwd`. |
@@ -107,6 +107,22 @@ A typical delegation loop:
 4. Call `threads_get_messages` to read the result
 
 This pattern works across any combination of threads — you can fan out to multiple peers simultaneously by sending messages to several threads before waiting on any of them.
+
+### Cross-project spawns
+
+`threads_create` can start a thread in a different project folder by passing `cwd` or `projectId`. Because that puts a new agent to work outside the calling thread's own project, you are asked to approve it. Approval is requested when the target differs from the calling thread:
+
+- a different `projectId`,
+- an explicit `cwd` that differs from the caller's, or
+- `projectId: null` from a project-scoped thread.
+
+The standard permission card appears, titled **Spawn thread in another project**. It shows the target project, the working directory, and the first line of the prompt. See [Permissions](/docs/permissions/permission-modes-and-plan-mode/#cross-project-spawn-approval) for the card.
+
+- **Allow** creates the thread.
+- **Deny** creates nothing, and the agent receives the error `Cross-project spawn was denied by the user.`
+- **Always Allow** lets later cross-project spawns through without prompting. Revoke it from the always-allowed tools list in the plugin settings.
+
+Spawns that stay in the caller's own project remain automatic. The coordination-scope rules above still apply first, so a spawn they already forbid is refused before any card is shown.
 
 ## Peer-plugin voice lifecycle tools
 
