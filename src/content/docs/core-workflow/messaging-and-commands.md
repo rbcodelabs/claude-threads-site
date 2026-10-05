@@ -241,3 +241,12 @@ A summary bar above the messages shows what the thread is about. It updates auto
 When you switch back to a thread you haven't viewed in over a minute, a **context recap banner** floats at the top of the conversation showing the thread summary and how long ago you were last active. It auto-dismisses after 10 seconds or when you send a message.
 
 ![Context recap banner — re-orients you to a thread after returning from a break](../../../assets/screenshots/screenshot-context-recap-banner.png)
+
+## Last-prompt bubble while scrolling
+
+When you scroll up through a long reply, your most recent prompt floats at the top of the conversation as a small chat bubble, styled like your own messages, with a two-line preview and a small **↑**. Content scrolling beneath it fades out so the bubble stays readable. Click the bubble to jump back to that message.
+
+- **Appears only when needed.** The bubble shows once your prompt has scrolled off the top of the screen. It is hidden while the prompt is visible, and in the agent (child activity) view.
+- **Follows the turn you are reading.** If the prompt on screen is not at the very top, the bubble shows the prompt of the turn you are reading, which is the previous one.
+- **Sits beneath the context recap banner** when both are showing.
+- **Desktop and mobile.** There is no setting to configure.
