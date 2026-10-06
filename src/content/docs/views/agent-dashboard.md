@@ -21,6 +21,8 @@ Right-clicking a Markdown note — in the file explorer or inside the open note 
 
 The kickoff button displays the harness that will own the new thread: **Claude** or **Codex**. Press Enter or click the button to dispatch with the harness shown. To change it without dispatching, right-click or press and hold the button; from the keyboard, focus it and use `Shift+F10`, the Context Menu key, or `Alt+Down`. Choosing Claude or Codex updates the button, and that choice stays local to the mounted list while you launch more threads.
 
+When Claude is selected, the same menu has a **Run in** section: **Container**, **Host (no container)**, or **Default (follows settings)**. It decides whether the new thread's Claude session runs inside the sandbox container or directly on your machine. The choice is sticky for the mounted list, shows as a small badge on the kickoff button (and in its accessible label), and is dropped if you switch the button to Codex. Default leaves the decision to **Settings → Tools** (`auto` unless you changed it). An existing thread can be changed later from its chat menu under Harness → **Run in**, which resets the native session.
+
 **Settings → Agent → Agent harness** provides the initial default only. An Agents List choice does not rewrite that setting, and a thread stays with the harness that created it—you cannot switch an existing thread. The [Agent Board dispatch panel](/docs/views/kanban-board/#dispatching-from-the-board) uses the same selector.
 
 You can resolve pending permission requests directly from Agents List rows without switching threads — see [Permissions](/docs/permissions/permission-modes-and-plan-mode/) for what those requests look like.
