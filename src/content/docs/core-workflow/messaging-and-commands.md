@@ -36,6 +36,10 @@ This row needs Geode's quick switcher plugin API. It does not appear in Obsidian
 
 Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[label](path.md)` Markdown links. Both formats open the target note in classic and conversation-first placement. OS-absolute paths also resolve when they point inside the vault, including heading and block anchors. An absolute path outside the vault remains inert and shows a notice instead of opening or creating anything.
 
+## Opening web links
+
+Bare `http(s)` URLs are clickable in assistant replies (including inside inline code) and in your own messages, not just Markdown `[label](url)` links. They open in the Web Viewer when it is enabled; Cmd/Ctrl-click opens the system browser instead. Links the assistant shares also appear as link chips in the recent-files pill below the chat (the 50 most recent per thread); click a chip to open it.
+
 ## Message queue
 
 If you send a message while Claude is already processing, it goes into a queue — displayed as stacked, removable rows above the composer. Each row shows a preview of the queued message and an `×` button to discard it. Click any row to pull it back into the input box for editing (an inline confirm prompt prevents you from accidentally discarding your current draft). The queue drains automatically as Claude finishes each turn. Queued messages survive thread switches and plugin reloads.
