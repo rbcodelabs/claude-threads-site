@@ -34,7 +34,7 @@ This row needs Geode's quick switcher plugin API. It does not appear in Obsidian
 
 ## Opening note links
 
-Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[label](path.md)` Markdown links. Both formats open the target note in classic and conversation-first placement. OS-absolute paths also resolve when they point inside the vault, including heading and block anchors. An absolute path outside the vault remains inert and shows a notice instead of opening or creating anything.
+Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[label](path.md)` Markdown links. Both formats open the target note in classic and conversation-first placement. OS-absolute paths also resolve when they point inside the vault, including heading and block anchors. An absolute path outside the vault is never opened automatically and never creates a note. On desktop, clicking it shows a confirmation with the full file path and the choices **Open**, **Reveal in Finder**, **Copy path** and **Cancel**; nothing happens unless you choose Open. On mobile, which has no way to open that file, a notice shows the path.
 
 ## Opening web links
 
