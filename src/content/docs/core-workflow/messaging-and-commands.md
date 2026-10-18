@@ -62,14 +62,16 @@ While Claude is processing, a typed status card appears above the input area sho
 
 ## Tool call grouping
 
-Consecutive tool calls of the same kind — a run of file reads, or a string of edits — collapse into a single expandable group instead of a long scroll of individual pills. This happens live as the turn runs, not just after it settles, so a long agentic run never grows an unbounded wall of pills while Claude is still working. The in-progress group shows a "still running" pulse, a group you expand mid-turn stays expanded as more calls arrive, and a group containing a failed call auto-expands and stays flagged so errors are never hidden.
+Every unbroken run of tool calls, in any mix (file reads, edits, shell commands, MCP calls), collapses into a single expandable group instead of a long scroll of individual pills. This happens live as the turn runs, not just after it settles, and rows update in place when a result lands.
 
-Two refinements keep even a busy, fast-changing turn (reads, edits, and planning calls interleaved) from reading as a wall of short, choppy groups:
+- **Collapsed by default.** A group is collapsed whether it is running, finished, or failed. The header shows a status dot or spinner, the activity name while it runs (for example "Exploring" or "Working"), and a one-line summary once it is done (for example "Read 2 files, edited 1 file").
+- **Failures are flagged, not forced open.** A failed call turns the group header red but does not open the group, so errors stay visible without expanding a long run. Open the group to see the rows, with a dim directory and bright filename for paths and the time of each call.
+- **Your choice sticks.** A group you open stays open as more calls arrive.
+- **Where a run ends.** Assistant text, or a browser session, ends the current run; the next tool call starts a new group.
 
-- **Smoothing** — a short interruption of a different kind (for example, a single `TaskUpdate` between two runs of file reads) is folded back into the group on either side instead of breaking it into three separate short entries.
-- **A second collapsible tier** — if the list is still long after smoothing, it collapses one level further into a single "N tool calls, M steps" wrapper. While the turn is in progress, that wrapper's header live-updates to show the icon and name of whichever tool is currently running, so a long collapsed run doesn't read as frozen. It auto-expands through both levels if any call anywhere inside it fails, the same way a single group does.
+Pick the look under **Settings → General → Tool call style**: **Tree** (default), **Chips**, or **Cards**. The change applies immediately. See [Settings](/docs/reference/settings/).
 
-Both refinements are available on desktop; mobile gets the smoothing pass only.
+Grouping works on desktop and mobile. Mobile records carry no per-call status, so a failed call can't show a red header there.
 
 ## Errors and auto-retry
 
