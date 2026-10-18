@@ -23,6 +23,10 @@ Agent Threads looks for `opencode` on your `$PATH` and in the usual locations: H
 
 Each active OpenCode thread starts its own local `opencode serve` process, which listens only on `127.0.0.1`. That process stops when the thread's session closes.
 
+### OpenCode versions
+
+Agent Threads supports both the 1.x and 2.x OpenCode servers (verified against 1.18.32 and 2.0.32). It detects which one is installed, so there is nothing to configure. On 2.x, OpenCode's task/todo list stays empty in the thread because the 2.x server doesn't send todo events.
+
 ## Configure a provider and model
 
 Agent Threads does not manage OpenCode providers, models, or credentials. You set them up in OpenCode itself, using one of these methods:
@@ -48,6 +52,15 @@ Agent Threads does not manage OpenCode providers, models, or credentials. You se
 
 The provider name and model ID above are examples. To see the IDs your installation accepts, run `opencode models`.
 
+## Skills
+
+OpenCode threads load the same skill sources as Claude and Codex threads: your [plugin skill sources](/docs/automation/skills-manager/), your local Skills folder, and skills installed in your vault. Agent Threads hands these folders to OpenCode through its native `skills.paths` setting, so nothing is copied or symlinked.
+
+Two OpenCode behaviors to be aware of:
+
+- OpenCode also scans `~/.claude/skills` on its own, so skills there are available regardless of your skill sources.
+- On OpenCode 2.x, stray top-level `.md` files inside a skill folder can show up as skills. Keep only `<name>/SKILL.md` layouts in folders you share with OpenCode.
+
 ## Select OpenCode
 
 - **For new threads:** choose **OpenCode** under **Settings → Agent → Agent harness**, or pick it in the Agents List or Agent Board kickoff selector.
@@ -69,7 +82,7 @@ Agent Threads applies [permission modes](/docs/permissions/permission-modes-and-
 | Don't ask | Denies anything that would prompt, so scheduled runs never stall. |
 | Plan | Uses OpenCode's read-only `plan` agent and refuses edits. |
 
-Agent Threads host tools (vault, thread coordination, and others) reach OpenCode through a private per-session MCP endpoint. They follow the same approval rules as on Codex.
+Agent Threads host tools (vault, thread coordination, and others) reach OpenCode through a private per-session MCP endpoint. They follow the same approval rules as on Codex. On OpenCode 2.x, the bridge's tools are allowed by name prefix.
 
 ## Switching harnesses
 
