@@ -21,7 +21,7 @@ Columns are sorted most-recently-active first. The board has its own floating di
 
 ## Dispatching from the board
 
-The kickoff button displays the selected Claude or Codex harness. Press Enter or click it to dispatch; right-click, press and hold, or use its keyboard menu to change the selection without sending. Selection is local to the mounted Agent Board, and Settings supplies only the initial default. See [Agents List → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for all selector gestures and harness behavior.
+The kickoff button displays the selected Claude or Codex harness. Press Enter or click it to dispatch; right-click, press and hold, or use its keyboard menu to change the selection without sending. Selection is local to the mounted Agent Board, and Settings supplies only the initial default. For Claude, the same menu also offers a **Run in** choice (Container / Host / Default) for the new thread. See [Agents List → Dispatch box](/docs/views/agent-dashboard/#dispatch-box) for all selector gestures and harness behavior.
 
 The accessible **Project** selector chooses the new thread's Project and initial working directory. **Unassigned** uses the global default cwd. Choose **New Project…** to open Settings → Projects with a blank draft; your current selection is unchanged. The selection survives harness, model, goal, loop, attachment, and image options; [Projects](/docs/integrations/git-and-vault/#projects) documents cwd resolution and reassignment behavior.
 
