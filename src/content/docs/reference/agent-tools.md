@@ -127,6 +127,15 @@ The standard permission card appears, titled **Spawn thread in another project**
 
 Spawns that stay in the caller's own project remain automatic. The coordination-scope rules above still apply first, so a spawn they already forbid is refused before any card is shown.
 
+## Tools from other plugins on a daemon
+
+Peer plugins such as Design add their own tools to your threads (for example `EnterDesignMode`). Threads that run on a daemon get them too, through the **Tools from other plugins** option.
+
+- **Local (container) daemon:** on by default, together with the read groups, `mcp` and `host_exec`. A new local daemon entry already has it ticked.
+- **Daemons you add yourself:** off. In Settings, Remote, edit daemon, Advanced, switch on **Tools on this computer** and tick **Tools from other plugins**.
+- **Turning it off:** untick the option. On the local daemon this is remembered, so the default does not switch it back on.
+- Only tools registered when the thread starts are offered; a plugin you enable later appears on the next thread session. Tools that change something still show an approval card in the app, and tools that write, schedule or touch secrets stay unavailable to a daemon whatever you tick.
+
 ## Peer-plugin voice lifecycle tools
 
 Obsidian Orchestrator consumes the public `voice-orchestration` bundle, which is separate from the internal `threads_*` tools above. Capable hosts expose:
