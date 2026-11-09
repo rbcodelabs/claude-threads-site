@@ -1,6 +1,6 @@
 ---
 title: Agent Board
-description: Status columns, folder swimlanes, project columns, task lists on cards, and auto-collapsing side panels.
+description: Status columns, folder swimlanes, project columns, a visual Gallery mode, task lists on cards, and auto-collapsing side panels.
 category: views
 order: 3
 ---
@@ -35,9 +35,9 @@ When a thread owns Claude or Codex child agents, its card also shows a compact n
 
 When a thread has an active Claude `TodoWrite` / `TaskCreate` checklist or Codex `update_plan` checklist, its Agent Board card shows a compact task list: up to 5 items with status icons (✔ completed, ■ in-progress, ○ pending), a "X / Y done" progress line, and "+N more" when there are additional tasks. The list updates live as the agent ticks items off — useful for seeing exactly how far along a long-running task is without opening the conversation.
 
-## Group by folder or project
+## Group by folder, project or gallery
 
-The group-by toggle in the board header (the icon next to search) cycles through three layouts: **status columns** (the default), **folder swimlanes**, and **project columns**. Each click advances to the next; the choice persists across reloads.
+The group-by toggle in the board header (the icon next to search) cycles through four layouts: **status columns** (the default), **folder swimlanes**, **project columns**, and **gallery**. Each click advances to the next; the choice persists across reloads.
 
 ### Folder swimlanes
 
@@ -47,7 +47,20 @@ One horizontal lane per app/project, so you can see every conversation for a giv
 
 ### Project columns
 
-One vertical column per app/project (same project resolution as folder swimlanes — alphabetical, Unassigned last), with each column's cards grouped under status **section headers**: Working, Waiting, New, Reviewed, Failed, Ready. This mirrors the Agents List sidebar's grouping — awaiting-permission threads fold into **Working**, and empty sections are omitted. Each column reads top-to-bottom like a compact per-project dashboard, which keeps a busy single-project board scannable without horizontal scrolling.
+One vertical column per app/project (same project resolution as folder swimlanes — alphabetical, Unassigned last), with each column's cards grouped under status **section headers**: Working, Waiting, New, Reviewed, Failed, Ready. This mirrors the Agents List sidebar's grouping — awaiting-permission threads fold into **Working**, and empty sections are omitted. Each column reads top-to-bottom like a compact per-project dashboard. Columns are a fixed 300px wide; when there are more than fit, the board scrolls horizontally, and each column scrolls vertically on its own. With a mouse, the wheel scrolls a column while it can still scroll in that direction and otherwise moves the board sideways (Shift+wheel and trackpad swipes also work).
+
+### Gallery
+
+Gallery (desktop and Geode only) shows one larger card per thread, built around what the agent actually produced:
+
+- **Hero image.** The thread's newest visual, with a source badge — **Browser** for an image from a `browser_screenshot` call, **Image** for any other tool-result image — and its age.
+- **Filmstrip.** Up to 3 thumbnails (4 when the board is one column wide, 5 on a featured card) with a "+N" slot when there are more. Use the previous/next arrows, click a thumbnail, or focus the hero and press the left/right arrow keys to step through the thread's images (newest 50). A live "n / m" counter shows your position.
+- **Needs you.** Threads waiting on you, including pending permission prompts, become large featured cards with **Allow**, **Deny** and **Always** buttons that behave like the Needs-you lane on the status board. The rest sit in a grid sorted by recent activity. The search box and **Only needs you** filter apply to the gallery too.
+- **Text placeholder cards.** A thread with no images — a brand-new thread, one whose images were never saved, a Codex, OpenCode or Replay thread (these don't produce tool-result images), or any **private** thread — gets a same-size text card with its last message, so every thread stays visible.
+
+Only images returned by tool results appear: screenshots, a `Read` of a picture, and so on. Images you attached yourself and the in-app browser's live frame are never shown. When an image is saved, a small 160px WebP thumbnail is written next to it; older images get theirs the first time their card scrolls into view. A new message or screenshot refreshes just that thread's card. Mobile and relay clients don't receive tool-result images, so Gallery isn't available there.
+
+![Agent Board in Gallery mode — a featured Needs-you card, image cards with filmstrips, and text placeholder cards](../../../assets/screenshots/screenshot-kanban-gallery.png)
 
 ## Stacked scheduled-job threads
 
