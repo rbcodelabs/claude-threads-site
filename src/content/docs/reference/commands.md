@@ -37,10 +37,11 @@ Every command below is reachable via `Cmd+P` and searchable by name.
 | `interrupt-active-thread` | Interrupt active thread | Stops the active thread's in-flight response |
 | `summarize-active-thread` | Summarize active thread | Manually regenerates the summary and tab name for the active thread (requires summarization to be enabled in Settings) |
 | `open-thread-orchestrator` | Open Portfolio Orchestrator | Opens (or creates) the portfolio-level [thread orchestrator](/docs/views/thread-orchestrator/) |
+| `focus-orchestrator-dock` | Ask the portfolio orchestrator | Focuses the **Ask the orchestrator…** field in the [Agent Board](/docs/views/kanban-board/#ask-the-portfolio-orchestrator) pill. Default hotkey Cmd+J (Ctrl+J on Windows/Linux); only available while the Agent Board is the active view. Rebind under Settings → Hotkeys |
 | `reload-plugin-safely` | Reload plugin (safe) | Reloads the plugin; if threads are running, prompts with Cancel / Interrupt & Reload / Force Reload — see [Safe plugin reload](/docs/help/faq/#safe-plugin-reload) |
 | `generate-diagnostics-report` | Generate diagnostics report | Assembles a redacted, **local-only** diagnostics bundle (performance counters, renderer CPU/memory samples, longtask summary, recent log tail), copies the Markdown to your clipboard, and saves `.md` + `.json` files into an `agent-threads-diagnostics/` folder in the vault root. No message/file contents, absolute home paths, or env values are included. Desktop only — on mobile it shows a "desktop only" notice. Requires the [Diagnostics setting](/docs/reference/settings/) to be enabled for the counters/samples to be populated. |
 
-That's 4 view-opening commands + 2 dispatch shortcuts + 2 tab-navigation commands + 9 thread-index commands + 7 thread-management/diagnostics commands = 24 total.
+That's 4 view-opening commands + 2 dispatch shortcuts + 2 tab-navigation commands + 9 thread-index commands + 7 thread-management/diagnostics commands + 1 Agent Board command = 25 total.
 
 ## Keyboard shortcuts
 

@@ -1,6 +1,6 @@
 ---
 title: Agent Board
-description: Status columns, folder swimlanes, project columns, a visual Gallery mode, task lists on cards, and auto-collapsing side panels.
+description: Status columns, folder swimlanes, project columns, a visual Gallery mode, task lists on cards, asking the portfolio orchestrator from the board, and auto-collapsing side panels.
 category: views
 order: 3
 ---
@@ -30,6 +30,84 @@ The panel accepts the same `/model`, `/goal`, `/loop`, and `/design` prefixes as
 When a thread owns Claude or Codex child agents, its card also shows a compact native-agent count. Like the Agents List, it is green while any child is starting, working, or waiting, and faint once every run is terminal or unavailable. Open the thread or [Agents List](/docs/views/agent-dashboard/) to inspect the nested team; see [Native Agent Workspace](/docs/views/native-agent-workspace/) for details.
 
 ![Agent Board grouped by status — Working, Awaiting, Waiting, New, Done, Failed, and Ready columns, each holding thread cards](../../../assets/screenshots/screenshot-kanban-status.png)
+
+## Ask the portfolio orchestrator
+
+Talk to the [Portfolio Orchestrator](/docs/views/thread-orchestrator/) without leaving the board. The floating pill at the bottom of the board leads with an **Ask the orchestrator…** field, followed by an orb (its ring spins while any thread is running) and a needs-you dot (orange when something is waiting on you). Hover the dot for the counts, for example **2 running · 14 total · 2 need you**; the same line also appears under the reply sheet's title, and on narrow boards the dot carries the needs-you count as a number.
+
+![The Agent Board pill with the Ask the orchestrator field, the Cmd+J hint, the needs-you dot and the New thread button](../../../assets/screenshots/screenshot-orchestrator-pill.png)
+
+### Ask field and keyboard
+
+Press **Cmd+J** (Ctrl+J on Windows and Linux) while the Agent Board is the active view to focus the field. The shortcut is a normal command named **Ask the portfolio orchestrator**; rebind or clear it under **Settings → Hotkeys**. When the Agent Board is not the active view the key falls through untouched, and it may not fire while a modal is open.
+
+| Key | Action |
+|---|---|
+| **Enter** | Send |
+| **Shift+Enter** | New line |
+| **ArrowUp** | Recall your previous message. Works in an empty field, or with the caret at the very start of a one-line draft. Repeat to go further back (the last 20 messages are kept; consecutive duplicates are dropped) |
+| **ArrowDown** | Go forward again; it ends on the draft you were typing |
+| **Esc** | Close the sheet, or leave the field |
+
+Once you move the caret inside a recalled message, only the very start (Up) or very end (Down) continues the walk, so a long wrapped paragraph keeps normal caret movement. Nothing is recalled while an IME composition is in progress or a send is pending.
+
+**Drafts are kept in memory only.** What you type survives closing and reopening the sheet, the working, error and offline states, switching between narrow and wide layouts, a board refresh, and re-opening the board in the same session. It is never written to disk or to your settings, because a draft can contain a secret, and it is gone when the app quits. A draft belongs to the current orchestrator thread; boards in the same window share it. Drafts are capped at 4,000 characters, and a message that fails to send is put back in the field.
+
+### The reply sheet
+
+**Enter** sends your message to the Portfolio Orchestrator and opens a reply sheet above the pill. The sheet stays open when you click the board and is never opened automatically.
+
+![The reply sheet above the pill showing a question, the orchestrator's answer with thread links, and a message under Waiting to send](../../../assets/screenshots/screenshot-orchestrator-sheet.png)
+
+- **Conversation.** Replies render as markdown and appear as they stream in, with the orchestrator's current activity shown while it works.
+- **Stop.** While the orchestrator is working, **Stop** replaces Send and interrupts the turn.
+- **Sent, will be picked up.** A message you send while the orchestrator is busy is picked up by the turn in progress and marked **Sent, will be picked up**.
+- **Waiting to send.** Anything the manager is holding back, for example while a plan awaits your decision, is listed under **Waiting to send** with a remove button.
+- **Open full thread.** Plans, questions, images, visualizations and tool detail are not rendered in the sheet; they show an **Open full thread ↗** chip instead.
+- **Unread peek.** With the sheet closed, a new reply shows a one-line peek above the pill for about 8 seconds and keeps the dot lit until you open the sheet.
+- **Suggestion chips.** With an empty conversation, focusing the field offers suggested prompts.
+
+### Thread links
+
+When the orchestrator names a thread, the sheet shows it as a link. Hover (or keyboard-focus) the link and that thread's card on the board is highlighted and scrolled into view; click it to open the thread. The sheet stays open. If your system asks for reduced motion, the card scrolls instantly with no flash.
+
+Links need a Threads Orchestrator plugin version that writes `[[thread:<id>|Title]]` markers (threads-orchestrator PR #21). With an older version the orchestrator names threads by plain title, so there is nothing to hover or click.
+
+### The Needs you tray
+
+A **Needs you (N)** tray above the composer lists every thread waiting on you, including the orchestrator's own, and collapses to **Show N more** beyond three. Permission requests are listed first.
+
+![The Needs you tray with an inline permission request offering Deny, Allow and Always, plus Answer and Review plan buttons](../../../assets/screenshots/screenshot-orchestrator-tray.png)
+
+- **Permission requests** show the same **Deny**, **Allow** and **Always** buttons as the thread's board card. Resolving one in the sheet or on the board resolves both. Each click is checked against the request that is pending now, so a stale card cannot approve the next request.
+- **Not approvable inline.** Allow and **Always** are offered only when the request is small enough to be read in full: a single field (a command, a path, a URL) that is not cut off and has no line breaks. A request with several fields, or a long or multi-line detail, keeps only **Deny** and a **Review in thread** button, so nothing is approved blind.
+- **Questions and plans** are never answered inline. They show a single **Answer…** or **Review plan…** button that opens the thread.
+
+![The tray with a long permission request showing only Deny and Review in thread](../../../assets/screenshots/screenshot-orchestrator-tray-review.png)
+
+### States
+
+| State | What you see |
+|---|---|
+| First run | No orchestrator exists yet: the field reads "No orchestrator yet" and becomes a **Set up…** button |
+| Working | The orb ring spins; the sheet shows activity and **Stop** |
+| Needs you | The dot turns orange (or stays lit for an unread reply) |
+| Error | The orchestrator's error reason, with **Open thread** |
+| Offline | "daemon disconnected", with **Reconnect** |
+
+![The pill on first run, with a Set up button in place of the field](../../../assets/screenshots/screenshot-orchestrator-first-run.png)
+
+### Narrow boards and phones
+
+Under 640px wide the pill collapses to the orb plus **New thread**, and the sheet becomes a bottom sheet with 44px touch targets that respects the device safe area and lifts above the on-screen keyboard.
+
+![The orchestrator bottom sheet on a narrow board with the Needs you tray and the composer](../../../assets/screenshots/screenshot-orchestrator-mobile.png)
+
+### Accessibility and motion
+
+- Screen readers hear a short announcement when the orchestrator errors, goes offline or recovers (not on every refresh), when a reply streams in or finishes, and when new Needs you items appear.
+- The dot has a text label with the counts, and the same counts are shown as visible text in the sheet header, so touch users do not depend on the hover tooltip.
+- With reduced motion enabled, the orb and activity animations, the pill transition and the card flash are switched off, and the highlighted card scrolls instantly.
 
 ## Task list on cards
 
