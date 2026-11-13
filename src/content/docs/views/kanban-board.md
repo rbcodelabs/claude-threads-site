@@ -63,7 +63,9 @@ Once you move the caret inside a recalled message, only the very start (Up) or v
 - **Stop.** While the orchestrator is working, **Stop** replaces Send and interrupts the turn.
 - **Sent, will be picked up.** A message you send while the orchestrator is busy is picked up by the turn in progress and marked **Sent, will be picked up**.
 - **Waiting to send.** Anything the manager is holding back, for example while a plan awaits your decision, is listed under **Waiting to send** with a remove button.
-- **Open full thread.** Plans, questions, images, visualizations and tool detail are not rendered in the sheet; they show an **Open full thread ↗** chip instead.
+- **Same rendering as the conversation panel.** Messages use the same renderer as the main conversation: markdown, tables and code, notices, compaction dividers, clickable URLs in your messages and local image thumbnails. Tool calls appear as one collapsed **N tool calls** row per message that expands in place. Remote images are never loaded: a remote markdown image shows as a text link instead.
+- **Last 50 messages.** The sheet draws the most recent 50 messages. When there are older ones, a **Showing last 50 messages** row at the top opens the full thread.
+- **Open full thread.** Plans, questions and visualizations are not rendered in the sheet; plans and questions hand off to the thread, and a visualization shows an **Open full thread ↗** chip.
 - **Unread peek.** With the sheet closed, a new reply shows a one-line peek above the pill for about 8 seconds and keeps the dot lit until you open the sheet.
 - **Suggestion chips.** With an empty conversation, focusing the field offers suggested prompts.
 
