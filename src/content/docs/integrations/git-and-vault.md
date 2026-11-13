@@ -85,6 +85,7 @@ Every Claude thread runs with the built-in `claude_threads` MCP server, which ex
 | `vault_get_note_metadata` | `path` | Returns the full metadata cache entry for a note: frontmatter, tags, wikilinks, and headings. |
 | `vault_get_backlinks` | `path` | Returns all notes that link to the specified file, with source path and original link text. |
 | `vault_get_outgoing_links` | `path` | Returns all wikilinks and Markdown links a note makes to other files, with display text and resolved vault paths. |
+| `vault_move` | `from`, `to` | Moves or renames a vault file or folder and updates links to it across the vault. Returns `{ moved, updatedNotes }`. Requires approval and Geode v0.30.19 or newer. See the [Agent tools reference](/docs/reference/agent-tools/) for details. |
 
 Combined with native `[[wikilink]]` rendering in the conversation — links Claude writes or references resolve the same way they would in any Obsidian note — this means an agent can navigate and reason about your vault's link graph the same way you do.
 

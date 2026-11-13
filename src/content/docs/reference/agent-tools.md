@@ -19,6 +19,9 @@ Read and search your vault from within any thread.
 | `vault_get_note_metadata` | `path` | Returns the full metadata cache entry for a note: frontmatter, tags, wikilinks, and headings. |
 | `vault_get_backlinks` | `path` | Returns all notes that link to the specified file, with source path and original link text. |
 | `vault_get_outgoing_links` | `path` | Returns all wikilinks and Markdown links a note makes to other files, with display text and resolved vault paths. |
+| `vault_move` | `from`, `to` | Moves or renames a vault file or folder and updates links to it, like dragging it in the file explorer. Returns `{ moved, updatedNotes }`. Requires approval. Legacy name: `obsidian_move_path`. |
+
+`vault_move` rewrites wikilinks, embeds, and Markdown links across the vault, and renaming a folder updates links to the notes inside it too. Both paths must be vault-relative: absolute paths, `..`, and dot-prefixed segments are rejected, and an existing target is never overwritten. It is a write tool, so it requires approval, and remote daemons never receive it. It needs Geode v0.30.19 or newer; on older Geode or on Obsidian it fails with a "host does not support link-updating moves" error and nothing is moved, with no silent fallback. `vault_get_backlinks` also works on Geode v0.30.19 or newer.
 
 ## Workspace and host tools
 
