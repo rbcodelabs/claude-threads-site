@@ -41,7 +41,7 @@ From the comment popover, add what you want changed or investigated and choose w
 - **Target thread dropdown** — routes the pick inline to any other open conversation without leaving the Web Viewer tab.
 - **+ New thread** — starts a fresh coding session seeded with the picked element and your note.
 
-If the target thread is currently mid-turn, Agent Threads places your pick into that thread's [message queue](/docs/core-workflow/messaging-and-commands/#message-queue) and delivers it automatically as soon as the running turn finishes.
+If the target thread is currently mid-turn, Agent Threads holds **one** pending pick for that busy thread in memory and sends it automatically as soon as the current turn finishes. Submitting another pick to the same busy thread before its turn completes replaces the earlier held pick (picks do not stack into the composer's reload-persistent message queue).
 
 ## What the agent receives
 
@@ -49,7 +49,7 @@ Each pick arrives in the target thread as a normal user turn backed by three pie
 
 - **Cropped PNG screenshot** — a crisp crop of the selected element attached natively as an image, supported across Claude, Codex, OpenCode, Antigravity, and remote daemons.
 - **Structured element metadata** — the primary CSS selector and alternate selectors, a sanitized HTML snippet, key computed layout and typography styles, accessibility role and accessible name, element bounding box, and the active viewport preset and dimensions.
-- **Heuristic `file:line` source hints** — candidate source locations matched inside the target thread's local repository working directory from element IDs, `data-testid` / `data-*` attributes, route paths, and text anchors, giving the agent an immediate foothold in your codebase.
+- **Heuristic `file:line` source hints** — candidate source locations matched inside the target thread's local repository working directory from element IDs, `data-testid` / `data-*` attributes, route paths, and text anchors, giving the agent an immediate foothold in your codebase (local threads only — omitted when the target thread runs on a remote daemon, while the cropped PNG screenshot and DOM metadata still work on remote daemons).
 
 ## Safety
 
@@ -61,4 +61,4 @@ Each pick arrives in the target thread as a normal user turn backed by three pie
 
 Geode desktop only — plain Obsidian and mobile do not expose the host Web Viewer APIs required for viewport framing and native element capture, so the controls stay hidden there.
 
-Inspection runs on the **top-level frame** of committed `http://` and `https://` pages only; it is unavailable on `about:blank`, browser error overlays, non-web schemes, and cross-origin iframes. The Web Viewer picker focuses on single-element **Pick & Send** on live web apps — for persistent multi-pin mockups and side-by-side explorations, use [Design artifacts (`/design`)](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode).
+Inspection runs on the **top-level frame** of committed `http://` and `https://` pages only; it is unavailable on `about:blank`, browser error overlays, non-web schemes, and cross-origin iframes. The Web Viewer picker focuses on picking and sending one element at a time on live web apps — for persistent multi-pin mockups and side-by-side explorations, use [Design artifacts (`/design`)](/docs/core-workflow/messaging-and-commands/#design-artifacts-in-geode).
