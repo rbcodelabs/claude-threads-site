@@ -38,7 +38,7 @@ Assistant responses can link to vault notes with `[[wikilinks]]` or ordinary `[l
 
 ## Opening web links
 
-Bare `http(s)` URLs are clickable in assistant replies (including inside inline code) and in your own messages, not just Markdown `[label](url)` links. They open in the Web Viewer when it is enabled; Cmd/Ctrl-click opens the system browser instead. Links the assistant shares also appear as link chips in the recent-files pill below the chat (the 50 most recent per thread); click a chip to open it.
+Bare `http(s)` URLs are clickable in assistant replies (including inside inline code) and in your own messages, not just Markdown `[label](url)` links. They open in the Web Viewer when it is enabled; Cmd/Ctrl-click opens the system browser instead. Links the assistant shares also appear as link chips in the recent-files pill below the chat (the 50 most recent per thread); click a chip to open it. In Geode on desktop, you can also test responsive viewports and visually send elements from any live Web Viewer tab back to a conversation with the [Web Viewer Element Picker](/docs/integrations/web-viewer-picker/).
 
 ## Message queue
 
