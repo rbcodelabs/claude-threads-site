@@ -9,6 +9,8 @@ Claude can drive a browser **inside Geode**, using the same embedded web view th
 
 Turn it on under **Settings → Tools → Agent browser**, then reload. The session cap and private-network settings are always shown there, and are disabled when the host can't support the browser. The toggle is disabled on hosts that can't support it (see [Limits](#limits)).
 
+If you already have a page open in a Web Viewer tab and want to point at a specific element yourself instead of having the agent browse, use the [Web Viewer Element Picker](/docs/integrations/web-viewer-picker/) to resize the tab, click an element, and send its screenshot, styles, and source hints straight to a thread.
+
 ## How Claude reads a page
 
 Pages are read as an **accessibility snapshot** rather than screenshots or raw HTML — a compact list of the things a person could actually interact with:
