@@ -19,6 +19,8 @@ You can also resolve permissions directly from the [Agents List](/docs/views/age
 
 The default behavior can be changed globally in **Settings → Tools → Permission Mode**, or **per-thread** via the shield (🛡) button in the thread footer — a thread-level override takes precedence over the global setting and is useful when you want Plan Mode for one specific task without affecting other threads.
 
+For Codex, the same thread footer menu has a **Network access** row alongside **Permissions**. It is **Off** by default. Turning it **On** allows network requests from that thread's Codex commands while the thread runs in the workspace-write sandbox. Plan Mode and other read-only sessions still deny network access. This control is separate from permission mode: choosing `acceptEdits` or `bypassPermissions` does not turn networking on, and turning networking on does not change command approval behavior or filesystem access.
+
 | Mode | Behavior |
 |---|---|
 | `default` | Use the selected harness's default permission behavior |
@@ -27,6 +29,8 @@ The default behavior can be changed globally in **Settings → Tools → Permiss
 | `plan` | The selected harness proposes a written plan before taking any action; you approve, edit, or reject it before it proceeds — see [Plan Mode](#plan-mode) below |
 | `dontAsk` | Suppress all interactive permission dialogs; the agent proceeds without confirmation. Intended for scheduled/background sessions that run unattended |
 | `auto` | The agent autonomously decides when to prompt vs. proceed based on action risk |
+
+If a Codex command such as `gh pr list` reports a connection error while the in-app browser can open GitHub, check that thread's **Network access** setting. The browser runs through the host app and does not establish that Codex's shell can reach the network. The Geode GitHub connection supplies credentials for supported repositories; network access is still required for `gh` to contact GitHub.
 
 > **Note for scheduled sessions.** Threads created by the built-in scheduler automatically use `dontAsk` so [cron jobs](/docs/automation/scheduled-tasks/) never stall waiting for a permission dialog that nobody is watching. They also inherit any external MCP servers configured under [Settings → MCP](/docs/integrations/mcp-servers/) (Compass, Helio, or any other user-configured HTTP/SSE/stdio server) alongside the plugin's built-in tools, so scheduled agents have the same tool surface as an interactive session — `${VAR_NAME}` placeholders in that config are resolved from environment variables and keychain-stored secrets, and a server with an unresolved placeholder is skipped for that run rather than started with a blank credential.
 

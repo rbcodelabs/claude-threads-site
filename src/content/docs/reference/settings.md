@@ -59,6 +59,8 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 
 See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup and the distinction between guest commands and host tools.
 
+Codex has a separate **Network access** row alongside **Permissions** in each thread's footer menu. It defaults to **Off** and allows that thread's workspace-write Codex session to reach the network when enabled. Plan Mode and read-only sessions deny network access regardless of the toggle. This per-thread control does not change the GitHub connection, permission mode, or the Sandbox VM network setting above. See [Permission Modes and Plan Mode](/docs/permissions/permission-modes-and-plan-mode/#permissions).
+
 ### Environment
 
 | Setting | Description |
