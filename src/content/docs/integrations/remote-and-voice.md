@@ -7,9 +7,9 @@ order: 2
 
 ## Local daemon on your Mac
 
-On an Apple silicon Mac running macOS 26 or later, open **Settings → Agent Threads → Remote → Local daemon** to manage the container that runs threads assigned to **This Mac (container)**. The Codex row shows the version reported by the CLI inside the running daemon. The Codex version installed directly on your Mac is managed separately.
+On an Apple silicon Mac running macOS 26 or later, open **Settings → Agent Threads → Remote → Local daemon** to manage the container that runs threads assigned to **This Mac (container)**. The Claude Code, Antigravity, and Codex rows show the versions measured inside the running daemon. CLI versions installed directly on your Mac are managed separately.
 
-When a newer reviewed Codex version is available for the local daemon, choose **Update harnesses** and review the installed and target versions before confirming. The daemon must be idle before the switch. The update keeps your sign-in, saved sessions, and workspaces in their existing volumes. If the replacement fails its checks, Agent Threads tries to restore the previous image.
+When an installed version differs from its reviewed version, choose **Update harnesses** and review the installed and target versions for the enabled harnesses before confirming. The daemon must be idle before the switch. The update keeps your sign-in, saved sessions, and workspaces in their existing volumes. If the replacement fails its checks, Agent Threads tries to restore the previous image.
 
 An older local daemon may need the regular daemon **Update** before it can apply harness updates. For setup and troubleshooting, see the [local daemon guide](https://github.com/rbcodelabs/agent-threads/blob/main/docs/remote-daemon.md#local-daemon-this-mac-in-a-container).
 
