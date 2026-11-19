@@ -5,6 +5,14 @@ category: integrations
 order: 2
 ---
 
+## Local daemon on your Mac
+
+On an Apple silicon Mac running macOS 26 or later, open **Settings → Agent Threads → Remote → Local daemon** to manage the container that runs threads assigned to **This Mac (container)**. The Codex row shows the version reported by the CLI inside the running daemon. The Codex version installed directly on your Mac is managed separately.
+
+When a newer reviewed Codex version is available for the local daemon, choose **Update harnesses** and review the installed and target versions before confirming. The daemon must be idle before the switch. The update keeps your sign-in, saved sessions, and workspaces in their existing volumes. If the replacement fails its checks, Agent Threads tries to restore the previous image.
+
+An older local daemon may need the regular daemon **Update** before it can apply harness updates. For setup and troubleshooting, see the [local daemon guide](https://github.com/rbcodelabs/agent-threads/blob/main/docs/remote-daemon.md#local-daemon-this-mac-in-a-container).
+
 ## Remote access (mobile)
 
 Agent Threads can mirror your desktop sessions to Obsidian Mobile in real time. Your phone becomes a thin client: you can read the conversation as it streams, send messages, approve permission requests, answer agent questions, and switch between threads — all over a secure WebSocket relay. The desktop runs the active Claude or Codex harness; mobile just shows the state.
