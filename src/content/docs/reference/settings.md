@@ -33,6 +33,7 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 | Codex binary path | Path to the `codex` executable. Leave empty to find it on `$PATH`; set this when Codex is installed somewhere else. |
 | OpenCode binary path | Path to the `opencode` executable (desktop only). Leave as `opencode` to find it on `$PATH`, Homebrew, `/usr/local/bin`, or `~/.opencode/bin`. OpenCode threads use the providers, credentials, and models configured in OpenCode. Model IDs use `provider/model` form, for example `openai/gpt-5`. See [OpenCode Harness](/docs/integrations/opencode-harness/). |
 | Codex computer use | Off by default. Blocks Codex's bundled computer-use tools, including its shared browser REPL tools, in newly started or restarted sessions. Turning it on uses your existing Codex permissions and installed tools. Existing sessions keep their current configuration until restarted; use **Reload plugin (safe)** when ready. Agent Threads' own contained browser tools remain available. See [Codex computer use](/docs/permissions/permission-modes-and-plan-mode/#codex-computer-use). |
+| Codex network access default | Shared default for local Codex threads that select **Use default**. Starts **Off**. Changes apply at the next session start or restart; existing sessions retain their current access. Explicit per-thread **On** or **Off** overrides are preserved. Remote threads are unaffected, and Plan/read-only sessions continue to deny network access. |
 | Account / provider | `Claude account` (default, uses the CLI's own login) or `Amazon Bedrock` (sets `CLAUDE_CODE_USE_BEDROCK=1` — also add `AWS_PROFILE` and `AWS_REGION` under Extra environment variables) |
 | Default model | Model for new turns unless a thread overrides it with [`/model`](/docs/core-workflow/models-goals-loops/). "CLI default" defers to the Claude Code CLI configuration. Family aliases always track the latest version; pinned IDs lock to a specific release. Start a thread to populate the full model list from the CLI. |
 | Thinking mode | `Disabled` (default), `Adaptive` (Claude decides when to use extended thinking), or `Enabled` (fixed token budget) |
@@ -58,6 +59,8 @@ With **Conversation first**, Geode hosts that support durable companions reuse t
 | GitHub commit email | Email for commits made with the Geode connection. Leave empty to use your GitHub noreply address (`ID+login@users.noreply.github.com`). Only applied where a repository has no `user.email` of its own. |
 
 See [Sandbox VMs](/docs/integrations/sandbox-vms/) for setup and the distinction between guest commands and host tools.
+
+Local Codex threads have a separate **Network access** row alongside **Permissions** in the footer menu: **Use default**, **On**, or **Off**. Threads without a saved override use the shared **Codex network access default** above. Per-thread changes apply live; existing explicit choices remain independent of the shared default. Plan Mode and read-only sessions deny network access regardless of these choices. Remote threads retain their existing behavior. This control does not change the GitHub connection, permission mode, or the Sandbox VM network setting. See [Permission Modes and Plan Mode](/docs/permissions/permission-modes-and-plan-mode/#permissions).
 
 ### Environment
 
