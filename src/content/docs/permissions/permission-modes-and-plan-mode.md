@@ -19,7 +19,9 @@ You can also resolve permissions directly from the [Agents List](/docs/views/age
 
 The default behavior can be changed globally in **Settings → Tools → Permission Mode**, or **per-thread** via the shield (🛡) button in the thread footer — a thread-level override takes precedence over the global setting and is useful when you want Plan Mode for one specific task without affecting other threads.
 
-For Codex, the same thread footer menu has a **Network access** row alongside **Permissions**. It is **Off** by default. Turning it **On** allows network requests from that thread's Codex commands while the thread runs in the workspace-write sandbox. Plan Mode and other read-only sessions still deny network access. This control is separate from permission mode: choosing `acceptEdits` or `bypassPermissions` does not turn networking on, and turning networking on does not change command approval behavior or filesystem access.
+For local Codex threads, **Settings → Agent → Codex network access default** supplies a shared network choice. It starts **Off**. The thread footer's **Network access** row offers **Use default**, **On**, and **Off**. **Use default** follows the shared setting; **On** and **Off** are explicit per-thread overrides. Existing saved On and Off choices remain explicit when the shared default changes. Selecting **Use default** removes the override.
+
+Shared-default changes apply when a local Codex session next starts or restarts, including a resumed conversation; an existing session keeps its current access. Selecting a per-thread choice updates a running local session. Remote threads do not inherit this setting or gain this footer control. Plan Mode and other read-only sessions still deny network access. Network access remains separate from permission mode: choosing `acceptEdits` or `bypassPermissions` does not turn networking on, and enabling networking does not change command approval behavior or filesystem access.
 
 | Mode | Behavior |
 |---|---|
