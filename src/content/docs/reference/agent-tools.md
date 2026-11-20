@@ -96,7 +96,9 @@ This tool updates stored Project configuration only. Automatic vault-relative/re
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `threads_set_notes` | `threadId`, `notes` | Sets orchestrator tracking notes. |
+| `threads_set_notes` | `threadId`, `notes`, `elevatedProjectId?` | Sets orchestrator tracking notes. Portfolio may pass `elevatedProjectId` when that Project's orchestrator is disabled. |
+| `threads_get_ledger` | `projectId?`, `elevatedProjectId?` | Reads the caller-authorized Tier 2 cross-thread campaign ledger note (`Products/<Project>/orchestrator-ledger.md` or `Products/Portfolio/orchestrator-ledger.md`). Canonical-only read tool. |
+| `threads_set_ledger` | `content`, `projectId?`, `elevatedProjectId?` | Writes (or clears with `""`) the caller-owned Tier 2 cross-thread campaign ledger note in the vault (up to 64 KiB, secret-redacted at rest) without requiring filesystem `Write`/`Edit` tools. |
 | `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval, rendered inline in the thread's Chat view and on its [Agent Board](/docs/views/kanban-board/) card. |
 | `threads_clear_proposed_reply` | `threadId` | Clears a stale proposed reply. |
 | `threads_post_decision` | `threadId?`, `question`, `options`, `header?`, `multiSelect?`, `allowOther?` | Posts a decision card (2–4 `{ label, description? }` options plus optional free-text **Other**, labeled with the posting orchestrator's title) inline in the thread's Chat (conversation) view and on its [Agent Board](/docs/views/kanban-board/) card (defaults to the calling thread). **Send answer** delivers your choice to the **calling** orchestrator thread as a user message — never into the target thread's context. Returns a `decisionId`. Pending decisions on a thread are dismissed automatically if you manually send a message to that thread yourself, while automated or agent sends (`threads_send_message`, wakeups, heartbeats) leave them intact. |
