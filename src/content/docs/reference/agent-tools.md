@@ -74,7 +74,8 @@ Project threads coordinate only within their Project, and threads with no Projec
 | Tool | Parameters | Description |
 |---|---|---|
 | `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
-| `threads_list` | `projectId?` | Returns authorized thread metadata. The Portfolio Orchestrator passes a Project id for explicit one-call elevation. |
+| `threads_get` | `threadId`, `recentMessages?`, `elevatedProjectId?` | Returns one thread's full snapshot in `O(1)` — including `goal`, `managerNotes`, `proposedReply`, `pendingDecisions`, parsed v2 `triage` metadata, and optionally the last `N` messages (`recentMessages`, up to 50). Canonical-only read tool. |
+| `threads_list` | `projectId?`, `view?` (`"full"` \| `"triage"`) | Returns authorized thread metadata. Pass `view: "triage"` during orchestrator heartbeats to receive compact parsed v2 triage summaries (`outcome`, `strategy`, `disposition`, `needsReview`, pending counts) without multi-line note or proposal bodies. The Portfolio Orchestrator passes a Project id for explicit one-call elevation. |
 | `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. Spawning into a different project or working directory asks you first — see [Cross-project spawns](#cross-project-spawns). |
 | `threads_list_projects` | — | Returns configured Projects, including each `vaultFolder`, optional `cwdOverride`, and resolved `effectiveCwd`. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
