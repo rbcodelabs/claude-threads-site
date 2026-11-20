@@ -74,7 +74,8 @@ Project threads coordinate only within their Project, and threads with no Projec
 | Tool | Parameters | Description |
 |---|---|---|
 | `threads_get_current` | — | Returns this thread's metadata, live status, project, cwd, PR, schedule origin, raw-log path, and message count. |
-| `threads_list` | `projectId?` | Returns authorized thread metadata. The Portfolio Orchestrator passes a Project id for explicit one-call elevation. |
+| `threads_get` | `threadId`, `recentMessages?`, `elevatedProjectId?` | Returns one thread's full snapshot in `O(1)` — including `goal`, `managerNotes`, `proposedReply`, `pendingDecisions`, parsed v2 `triage` metadata, and optionally the last `N` messages (`recentMessages`, up to 50). Canonical-only read tool. |
+| `threads_list` | `projectId?`, `view?` (`"full"` \| `"triage"`) | Returns authorized thread metadata. Pass `view: "triage"` during orchestrator heartbeats to receive compact parsed v2 triage summaries (`outcome`, `strategy`, `disposition`, `needsReview`, pending counts) without multi-line note or proposal bodies. The Portfolio Orchestrator passes a Project id for explicit one-call elevation. |
 | `threads_create` | `prompt`, `title?`, `cwd?`, `projectId?` | Creates an independent thread, queues its initial prompt immediately, and returns `{threadId, title}` without waiting for the thread to finish. Omitted `cwd` and `projectId` inherit from the calling thread; pass `projectId: null` to create the thread without a project. Spawning into a different project or working directory asks you first — see [Cross-project spawns](#cross-project-spawns). |
 | `threads_list_projects` | — | Returns configured Projects, including each `vaultFolder`, optional `cwdOverride`, and resolved `effectiveCwd`. |
 | `threads_create_project` | `name`, `vaultFolder`, `description?`, `cwdOverride?` | Creates and persists a project. |
@@ -95,7 +96,9 @@ This tool updates stored Project configuration only. Automatic vault-relative/re
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `threads_set_notes` | `threadId`, `notes` | Sets orchestrator tracking notes. |
+| `threads_set_notes` | `threadId`, `notes`, `elevatedProjectId?` | Sets orchestrator tracking notes. Portfolio may pass `elevatedProjectId` when that Project's orchestrator is disabled. |
+| `threads_get_ledger` | `projectId?`, `elevatedProjectId?` | Reads the caller-authorized Tier 2 cross-thread campaign ledger note (`Products/<Project>/orchestrator-ledger.md` or `Products/Portfolio/orchestrator-ledger.md`). Canonical-only read tool. |
+| `threads_set_ledger` | `content`, `projectId?`, `elevatedProjectId?` | Writes (or clears with `""`) the caller-owned Tier 2 cross-thread campaign ledger note in the vault (up to 64 KiB, secret-redacted at rest) without requiring filesystem `Write`/`Edit` tools. |
 | `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval, rendered inline in the thread's Chat view and on its [Agent Board](/docs/views/kanban-board/) card. |
 | `threads_clear_proposed_reply` | `threadId` | Clears a stale proposed reply. |
 | `threads_post_decision` | `threadId?`, `question`, `options`, `header?`, `multiSelect?`, `allowOther?` | Posts a decision card (2–4 `{ label, description? }` options plus optional free-text **Other**, labeled with the posting orchestrator's title) inline in the thread's Chat (conversation) view and on its [Agent Board](/docs/views/kanban-board/) card (defaults to the calling thread). **Send answer** delivers your choice to the **calling** orchestrator thread as a user message — never into the target thread's context. Returns a `decisionId`. Pending decisions on a thread are dismissed automatically if you manually send a message to that thread yourself, while automated or agent sends (`threads_send_message`, wakeups, heartbeats) leave them intact. |
