@@ -96,7 +96,7 @@ This tool updates stored Project configuration only. Automatic vault-relative/re
 
 | Tool | Parameters | Description |
 |---|---|---|
-| `threads_set_notes` | `threadId`, `notes`, `elevatedProjectId?` | Sets orchestrator tracking notes. Portfolio may pass `elevatedProjectId` when that Project's orchestrator is disabled. |
+| `threads_set_notes` | `threadId`, `notes`, `elevatedProjectId?` | Sets orchestrator tracking notes. Notes are owner-scoped: a Project orchestrator writes only in its own Project. The Portfolio orchestrator writes only on unassigned threads, or on Project threads when `elevatedProjectId` matches and that Project's orchestrator is disabled. Elevation applies per call and never permits writes in a Project whose orchestrator is enabled; when the Portfolio orchestrator creates a thread there, it puts the goal contract in the create prompt and sends that Project orchestrator one message so it seeds and owns the notes. |
 | `threads_get_ledger` | `projectId?`, `elevatedProjectId?` | Reads the caller-authorized Tier 2 cross-thread campaign ledger note (`Products/<Project>/orchestrator-ledger.md` or `Products/Portfolio/orchestrator-ledger.md`). Canonical-only read tool. |
 | `threads_set_ledger` | `content`, `projectId?`, `elevatedProjectId?` | Writes (or clears with `""`) the caller-owned Tier 2 cross-thread campaign ledger note in the vault (up to 64 KiB, secret-redacted at rest) without requiring filesystem `Write`/`Edit` tools. |
 | `threads_set_proposed_reply` | `threadId`, `text` | Stages a proposed reply for human approval, rendered inline in the thread's Chat view and on its [Agent Board](/docs/views/kanban-board/) card. |
