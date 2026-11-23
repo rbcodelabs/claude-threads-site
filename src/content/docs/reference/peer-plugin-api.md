@@ -17,6 +17,8 @@ Listen for `claude-threads:api-ready` and `claude-threads:api-stopping`. Reacqui
 
 `threads.list`, `threads.get`, `threads.create`, `threads.send`, `threads.wait`, `threads.cancel`, `threads.open`, and `threads.subscribe` provide immutable snapshots and lifecycle events. Hosts advertising `threads.beginProvisional` also support reversible peer-owned creation workflows.
 
+When `capabilities` includes `threads.pendingDecisions`, the snapshot returned by `threads.get` carries `pendingDecisions`: the decisions orchestrators posted for Rick with `threads_post_decision` that are still unanswered, as read-only copies of `{ id, header, question, options: { label, description }[], multiSelect, allowOther, recommended?, sourceThreadId?, createdAt }`. `recommended` is the label of the recommended option when the poster named one. The field appears only on `threads.get` (not `threads.list`), is omitted when nothing is pending, and is view-only: peers cannot answer or clear a decision.
+
 For durable retries, provide both `ownerPluginId` and `idempotencyKey`. A key is bound to its operation, target thread, and exact input fingerprint. Reusing it with different input fails with `IDEMPOTENCY_CONFLICT`.
 
 ```ts
